@@ -7,3 +7,12 @@ c:\users\acer\documents\visual studio 2017\Projects\InfiniteChess\InfiniteChess\
 c:\users\acer\documents\visual studio 2017\Projects\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.csproj.GenerateResource.Cache
 c:\users\acer\documents\visual studio 2017\Projects\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.exe
 c:\users\acer\documents\visual studio 2017\Projects\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.pdb
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\bin\Debug\InfiniteChess.exe.config
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.exe
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.pdb
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.csprojResolveAssemblyReference.cache
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.InfinteChess.resources
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.Properties.Resources.resources
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.csproj.GenerateResource.Cache
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\bin\Debug\InfiniteChess.exe
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\bin\Debug\InfiniteChess.pdb

@@ -7,3 +7,6 @@ c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\obj\Debug\Chess.
 c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\obj\Debug\Chess.exe
 c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\obj\Debug\Chess.pdb
 c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\obj\Debug\Chess.chessWin.resources
+A:\Files\Documents\GitHub\InfiniteChess\Chess\Chess\bin\Debug\Chess.exe.config
+A:\Files\Documents\GitHub\InfiniteChess\Chess\Chess\obj\Debug\Chess.exe
+A:\Files\Documents\GitHub\InfiniteChess\Chess\Chess\obj\Debug\Chess.pdb

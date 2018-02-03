@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.boardPanel = new InfiniteChess.GameContainer();
+            this.begin = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // boardPanel
@@ -38,11 +39,22 @@
             this.boardPanel.Size = new System.Drawing.Size(512, 512);
             this.boardPanel.TabIndex = 0;
             // 
+            // begin
+            // 
+            this.begin.Location = new System.Drawing.Point(759, 12);
+            this.begin.Name = "begin";
+            this.begin.Size = new System.Drawing.Size(75, 23);
+            this.begin.TabIndex = 1;
+            this.begin.Text = "debug1";
+            this.begin.UseVisualStyleBackColor = true;
+            this.begin.Click += new System.EventHandler(this.begin_Click);
+            // 
             // InfinteChess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(846, 681);
+            this.Controls.Add(this.begin);
             this.Controls.Add(this.boardPanel);
             this.Name = "InfinteChess";
             this.Text = "InfiniteChess";
@@ -54,6 +66,7 @@
         #endregion
 
         private GameContainer boardPanel;
+        private System.Windows.Forms.Button begin;
     }
 }
 
