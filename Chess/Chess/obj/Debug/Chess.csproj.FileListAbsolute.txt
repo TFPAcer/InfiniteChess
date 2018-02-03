@@ -1,0 +1,9 @@
+c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\bin\Debug\Chess.exe.config
+c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\bin\Debug\Chess.exe
+c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\bin\Debug\Chess.pdb
+c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\obj\Debug\Chess.csprojResolveAssemblyReference.cache
+c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\obj\Debug\Chess.Properties.Resources.resources
+c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\obj\Debug\Chess.csproj.GenerateResource.Cache
+c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\obj\Debug\Chess.exe
+c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\obj\Debug\Chess.pdb
+c:\users\acer\documents\visual studio 2017\Projects\Chess\Chess\obj\Debug\Chess.chessWin.resources
