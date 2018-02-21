@@ -11,8 +11,8 @@ namespace Chess
         public short indexX { get; set; }
         public short indexY { get; set; } //square reference
         public static List<Square> emptyList() { return new List<Square> { }; }
-        public override string ToString()
-        {
+
+        public override string ToString() {
             return indexX.ToString() + ", " + indexY.ToString() + ", " + X.ToString() + ", " + Y.ToString();
         }
     }
@@ -23,11 +23,7 @@ namespace Chess
         {
             Label l = (Label)Parent.Controls.Find("cursorPosition", false)[0];
             Square cursorSquare = findSquareByCoords(e.X, e.Y);
-            if (cursorSquare != null)
-            {
-                l.Text = cursorSquare.ToString();
-            }
-            else l.Text = "";
+            l.Text = cursorSquare?.ToString() ?? "null";
             //l.Text = chessWin.O.ToString();
         }
 

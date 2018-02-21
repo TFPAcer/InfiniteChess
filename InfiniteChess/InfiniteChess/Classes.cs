@@ -8,14 +8,13 @@ namespace InfiniteChess
     {
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            Graphics g = CreateGraphics();
-            g.DrawImage(new Bitmap(new Bitmap("res/image/board.png"), new Size(512,512)), 0, 0);
-            g.Dispose();
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            
+            Label l = (Label)Parent.Controls.Find("debug2", false)[0];
+            Square cursorSquare = findSquareByCoords(e.X, e.Y);
+            l.Text = cursorSquare?.ToString() ?? "null";
         }
 
         public static Square findSquareByCoords(int x, int y) {
