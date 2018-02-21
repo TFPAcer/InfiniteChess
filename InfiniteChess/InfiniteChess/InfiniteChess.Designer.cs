@@ -28,21 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.boardPanel = new InfiniteChess.GameContainer();
             this.begin = new System.Windows.Forms.Button();
             this.debug2 = new System.Windows.Forms.Label();
             this.sUp = new System.Windows.Forms.Button();
             this.sDown = new System.Windows.Forms.Button();
             this.sLeft = new System.Windows.Forms.Button();
             this.sRight = new System.Windows.Forms.Button();
+            this.boardPanel = new InfiniteChess.GameContainer();
+            this.debug3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // boardPanel
-            // 
-            this.boardPanel.Location = new System.Drawing.Point(12, 12);
-            this.boardPanel.Name = "boardPanel";
-            this.boardPanel.Size = new System.Drawing.Size(608, 608);
-            this.boardPanel.TabIndex = 0;
             // 
             // begin
             // 
@@ -73,6 +67,7 @@
             this.sUp.TabIndex = 3;
             this.sUp.Text = "↑";
             this.sUp.UseVisualStyleBackColor = true;
+            this.sUp.Click += new System.EventHandler(this.sUp_Click);
             // 
             // sDown
             // 
@@ -107,11 +102,28 @@
             this.sRight.Text = "→";
             this.sRight.UseVisualStyleBackColor = true;
             // 
+            // boardPanel
+            // 
+            this.boardPanel.Location = new System.Drawing.Point(12, 12);
+            this.boardPanel.Name = "boardPanel";
+            this.boardPanel.Size = new System.Drawing.Size(608, 608);
+            this.boardPanel.TabIndex = 0;
+            // 
+            // debug3
+            // 
+            this.debug3.AutoSize = true;
+            this.debug3.Location = new System.Drawing.Point(750, 90);
+            this.debug3.Name = "debug3";
+            this.debug3.Size = new System.Drawing.Size(37, 13);
+            this.debug3.TabIndex = 7;
+            this.debug3.Text = "debug";
+            // 
             // InfinteChess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(846, 681);
+            this.Controls.Add(this.debug3);
             this.Controls.Add(this.sRight);
             this.Controls.Add(this.sLeft);
             this.Controls.Add(this.sDown);
@@ -135,6 +147,7 @@
         private System.Windows.Forms.Button sDown;
         private System.Windows.Forms.Button sLeft;
         private System.Windows.Forms.Button sRight;
+        private System.Windows.Forms.Label debug3;
     }
 }
 

@@ -28,14 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(chessWin));
             this.cursorPosition = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.v_U = new System.Windows.Forms.Button();
             this.v_D = new System.Windows.Forms.Button();
             this.h_R = new System.Windows.Forms.Button();
             this.h_L = new System.Windows.Forms.Button();
-            this.boardPanel = new Chess.GameContainer();
             this.v_U2 = new System.Windows.Forms.Button();
             this.v_D2 = new System.Windows.Forms.Button();
             this.h_R2 = new System.Windows.Forms.Button();
@@ -43,6 +41,7 @@
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.draw = new System.Windows.Forms.Button();
+            this.boardPanel = new Chess.GameContainer();
             this.SuspendLayout();
             // 
             // cursorPosition
@@ -126,15 +125,6 @@
             this.h_L.UseVisualStyleBackColor = true;
             this.h_L.Click += new System.EventHandler(this.h_L_Click);
             // 
-            // boardPanel
-            // 
-            this.boardPanel.BackColor = System.Drawing.Color.Transparent;
-            this.boardPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.boardPanel.Location = new System.Drawing.Point(12, 12);
-            this.boardPanel.Name = "boardPanel";
-            this.boardPanel.Size = new System.Drawing.Size(608, 608);
-            this.boardPanel.TabIndex = 8;
-            // 
             // v_U2
             // 
             this.v_U2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -204,6 +194,7 @@
             // 
             // draw
             // 
+            this.draw.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.draw.BackColor = System.Drawing.Color.Transparent;
             this.draw.FlatAppearance.BorderSize = 0;
             this.draw.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -215,11 +206,20 @@
             this.draw.UseVisualStyleBackColor = false;
             this.draw.Click += new System.EventHandler(this.draw_Click);
             // 
+            // boardPanel
+            // 
+            this.boardPanel.BackColor = System.Drawing.Color.Transparent;
+            this.boardPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.boardPanel.Location = new System.Drawing.Point(12, 12);
+            this.boardPanel.Name = "boardPanel";
+            this.boardPanel.Size = new System.Drawing.Size(608, 608);
+            this.boardPanel.TabIndex = 8;
+            // 
             // chessWin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(844, 677);
             this.Controls.Add(this.draw);
             this.Controls.Add(this.button1);

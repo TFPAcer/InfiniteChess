@@ -19,3 +19,9 @@ C:\Users\Acer\Documents\Github\InfiniteChess\Chess\Chess\obj\Debug\Chess.Propert
 C:\Users\Acer\Documents\Github\InfiniteChess\Chess\Chess\obj\Debug\Chess.csproj.GenerateResource.Cache
 C:\Users\Acer\Documents\Github\InfiniteChess\Chess\Chess\obj\Debug\Chess.exe
 C:\Users\Acer\Documents\Github\InfiniteChess\Chess\Chess\obj\Debug\Chess.pdb
+A:\Files\Documents\GitHub\InfiniteChess\Chess\Chess\bin\Debug\Chess.exe
+A:\Files\Documents\GitHub\InfiniteChess\Chess\Chess\bin\Debug\Chess.pdb
+A:\Files\Documents\GitHub\InfiniteChess\Chess\Chess\obj\Debug\Chess.csprojResolveAssemblyReference.cache
+A:\Files\Documents\GitHub\InfiniteChess\Chess\Chess\obj\Debug\Chess.chessWin.resources
+A:\Files\Documents\GitHub\InfiniteChess\Chess\Chess\obj\Debug\Chess.Properties.Resources.resources
+A:\Files\Documents\GitHub\InfiniteChess\Chess\Chess\obj\Debug\Chess.csproj.GenerateResource.Cache

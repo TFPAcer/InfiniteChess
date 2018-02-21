@@ -14,6 +14,8 @@ namespace Chess
 {
     public partial class chessWin : Form
     {
+        //720p: sf 36, sf2 38, size 16x16, 
+        //1080p: sf 50, sf2 38, size 24x24,
         public static List<Square> board = new List<Square>(); //stores all squares of the board
         public int smallScroll = 1; public int bigScroll = 9;
         public static Color movementColour = Color.Red;
@@ -22,7 +24,7 @@ namespace Chess
         public static int sf = 36; //scale factor of the window and controls
         public static int sf2 = 38; //scale factor of the board
         public static List<Piece> pieces = new List<Piece>();
-        public static int[] O = { 0, 570 }; //coordinate of 0, 0
+        public static int[] O = { 0, (size[1]-1)*sf2 }; //coordinate of 0, 0
         public enum GameState { INIT, PLAY_WHITE, PLAY_BLACK, MOVING_BLACK, MOVING_WHITE, WIN_BLACK, WIN_WHITE, STALE};
         public static GameState state = GameState.INIT;
         public static int pieceMoving = -1;
@@ -37,7 +39,7 @@ namespace Chess
             InitialiseLabels();
             pieces.AddRange(Piece.IntializePieces());
             state = GameState.PLAY_WHITE;
-            music.PlayLooping();
+            //music.PlayLooping();
             drawGrid();
         }
 
@@ -47,6 +49,7 @@ namespace Chess
         }
 
         public void InitialiseBoard() {
+            this.Size = new Size(24 * sf, 20 * sf);
             //Graphics g = boardPanel.CreateGraphics();
             bounds[1] = (size[0] - 1); bounds[3] = (size[1] - 1);
             for (int i = 0; i < size[0]; i++) { for (int j = 0; j < size[1]; j++) {
@@ -58,7 +61,8 @@ namespace Chess
         
         public void drawGrid() {
             Graphics g = boardPanel.CreateGraphics();
-            g.DrawImage(new Bitmap(new Bitmap("res/image/board.png"), new Size(size[0]*sf2, size[1]*sf2)),0,0);
+            //g.Clear(Color.FromArgb(64,64,64));
+            g.DrawImage(new Bitmap(new Bitmap("res/image/board.png"), new Size(size[0] * sf2, size[1] * sf2)), 0, 0);
             drawPieces(g);
             //for (int i = 0; i < size[0]; i++)
             //{
