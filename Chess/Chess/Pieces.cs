@@ -17,7 +17,7 @@ namespace Chess
         public PieceColour colour { get; private set; } //true = WHITE, false = BLACK
 
         public Piece(PieceType t, Square s, PieceColour c) {
-            type = t; colour = c; square = s; icon = new Bitmap("res/image/" + c.ToString().ToLower() + "/" + t.ToString() + ".png"); }
+            type = t; colour = c; square = s; icon = icon = new Bitmap($"res/image/{c.ToString()}/{t.ToString()}.png"); }
 
         public void move(Square s) { square = s; }
 

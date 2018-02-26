@@ -54,6 +54,7 @@
     <Compile Include="InfiniteChess.Designer.cs">
       <DependentUpon>InfiniteChess.cs</DependentUpon>
     </Compile>
+    <Compile Include="Pieces.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="InfiniteChess.resx">

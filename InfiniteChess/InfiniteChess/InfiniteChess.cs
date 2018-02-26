@@ -43,6 +43,13 @@ namespace InfiniteChess
             InitialiseBoard();
         }
 
+        public void updateSquares(int amount, bool isX, object sender)
+        {
+            origin[isX ? 0 : 1] += 38 * amount;
+            if (isX) { foreach (Square s in board) { s.X += 38 * amount; } }
+            else { foreach (Square s in board) { s.Y += 38 * amount; } }
+        }
+
         private void sUp_Click(object sender, EventArgs e)
         {
             Square edge = GameContainer.findSquareByCoords(0, 0);
@@ -59,12 +66,52 @@ namespace InfiniteChess
             debug3.Text = $"{bounds[0]},{bounds[1]},{bounds[2]},{bounds[3]}";
         }
 
-        public void updateSquares(int amount, bool isX, object sender)
+        private void sDown_Click(object sender, EventArgs e)
         {
-            origin[isX ? 0 : 1] += 38 * amount;
-            if (isX) { foreach (Square s in board) { s.X += 38 * amount; } }
-            else { foreach (Square s in board) { s.Y += 38 * amount; } }
+            Square edge = GameContainer.findSquareByCoords((size[0] - 1) * 38 + 1, (size[1] - 1) * 38 + 1);
+            updateSquares(-1, false, sender);
+            if (edge.indexY == bounds[2]) {
+                bounds[2]--;
+                for (int j = bounds[0]; j <= bounds[1]; j++) {
+                    board.Add(new Square { X = origin[0] + 38 * j,
+                                           Y = origin[1] - bounds[2] * 38,
+                                           indexX = (short)j,
+                                           indexY = (short)bounds[2] });
+                }
+            }
+            debug3.Text = $"{bounds[0]},{bounds[1]},{bounds[2]},{bounds[3]}";
         }
 
+        private void sRight_Click(object sender, EventArgs e)
+        {
+            Square edge = GameContainer.findSquareByCoords((size[0] - 1) * 38 + 1, (size[1] - 1) * 38 + 1);
+            updateSquares(-1, true, sender);
+            if (edge.indexX == bounds[1]) {
+                bounds[1]++;
+                for (int j = bounds[2]; j <= bounds[3]; j++) {
+                    board.Add(new Square { X = origin[0] + bounds[1] * 38,
+                                           Y = origin[1] - 38 * j,
+                                           indexX = (short)bounds[1],
+                                           indexY = (short)j });
+                }
+            }
+            debug3.Text = $"{bounds[0]},{bounds[1]},{bounds[2]},{bounds[3]}";
+        }
+
+        private void sLeft_Click(object sender, EventArgs e)
+        {
+            Square edge = GameContainer.findSquareByCoords(0, 0);
+            updateSquares(1, true, sender);
+            if (edge.indexX == bounds[0]) {
+                bounds[0]--;
+                for (int j = bounds[2]; j <= bounds[3]; j++) {
+                    board.Add(new Square { X = origin[0] + bounds[0] * 38,
+                                           Y = origin[1] - 38 * j,
+                                           indexX = (short)bounds[0],
+                                           indexY = (short)j });
+                }
+            }
+            debug3.Text = $"{bounds[0]},{bounds[1]},{bounds[2]},{bounds[3]}";
+        }
     }
 }

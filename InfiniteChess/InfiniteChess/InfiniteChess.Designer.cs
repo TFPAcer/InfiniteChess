@@ -34,8 +34,8 @@
             this.sDown = new System.Windows.Forms.Button();
             this.sLeft = new System.Windows.Forms.Button();
             this.sRight = new System.Windows.Forms.Button();
-            this.boardPanel = new InfiniteChess.GameContainer();
             this.debug3 = new System.Windows.Forms.Label();
+            this.boardPanel = new InfiniteChess.GameContainer();
             this.SuspendLayout();
             // 
             // begin
@@ -79,6 +79,7 @@
             this.sDown.TabIndex = 4;
             this.sDown.Text = "↓";
             this.sDown.UseVisualStyleBackColor = true;
+            this.sDown.Click += new System.EventHandler(this.sDown_Click);
             // 
             // sLeft
             // 
@@ -90,6 +91,7 @@
             this.sLeft.TabIndex = 5;
             this.sLeft.Text = "←";
             this.sLeft.UseVisualStyleBackColor = true;
+            this.sLeft.Click += new System.EventHandler(this.sLeft_Click);
             // 
             // sRight
             // 
@@ -101,13 +103,7 @@
             this.sRight.TabIndex = 6;
             this.sRight.Text = "→";
             this.sRight.UseVisualStyleBackColor = true;
-            // 
-            // boardPanel
-            // 
-            this.boardPanel.Location = new System.Drawing.Point(12, 12);
-            this.boardPanel.Name = "boardPanel";
-            this.boardPanel.Size = new System.Drawing.Size(608, 608);
-            this.boardPanel.TabIndex = 0;
+            this.sRight.Click += new System.EventHandler(this.sRight_Click);
             // 
             // debug3
             // 
@@ -117,6 +113,13 @@
             this.debug3.Size = new System.Drawing.Size(37, 13);
             this.debug3.TabIndex = 7;
             this.debug3.Text = "debug";
+            // 
+            // boardPanel
+            // 
+            this.boardPanel.Location = new System.Drawing.Point(12, 12);
+            this.boardPanel.Name = "boardPanel";
+            this.boardPanel.Size = new System.Drawing.Size(608, 608);
+            this.boardPanel.TabIndex = 0;
             // 
             // InfinteChess
             // 

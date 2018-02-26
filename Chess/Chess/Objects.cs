@@ -30,37 +30,37 @@ namespace Chess
         protected override void OnMouseClick(MouseEventArgs e)
         {
             Label l = (Label)Parent.Controls.Find("label2", false)[0];
-            if (chessWin.state == chessWin.GameState.PLAY_BLACK || chessWin.state == chessWin.GameState.PLAY_WHITE) {
+            if (chessWin.state == GameState.PLAY_BLACK || chessWin.state == GameState.PLAY_WHITE) {
                 Square cursorSquare = findSquareByCoords(e.X, e.Y);
                 int pieceClicked = -1;
                 foreach (Piece p in chessWin.pieces) { if (p.square == cursorSquare) { pieceClicked = chessWin.pieces.IndexOf(p); } }
                 if (pieceClicked != -1) {
-                    if ((chessWin.pieces[pieceClicked].colour == PieceColour.BLACK && chessWin.state == chessWin.GameState.PLAY_BLACK) ||
-                        (chessWin.pieces[pieceClicked].colour == PieceColour.WHITE && chessWin.state == chessWin.GameState.PLAY_WHITE)) {
+                    if ((chessWin.pieces[pieceClicked].colour == PieceColour.BLACK && chessWin.state == GameState.PLAY_BLACK) ||
+                        (chessWin.pieces[pieceClicked].colour == PieceColour.WHITE && chessWin.state == GameState.PLAY_WHITE)) {
                         chessWin.pieceMoving = pieceClicked;
                         drawAvailableMovement((object)e, chessWin.pieces[pieceClicked]);
                         switch (chessWin.state) {
-                            case chessWin.GameState.PLAY_BLACK: chessWin.state = chessWin.GameState.MOVING_BLACK; break;
+                            case GameState.PLAY_BLACK: chessWin.state = GameState.MOVING_BLACK; break;
                             default:
-                                chessWin.state = chessWin.GameState.MOVING_WHITE;
+                                chessWin.state = GameState.MOVING_WHITE;
                                 break;
                         }
                     }
                 }
             }
-            else if (chessWin.state == chessWin.GameState.MOVING_BLACK || chessWin.state == chessWin.GameState.MOVING_WHITE) {
-                if (chessWin.pieces[chessWin.pieceMoving].colour == PieceColour.BLACK) chessWin.state = chessWin.GameState.PLAY_WHITE;
-                else chessWin.state = chessWin.GameState.PLAY_BLACK;
+            else if (chessWin.state == GameState.MOVING_BLACK || chessWin.state == GameState.MOVING_WHITE) {
+                if (chessWin.pieces[chessWin.pieceMoving].colour == PieceColour.BLACK) chessWin.state = GameState.PLAY_WHITE;
+                else chessWin.state = GameState.PLAY_BLACK;
                 //l.Text = chessWin.pieceMoving.colour.ToString();
                 Square attempt = findSquareByCoords(e.X, e.Y);
                 if (chessWin.pieces[chessWin.pieceMoving].calculateMovement().Contains(attempt)) {
                     chessWin.pieces[chessWin.pieceMoving].move(attempt);
-                    if (chessWin.pieces[chessWin.pieceMoving].colour == PieceColour.BLACK) chessWin.state = chessWin.GameState.PLAY_WHITE;
-                    else chessWin.state = chessWin.GameState.PLAY_BLACK;
+                    if (chessWin.pieces[chessWin.pieceMoving].colour == PieceColour.BLACK) chessWin.state = GameState.PLAY_WHITE;
+                    else chessWin.state = GameState.PLAY_BLACK;
                 }
                 else {
-                    if (chessWin.pieces[chessWin.pieceMoving].colour == PieceColour.BLACK) chessWin.state = chessWin.GameState.PLAY_BLACK;
-                    else chessWin.state = chessWin.GameState.PLAY_WHITE;
+                    if (chessWin.pieces[chessWin.pieceMoving].colour == PieceColour.BLACK) chessWin.state = GameState.PLAY_BLACK;
+                    else chessWin.state = GameState.PLAY_WHITE;
                 }
                 chessWin.pieceMoving = -1;
                 Button b1 = (Button)Parent.Controls.Find("draw", false)[0]; b1.PerformClick();

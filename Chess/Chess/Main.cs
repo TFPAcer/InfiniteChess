@@ -12,6 +12,8 @@ using System.Timers;
 
 namespace Chess
 {
+
+    public enum GameState { INIT, PLAY_WHITE, PLAY_BLACK, MOVING_BLACK, MOVING_WHITE, WIN_BLACK, WIN_WHITE, STALE };
     public partial class chessWin : Form
     {
         //720p: sf 36, sf2 38, size 16x16, 
@@ -24,9 +26,8 @@ namespace Chess
         public static int sf = 36; //scale factor of the window and controls
         public static int sf2 = 38; //scale factor of the board
         public static List<Piece> pieces = new List<Piece>();
-        public static int[] O = { 0, (size[1]-1)*sf2 }; //coordinate of 0, 0
-        public enum GameState { INIT, PLAY_WHITE, PLAY_BLACK, MOVING_BLACK, MOVING_WHITE, WIN_BLACK, WIN_WHITE, STALE};
         public static GameState state = GameState.INIT;
+        public static int[] O = { 0, (size[1]-1)*sf2 }; //coordinate of 0, 0
         public static int pieceMoving = -1;
         public SolidBrush[] brush = new SolidBrush[] { new SolidBrush(Color.White), new SolidBrush(Color.Black), new SolidBrush(Color.Silver), new SolidBrush(Color.Green), new SolidBrush(Color.Brown) };
         public SoundPlayer music = new SoundPlayer("res/audio/music1.wav");
@@ -165,4 +166,6 @@ namespace Chess
             drawGrid();
         }
     }
+
+
 }
