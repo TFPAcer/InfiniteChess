@@ -36,9 +36,12 @@ namespace Chess
                             List<Square> v = Square.emptyList();
                             var y = colour == PieceColour.WHITE ? square.indexY + 1 : square.indexY - 1;
                             Square q = GameContainer.findSquareByIndex(square.indexX, y);
-                            foreach (Piece p in chessWin.pieces) { if (p.square == q) { return v; }
-                                if (p.square == GameContainer.findSquareByIndex(q.indexX + 1, y) || p.square == GameContainer.findSquareByIndex(q.indexX - 1, y))
-                                { v.Add(p.square); } } v.Add(q); return v;
+                            foreach (Piece p in chessWin.pieces) {
+                                if (p.square == q) { return v; }
+                                if (p.square == GameContainer.findSquareByIndex(q.indexX + 1, y) || p.square == GameContainer.findSquareByIndex(q.indexX - 1, y)) { v.Add(p.square); }
+                            }
+                            v.Add(q);
+                            return v;
                         }
                     case PieceType.BISHOP: {
                             List<Square> v = Square.emptyList();
@@ -110,19 +113,19 @@ namespace Chess
             List<Piece> pieces = new List<Piece>();
             for (int i = 0; i < 2; i++)
             {
-                var w = i==0?PieceColour.WHITE:PieceColour.BLACK;
-                pieces.Add(new Piece(PieceType.PAWN, GameContainer.findSquareByIndex(3, 4+2*i), w));
-                pieces.Add(new Piece(PieceType.KNIGHT, GameContainer.findSquareByIndex(4, 4+i), w));
-                pieces.Add(new Piece(PieceType.ROOK, GameContainer.findSquareByIndex(5, 4+i), w));
-                pieces.Add(new Piece(PieceType.BISHOP, GameContainer.findSquareByIndex(6, 4+i), w));
-                pieces.Add(new Piece(PieceType.QUEEN, GameContainer.findSquareByIndex(7, 4+i), w));
-                pieces.Add(new Piece(PieceType.KING, GameContainer.findSquareByIndex(8, 4+i), w));
-                pieces.Add(new Piece(PieceType.HAWK, GameContainer.findSquareByIndex(9, 4 + i), w));
-                pieces.Add(new Piece(PieceType.CHANCELLOR, GameContainer.findSquareByIndex(10, 4 + i), w));
-                pieces.Add(new Piece(PieceType.MANN, GameContainer.findSquareByIndex(11, 4 + i), w));
-                pieces.Add(new Piece(PieceType.NONE, GameContainer.findSquareByIndex(12, 4+i), w));
+                var w = i == 0 ? PieceColour.WHITE:PieceColour.BLACK;
+                pieces.AddRange( new List<Piece> {
+                new Piece(PieceType.PAWN, GameContainer.findSquareByIndex(3, 4 + i), w),
+                new Piece(PieceType.KNIGHT, GameContainer.findSquareByIndex(4, 4 + i), w),
+                new Piece(PieceType.ROOK, GameContainer.findSquareByIndex(5, 4 + i), w),
+                new Piece(PieceType.BISHOP, GameContainer.findSquareByIndex(6, 4 + i), w),
+                new Piece(PieceType.QUEEN, GameContainer.findSquareByIndex(7, 4 + i), w),
+                new Piece(PieceType.KING, GameContainer.findSquareByIndex(8, 4 + i), w),
+                new Piece(PieceType.HAWK, GameContainer.findSquareByIndex(9, 4 + i), w),
+                new Piece(PieceType.CHANCELLOR, GameContainer.findSquareByIndex(10, 4 + i), w),
+                new Piece(PieceType.MANN, GameContainer.findSquareByIndex(11, 4 + i), w),
+                new Piece(PieceType.NONE, GameContainer.findSquareByIndex(12, 4 + i), w) } );
             }
-            pieces.Add(new Piece(PieceType.KNIGHT, GameContainer.findSquareByIndex(7, 10), PieceColour.BLACK));
             return pieces;
         }
     }

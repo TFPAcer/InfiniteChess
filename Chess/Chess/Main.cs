@@ -79,7 +79,6 @@ namespace Chess
             int s = (int)Math.Floor(0.842 * sf2);
             foreach (Piece p in pieces) {
                 Bitmap b = new Bitmap(p.icon, new Size(s, s));
-                b.MakeTransparent(Color.White);
                 g.DrawImage(b,p.square.X+3,p.square.Y+(float)Math.Ceiling(sf2*0.08));
             }
         }

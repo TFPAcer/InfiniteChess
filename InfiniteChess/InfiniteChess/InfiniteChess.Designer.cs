@@ -1,6 +1,6 @@
 ﻿namespace InfiniteChess
 {
-    partial class InfinteChess
+    partial class Chess
     {
         /// <summary>
         /// Required designer variable.

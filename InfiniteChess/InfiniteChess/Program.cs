@@ -16,7 +16,7 @@ namespace InfiniteChess
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new InfinteChess());
+            Application.Run(new Chess());
         }
     }
 }
