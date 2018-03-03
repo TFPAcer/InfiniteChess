@@ -71,7 +71,19 @@ namespace InfiniteChess
             if (isX) { foreach (Square s in board) { s.X += sf * amount; } }
             else { foreach (Square s in board) { s.Y += sf * amount; } }
         }
-
+        #region util
+        public static int findLargest(int[] i) {
+            int j = int.MinValue;
+            foreach (int k in i) { if (k > j) j = k; }
+            return j;
+        }
+        public static bool checkSquareForPiece(Square s) {
+            foreach (Piece p in pieces) {
+                if (p.square == s) return true;
+            }
+            return false;
+        }
+        #endregion
         #region scrolling
         private void sUp_Click(object sender, EventArgs e)
         {

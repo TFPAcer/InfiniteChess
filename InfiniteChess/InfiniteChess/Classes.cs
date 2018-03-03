@@ -8,9 +8,14 @@ namespace InfiniteChess
     {
         protected override void OnMouseClick(MouseEventArgs e)
         {
+            
             Square cursorSquare = findSquareByCoords(e.X, e.Y);
             foreach (Piece p in Chess.pieces) {
-                if (p.square == cursorSquare) drawMoves(p);
+                if (p.square == cursorSquare) {
+                    drawMoves(p);
+                    Label l = (Label)Parent.Controls.Find("debug3", false)[0];
+                    l.Text = p.ToString();
+                }
             }
         }
 
@@ -38,10 +43,17 @@ namespace InfiniteChess
 
         public void drawMoves(Piece p) {
             Graphics g = CreateGraphics();
+            //Color[] c = new Color[] { Color.Aqua, Color.Cornsilk, Color.Red, Color.Violet, Color.SeaGreen, Color.PeachPuff, Color.Navy };
+            //System.Random r = new System.Random();
+            //foreach (Square s in p.calculateMovement()) {
+            //    g.DrawRectangle(new Pen(Color.FromArgb(255, c[r.Next(7)])), s.X + 1, s.Y + 1, Chess.sf - 3, Chess.sf - 3);
+            //    g.DrawRectangle(new Pen(Color.FromArgb(195, c[r.Next(7)])), s.X + 2, s.Y + 2, Chess.sf - 5, Chess.sf - 5);
+            //    g.DrawRectangle(new Pen(Color.FromArgb(145, c[r.Next(7)])), s.X + 3, s.Y + 3, Chess.sf - 7, Chess.sf - 7);
+            //}
             foreach (Square s in p.calculateMovement()) {
-                g.DrawRectangle(new Pen(Color.FromArgb(255, 255, 0 ,0)), s.X, s.Y, Chess.sf-1, Chess.sf-1);
-                g.DrawRectangle(new Pen(Color.FromArgb(255, 255, 0, 0)), s.X+1, s.Y+1, Chess.sf-3, Chess.sf-3);
-                g.DrawRectangle(new Pen(Color.FromArgb(255, 255, 0, 0)), s.X+2, s.Y+2, Chess.sf-5, Chess.sf-5);
+                g.DrawRectangle(new Pen(Color.FromArgb(255, 206, 17, 22)), s.X + 1, s.Y + 1, Chess.sf - 3, Chess.sf - 3);
+                g.DrawRectangle(new Pen(Color.FromArgb(195, 206, 17, 22)), s.X + 2, s.Y + 2, Chess.sf - 5, Chess.sf - 5);
+                g.DrawRectangle(new Pen(Color.FromArgb(145, 206, 17, 22)), s.X + 3, s.Y + 3, Chess.sf - 7, Chess.sf - 7);
             }
             g.Dispose();
         }
@@ -55,9 +67,7 @@ namespace InfiniteChess
         public short indexX { get; set; }
         public short indexY { get; set; } //square reference
         public static List<Square> emptyList() { return new List<Square> { }; }
-        public override string ToString()
-        {
-            return indexX.ToString() + ", " + indexY.ToString() + ", " + X.ToString() + ", " + Y.ToString();
-        }
+        public override string ToString() => indexX.ToString() + ", " + indexY.ToString() + ", " + X.ToString() + ", " + Y.ToString();
+        public static List<Square> operator +(Square s1, Square s2) => new List<Square> {s1, s2};
     }
 }
