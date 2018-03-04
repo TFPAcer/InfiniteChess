@@ -35,11 +35,10 @@ namespace InfiniteChess
                 case (PieceType.HAWK): { goto case PieceType.KING; }
                 case (PieceType.KING): {
                         string[] attempts = File.ReadAllLines($"res/movement/{type.ToString()}.txt");
-                        foreach (string att in attempts)
-                        {
+                        foreach (string att in attempts) {
                             Square s = GameContainer.findSquareByIndex(
-                                square.indexX + Int32.Parse(att.Split(',')[0]),
-                                square.indexY + Int32.Parse(att.Split(',')[1]));
+                                square.indexX + int.Parse(att.Split(',')[0]),
+                                square.indexY + int.Parse(att.Split(',')[1]));
                             if (!Chess.checkSquareForPiece(s)) moves.Add(s); 
                         }
                         return moves;
@@ -84,22 +83,27 @@ namespace InfiniteChess
             }
         }
 
+        public void altColour(){
+            colour = colour == PieceColour.WHITE ? PieceColour.BLACK : PieceColour.WHITE;
+            icon = new Bitmap($"res/image/{colour.ToString()}/{type.ToString()}.png");
+        }
+
         public static List<Piece> IntializePieces()
         {
             List<Piece> pieces = new List<Piece>();
             for (int i = 0; i < 2; i++) {
                 var w = i == 0 ? PieceColour.WHITE : PieceColour.BLACK;
-                pieces.AddRange(new List<Piece> {
-                new Piece(PieceType.PAWN, GameContainer.findSquareByIndex(3, 4 + 2*i), w),
-                new Piece(PieceType.KNIGHT, GameContainer.findSquareByIndex(4, 4 + 2*i), w),
-                new Piece(PieceType.ROOK, GameContainer.findSquareByIndex(5, 4 + 2*i), w),
-                new Piece(PieceType.BISHOP, GameContainer.findSquareByIndex(6, 4 + 2*i), w),
-                new Piece(PieceType.QUEEN, GameContainer.findSquareByIndex(7, 4 + 2*i), w),
-                new Piece(PieceType.KING, GameContainer.findSquareByIndex(8, 4 + 2*i), w),
-                new Piece(PieceType.HAWK, GameContainer.findSquareByIndex(9, 4 + 2*i), w),
-                new Piece(PieceType.CHANCELLOR, GameContainer.findSquareByIndex(10, 4 + 2*i), w),
-                new Piece(PieceType.MANN, GameContainer.findSquareByIndex(11, 4 + 2*i), w),
-                new Piece(PieceType.NONE, GameContainer.findSquareByIndex(12, 4 + 2*i), w) });
+                //pieces.AddRange(new List<Piece> {
+                //new Piece(PieceType.PAWN, GameContainer.findSquareByIndex(3, 4 + 2*i), w),
+                //new Piece(PieceType.KNIGHT, GameContainer.findSquareByIndex(4, 4 + 2*i), w),
+                //new Piece(PieceType.ROOK, GameContainer.findSquareByIndex(5, 4 + 2*i), w),
+                //new Piece(PieceType.BISHOP, GameContainer.findSquareByIndex(6, 4 + 2*i), w),
+                //new Piece(PieceType.QUEEN, GameContainer.findSquareByIndex(7, 4 + 2*i), w),
+                //new Piece(PieceType.KING, GameContainer.findSquareByIndex(8, 4 + 2*i), w),
+                //new Piece(PieceType.HAWK, GameContainer.findSquareByIndex(9, 4 + 2*i), w),
+                //new Piece(PieceType.CHANCELLOR, GameContainer.findSquareByIndex(10, 4 + 2*i), w),
+                //new Piece(PieceType.MANN, GameContainer.findSquareByIndex(11, 4 + 2*i), w),
+                //new Piece(PieceType.NONE, GameContainer.findSquareByIndex(12, 4 + 2*i), w) });
             }
             return pieces;
         }

@@ -8,19 +8,74 @@ namespace InfiniteChess
     {
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            
+            Label l = (Label)Parent.Controls.Find("debug3", false)[0];
             Square cursorSquare = findSquareByCoords(e.X, e.Y);
             foreach (Piece p in Chess.pieces) {
                 if (p.square == cursorSquare) {
                     drawMoves(p);
-                    Label l = (Label)Parent.Controls.Find("debug3", false)[0];
+
                     l.Text = p.ToString();
                 }
             }
         }
 
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            Label l = (Label)Parent.Controls.Find("debug3", false)[0];
+            Button b = (Button)Parent.Controls.Find("begin", false)[0];
+
+            Point a = Parent.PointToClient(new Point(Cursor.Position.X, Cursor.Position.Y));
+            Square cursorSquare = findSquareByCoords(a.X - Location.X, a.Y - Location.Y);
+            Piece target = null;
+            foreach (Piece p in Chess.pieces) { if (p.square == cursorSquare) { target = p; } }
+
+            if (cursorSquare != null) {
+                if (target != null) {
+                    if (e.KeyChar == '\b') Chess.pieces.Remove(target);
+                    if (e.KeyChar == 'c') target.altColour();
+                }
+                else {
+                    switch (e.KeyChar) {
+                        case '0': {
+                                Chess.pieces.Add(new Piece(PieceType.NONE, cursorSquare, PieceColour.WHITE));
+                                break; }
+                        case '1': {
+                                Chess.pieces.Add(new Piece(PieceType.PAWN, cursorSquare, PieceColour.WHITE));
+                                break; }
+                        case '2': {
+                                Chess.pieces.Add(new Piece(PieceType.BISHOP, cursorSquare, PieceColour.WHITE));
+                                break; }
+                        case '3': {
+                                Chess.pieces.Add(new Piece(PieceType.KNIGHT, cursorSquare, PieceColour.WHITE));
+                                break; }
+                        case '4': {
+                                Chess.pieces.Add(new Piece(PieceType.MANN, cursorSquare, PieceColour.WHITE));
+                                break; }
+                        case '5': {
+                                Chess.pieces.Add(new Piece(PieceType.HAWK, cursorSquare, PieceColour.WHITE));
+                                break; }
+                        case '6': {
+                                Chess.pieces.Add(new Piece(PieceType.ROOK, cursorSquare, PieceColour.WHITE));
+                                break; }
+                        case '7': {
+                                Chess.pieces.Add(new Piece(PieceType.CHANCELLOR, cursorSquare, PieceColour.WHITE));
+                                break; }
+                        case '8': {
+                                Chess.pieces.Add(new Piece(PieceType.QUEEN, cursorSquare, PieceColour.WHITE));
+                                break; }
+                        case '9': {
+                                Chess.pieces.Add(new Piece(PieceType.KING, cursorSquare, PieceColour.WHITE));
+                                break; }
+                    }
+
+                }
+                b.PerformClick();
+            }
+        }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            Focus();
             Label l = (Label)Parent.Controls.Find("debug2", false)[0];
             Square cursorSquare = findSquareByCoords(e.X, e.Y);
             l.Text = cursorSquare?.ToString() ?? "null";
