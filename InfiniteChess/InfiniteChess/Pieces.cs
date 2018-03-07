@@ -45,39 +45,39 @@ namespace InfiniteChess
                     }
                 case (PieceType.ROOK): { goto case PieceType.BISHOP; }
                 case (PieceType.BISHOP): {
-                        bool[] tracker = { false, false, false, false };
-                        int[][] direction = type == PieceType.BISHOP ?
-                            new int[][] { new int[]{-1,-1}, new int[]{-1,1}, new int[]{1,-1}, new int[]{1,1} } :
-                            new int[][] { new int[]{-1,0}, new int[]{1,0}, new int[]{0,-1}, new int[]{0,1} };
-                        int max = Chess.findLargest(new int[] {
-                            square.indexX-Chess.bounds[0], square.indexY-Chess.bounds[2],
-                            Chess.bounds[1]-square.indexX, Chess.bounds[3]-square.indexY} );
-                        for (int i = 1; i <= max; i++) {
-                            for (int j = 0; j < 4; j++) {
-                                if (!tracker[j]) {
-                                    Square attempt = GameContainer.findSquareByIndex( 
-                                        square.indexX - i*direction[j][0], square.indexY - i*direction[j][1]) ?? square;
-                                    tracker[j] = Chess.checkSquareForPiece(attempt);
-                                    if (!tracker[j]) moves.Add(attempt);
-                                }
+                    bool[] tracker = { false, false, false, false };
+                    int[][] direction = type == PieceType.BISHOP ?
+                        new int[][] { new int[]{-1,-1}, new int[]{-1,1}, new int[]{1,-1}, new int[]{1,1} } :
+                        new int[][] { new int[]{-1,0}, new int[]{1,0}, new int[]{0,-1}, new int[]{0,1} };
+                    int max = Chess.findLargest(new int[] {
+                        square.indexX-Chess.bounds[0], square.indexY-Chess.bounds[2],
+                        Chess.bounds[1]-square.indexX, Chess.bounds[3]-square.indexY} );
+                    for (int i = 1; i <= max; i++) {
+                        for (int j = 0; j < 4; j++) {
+                            if (!tracker[j]) {
+                                Square attempt = GameContainer.findSquareByIndex( 
+                                    square.indexX - i*direction[j][0], square.indexY - i*direction[j][1]) ?? square;
+                                tracker[j] = Chess.checkSquareForPiece(attempt);
+                                if (!tracker[j]) moves.Add(attempt);
                             }
                         }
+                    }
+                    return moves;
+                }
+                case PieceType.QUEEN: {
+                        moves.AddRange(new Piece(
+                            PieceType.BISHOP, square, PieceColour.WHITE).calculateMovement());
+                        moves.AddRange(new Piece(
+                            PieceType.ROOK, square, PieceColour.WHITE).calculateMovement());
+                        return moves;
+                    } 
+                case PieceType.CHANCELLOR: { //KNIGHT + ROOK
+                        moves.AddRange(new Piece(
+                            PieceType.KNIGHT, square, PieceColour.WHITE).calculateMovement());
+                        moves.AddRange(new Piece(
+                            PieceType.ROOK, square, PieceColour.WHITE).calculateMovement());
                         return moves;
                     }
-                    case PieceType.QUEEN: {
-                            moves.AddRange(new Piece(
-                                PieceType.BISHOP, square, PieceColour.WHITE).calculateMovement());
-                            moves.AddRange(new Piece(
-                                PieceType.ROOK, square, PieceColour.WHITE).calculateMovement());
-                            return moves;
-                        } 
-                    case PieceType.CHANCELLOR: { //KNIGHT + ROOK
-                            moves.AddRange(new Piece(
-                                PieceType.KNIGHT, square, PieceColour.WHITE).calculateMovement());
-                            moves.AddRange(new Piece(
-                                PieceType.ROOK, square, PieceColour.WHITE).calculateMovement());
-                            return moves;
-                        }
                 default:
                     return moves;
             }

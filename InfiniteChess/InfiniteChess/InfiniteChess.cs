@@ -13,6 +13,8 @@ namespace InfiniteChess
     public partial class Chess : Form
     {
         //global variables
+        public delegate void Del(Piece p);
+
         public static List<Square> board = new List<Square>(); //stores all squares of the board
         public static int[] origin = { 0, 570 }; //coordinates of [0,0]
         public static int[] bounds = { 0, 0, 0, 0 }; //boundaries of the generated board
@@ -20,6 +22,10 @@ namespace InfiniteChess
         public static int sf = 38;
 
         public static List<Piece> pieces = new List<Piece>();
+
+        [Flags] public enum State {
+            Colour = 0x01, Move = 0x02, Check = 0x04, Win = 0x08, Stale = 0x0F
+        }
 
         #region init
         public Chess()
@@ -60,18 +66,22 @@ namespace InfiniteChess
             g.Dispose();
         }
 
+        public static void handleTurn(Del) {
+
+        }
+
         private void begin_Click(object sender, EventArgs e)
         {
             drawBoard();
         }
-
+        #region util
         public void updateSquares(int amount, bool isX, object sender)
         {
             origin[isX ? 0 : 1] += sf * amount;
             if (isX) { foreach (Square s in board) { s.X += sf * amount; } }
             else { foreach (Square s in board) { s.Y += sf * amount; } }
         }
-        #region util
+
         public static int findLargest(int[] i) {
             int j = int.MinValue;
             foreach (int k in i) { if (k > j) j = k; }

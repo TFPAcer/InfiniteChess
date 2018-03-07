@@ -6,20 +6,21 @@ namespace InfiniteChess
 {
     class GameContainer : Panel
     {
+
         protected override void OnMouseClick(MouseEventArgs e)
         {
+            Chess.Del drawDelegate = drawMoves;
             Label l = (Label)Parent.Controls.Find("debug3", false)[0];
             Square cursorSquare = findSquareByCoords(e.X, e.Y);
             foreach (Piece p in Chess.pieces) {
                 if (p.square == cursorSquare) {
-                    drawMoves(p);
-
+                    drawDelegate(p);
                     l.Text = p.ToString();
                 }
             }
         }
 
-        protected override void OnKeyPress(KeyPressEventArgs e)
+        protected override void OnKeyPress(KeyPressEventArgs e) //debug function
         {
             Label l = (Label)Parent.Controls.Find("debug3", false)[0];
             Button b = (Button)Parent.Controls.Find("begin", false)[0];

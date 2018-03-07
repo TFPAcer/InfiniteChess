@@ -38,7 +38,7 @@ namespace Chess
                     if ((chessWin.pieces[pieceClicked].colour == PieceColour.BLACK && chessWin.state == GameState.PLAY_BLACK) ||
                         (chessWin.pieces[pieceClicked].colour == PieceColour.WHITE && chessWin.state == GameState.PLAY_WHITE)) {
                         chessWin.pieceMoving = pieceClicked;
-                        drawAvailableMovement((object)e, chessWin.pieces[pieceClicked]);
+                        drawAvailableMovement(e, chessWin.pieces[pieceClicked]);
                         switch (chessWin.state) {
                             case GameState.PLAY_BLACK: chessWin.state = GameState.MOVING_BLACK; break;
                             default:
