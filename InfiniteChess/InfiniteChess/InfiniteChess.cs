@@ -10,6 +10,8 @@ using System.Windows.Forms;
 
 namespace InfiniteChess
 {
+    [Flags] public enum GameState { Colour = 0x01, Move = 0x02, Check = 0x04, Win = 0x08, Stale = 0x0F }
+
     public partial class Chess : Form
     {
         //global variables
@@ -22,10 +24,7 @@ namespace InfiniteChess
         public static int sf = 38;
 
         public static List<Piece> pieces = new List<Piece>();
-
-        [Flags] public enum State {
-            Colour = 0x01, Move = 0x02, Check = 0x04, Win = 0x08, Stale = 0x0F
-        }
+        public static GameState State = (GameState)0x17;
 
         #region init
         public Chess()
@@ -66,8 +65,8 @@ namespace InfiniteChess
             g.Dispose();
         }
 
-        public static void handleTurn(Del) {
-
+        public static void handleTurn(Del d, Piece p) {
+            d(p);
         }
 
         private void begin_Click(object sender, EventArgs e)

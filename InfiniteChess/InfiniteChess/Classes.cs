@@ -6,15 +6,15 @@ namespace InfiniteChess
 {
     class GameContainer : Panel
     {
-
         protected override void OnMouseClick(MouseEventArgs e)
         {
             Chess.Del drawDelegate = drawMoves;
+
             Label l = (Label)Parent.Controls.Find("debug3", false)[0];
             Square cursorSquare = findSquareByCoords(e.X, e.Y);
             foreach (Piece p in Chess.pieces) {
                 if (p.square == cursorSquare) {
-                    drawDelegate(p);
+                    Chess.handleTurn(drawDelegate, p);
                     l.Text = p.ToString();
                 }
             }
