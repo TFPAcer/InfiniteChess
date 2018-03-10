@@ -21,13 +21,17 @@ namespace InfiniteChess
             icon = new Bitmap($"res/image/{c.ToString()}/{t.ToString()}.png");
         }
 
+        public void move(Square s) => square = s;
+
         public List<Square> calculateMovement() {
             List<Square> moves = Square.emptyList();
             switch (type) {
                 case (PieceType.PAWN): {
-                        var direction = colour == PieceColour.WHITE ? square.indexY + 1 : square.indexY - 1;
-                        Square attempt = GameContainer.findSquareByIndex(square.indexX, direction);
-                        if (!Chess.checkSquareForPiece(attempt)) moves.Add(attempt);
+                        int direction = colour == PieceColour.WHITE ? square.indexY + 1 : square.indexY - 1;
+                        for (int i = -1; i <= 1; i++) {
+                            Square attempt = Chess.GameContainer.findSquareByIndex(square.indexX + i, direction);
+                            if (Chess.checkSquareForPiece(attempt) == Math.Abs(i)) moves.Add(attempt);
+                        }
                         return moves;
                     }
                 case (PieceType.MANN): { goto case PieceType.KING; }
@@ -36,16 +40,16 @@ namespace InfiniteChess
                 case (PieceType.KING): {
                         string[] attempts = File.ReadAllLines($"res/movement/{type.ToString()}.txt");
                         foreach (string att in attempts) {
-                            Square s = GameContainer.findSquareByIndex(
+                            Square s = Chess.GameContainer.findSquareByIndex(
                                 square.indexX + int.Parse(att.Split(',')[0]),
                                 square.indexY + int.Parse(att.Split(',')[1]));
-                            if (!Chess.checkSquareForPiece(s)) moves.Add(s); 
+                            if (Chess.checkSquareForPiece(s) != 2 && s != null) moves.Add(s); 
                         }
                         return moves;
                     }
                 case (PieceType.ROOK): { goto case PieceType.BISHOP; }
                 case (PieceType.BISHOP): {
-                    bool[] tracker = { false, false, false, false };
+                    int[] tracker = { 0, 0, 0, 0 };
                     int[][] direction = type == PieceType.BISHOP ?
                         new int[][] { new int[]{-1,-1}, new int[]{-1,1}, new int[]{1,-1}, new int[]{1,1} } :
                         new int[][] { new int[]{-1,0}, new int[]{1,0}, new int[]{0,-1}, new int[]{0,1} };
@@ -54,11 +58,14 @@ namespace InfiniteChess
                         Chess.bounds[1]-square.indexX, Chess.bounds[3]-square.indexY} );
                     for (int i = 1; i <= max; i++) {
                         for (int j = 0; j < 4; j++) {
-                            if (!tracker[j]) {
-                                Square attempt = GameContainer.findSquareByIndex( 
+                            if (tracker[j] != 2) {
+                                Square attempt = Chess.GameContainer.findSquareByIndex( 
                                     square.indexX - i*direction[j][0], square.indexY - i*direction[j][1]) ?? square;
                                 tracker[j] = Chess.checkSquareForPiece(attempt);
-                                if (!tracker[j]) moves.Add(attempt);
+                                if (tracker[j] != 2) {
+                                    moves.Add(attempt);
+                                    if (tracker[j] == 1) tracker[j] = 2;
+                                }
                             }
                         }
                     }

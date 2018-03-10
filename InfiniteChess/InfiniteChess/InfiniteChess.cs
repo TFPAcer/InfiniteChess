@@ -10,12 +10,13 @@ using System.Windows.Forms;
 
 namespace InfiniteChess
 {
-    [Flags] public enum GameState { Colour = 0x01, Move = 0x02, Check = 0x04, Win = 0x08, Stale = 0x0F }
+    [Flags] public enum GameState { COLOUR = 0x01, MOVE = 0x02, CHECK = 0x04, WIN = 0x08, STALE = 0x0F }
 
     public partial class Chess : Form
     {
         //global variables
-        public delegate void Del(Piece p);
+        public delegate void drawMovesDelegate(Piece p);
+        public delegate void drawBoardDelegate();
 
         public static List<Square> board = new List<Square>(); //stores all squares of the board
         public static int[] origin = { 0, 570 }; //coordinates of [0,0]
@@ -24,7 +25,8 @@ namespace InfiniteChess
         public static int sf = 38;
 
         public static List<Piece> pieces = new List<Piece>();
-        public static GameState State = (GameState)0x17;
+        public static Piece pieceMoving = null;
+        public static GameState state = 0x0;
 
         #region init
         public Chess()
@@ -65,10 +67,6 @@ namespace InfiniteChess
             g.Dispose();
         }
 
-        public static void handleTurn(Del d, Piece p) {
-            d(p);
-        }
-
         private void begin_Click(object sender, EventArgs e)
         {
             drawBoard();
@@ -86,11 +84,16 @@ namespace InfiniteChess
             foreach (int k in i) { if (k > j) j = k; }
             return j;
         }
-        public static bool checkSquareForPiece(Square s) {
+        public static int checkSquareForPiece(Square s) {
             foreach (Piece p in pieces) {
-                if (p.square == s) return true;
+                if (p.square == s) {
+                    if (p.type == PieceType.KING) return 2;
+                    if (state.HasFlag(GameState.COLOUR) == p.colour.HasFlag(PieceColour.WHITE))
+                        return 1;
+                    else return 2;
+                }
             }
-            return false;
+            return 0;
         }
         #endregion
         #region scrolling

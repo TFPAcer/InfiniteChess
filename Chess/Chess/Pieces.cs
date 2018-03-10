@@ -7,7 +7,7 @@ using System.IO;
 namespace Chess
 {
     public enum PieceType { PAWN, KNIGHT, ROOK, BISHOP, QUEEN, KING, MANN, HAWK, CHANCELLOR, NONE };
-    public enum PieceColour { BLACK, WHITE }; //WHITE moves up the board, BLACK down
+    public enum PieceColour { WHITE, BLACK }; //WHITE moves up the board, BLACK down
 
     public class Piece
     {
@@ -19,7 +19,7 @@ namespace Chess
         public Piece(PieceType t, Square s, PieceColour c) {
             type = t; colour = c; square = s; icon = icon = new Bitmap($"res/image/{c.ToString()}/{t.ToString()}.png"); }
 
-        public void move(Square s) { square = s; }
+        public void move(Square s) => square = s;
 
         public List<Square> calculateMovement() {
             if (type == PieceType.NONE) { return Square.emptyList(); }
