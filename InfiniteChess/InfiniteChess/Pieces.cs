@@ -21,7 +21,10 @@ namespace InfiniteChess
             icon = new Bitmap($"res/image/{c.ToString()}/{t.ToString()}.png");
         }
 
-        public void move(Square s) => square = s;
+        public void move(Square s) {
+            Chess.pieces.Remove(Chess.pieces.Find(p => p.square == s));
+            square = s;    
+        }
 
         public List<Square> calculateMovement() {
             List<Square> moves = Square.emptyList();

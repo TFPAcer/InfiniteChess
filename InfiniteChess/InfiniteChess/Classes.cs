@@ -64,7 +64,7 @@ namespace InfiniteChess
             private static bool pieceSearchParameter(Square s, Piece p) {
                 return p.square == s;
             }
-            private static TForm getForm<TForm>() where TForm : Form {
+            public static TForm getForm<TForm>() where TForm : Form {
                 return (TForm)Application.OpenForms[0];
             }
 
