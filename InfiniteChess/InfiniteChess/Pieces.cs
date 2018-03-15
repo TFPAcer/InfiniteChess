@@ -26,14 +26,14 @@ namespace InfiniteChess
             square = s;    
         }
 
-        public List<Square> calculateMovement() {
+        public List<Square> calculateMovement(bool includeKings) {
             List<Square> moves = Square.emptyList();
             switch (type) {
                 case (PieceType.PAWN): {
                         int direction = colour == PieceColour.WHITE ? square.indexY + 1 : square.indexY - 1;
                         for (int i = -1; i <= 1; i++) {
                             Square attempt = Chess.GameContainer.findSquareByIndex(square.indexX + i, direction);
-                            if (Chess.checkSquareForPiece(attempt) == Math.Abs(i)) moves.Add(attempt);
+                            if (Chess.checkSquareForPiece(attempt, includeKings) == Math.Abs(i)) moves.Add(attempt);
                         }
                         return moves;
                     }
@@ -46,7 +46,7 @@ namespace InfiniteChess
                             Square s = Chess.GameContainer.findSquareByIndex(
                                 square.indexX + int.Parse(att.Split(',')[0]),
                                 square.indexY + int.Parse(att.Split(',')[1]));
-                            if (Chess.checkSquareForPiece(s) != 2 && s != null) moves.Add(s); 
+                            if (Chess.checkSquareForPiece(s, includeKings) != 2 && s != null) moves.Add(s); 
                         }
                         return moves;
                     }
@@ -64,7 +64,7 @@ namespace InfiniteChess
                             if (tracker[j] != 2) {
                                 Square attempt = Chess.GameContainer.findSquareByIndex( 
                                     square.indexX - i*direction[j][0], square.indexY - i*direction[j][1]) ?? square;
-                                tracker[j] = Chess.checkSquareForPiece(attempt);
+                                tracker[j] = Chess.checkSquareForPiece(attempt, includeKings);
                                 if (tracker[j] != 2) {
                                     moves.Add(attempt);
                                     if (tracker[j] == 1) tracker[j] = 2;
@@ -76,16 +76,16 @@ namespace InfiniteChess
                 }
                 case PieceType.QUEEN: {
                         moves.AddRange(new Piece(
-                            PieceType.BISHOP, square, PieceColour.WHITE).calculateMovement());
+                            PieceType.BISHOP, square, PieceColour.WHITE).calculateMovement(false));
                         moves.AddRange(new Piece(
-                            PieceType.ROOK, square, PieceColour.WHITE).calculateMovement());
+                            PieceType.ROOK, square, PieceColour.WHITE).calculateMovement(false));
                         return moves;
                     } 
                 case PieceType.CHANCELLOR: { //KNIGHT + ROOK
                         moves.AddRange(new Piece(
-                            PieceType.KNIGHT, square, PieceColour.WHITE).calculateMovement());
+                            PieceType.KNIGHT, square, PieceColour.WHITE).calculateMovement(false));
                         moves.AddRange(new Piece(
-                            PieceType.ROOK, square, PieceColour.WHITE).calculateMovement());
+                            PieceType.ROOK, square, PieceColour.WHITE).calculateMovement(false));
                         return moves;
                     }
                 default:
@@ -118,7 +118,7 @@ namespace InfiniteChess
             return pieces;
         }
 
-        public override string ToString() => $"{type}: \n{colour}, \n{square.ToString()}";
+        public override string ToString() => $"{type}: {colour}, {square.ToString()}";
     }
 
 }

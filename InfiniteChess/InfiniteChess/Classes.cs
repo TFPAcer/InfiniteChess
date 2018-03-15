@@ -26,13 +26,37 @@ namespace InfiniteChess
                     }
                 }
                 else {
-                    if (pieceMoving.calculateMovement().Contains(s)) {
+                    if (pieceMoving.calculateMovement(false).Contains(s)) {
                         pieceMoving.move(s);
                         state ^= (GameState.MOVE | GameState.COLOUR);
+                        evaluateCheck();
                     }
                     else state ^= GameState.MOVE;
                     c.drawBoard();
                     pieceMoving = null;
+                    //c.debug3.Text = ((int)state).ToString();
+                }
+            }
+
+            public void evaluateCheck() {
+                c.debug3.Text = "";
+                var colour = state.HasFlag(GameState.COLOUR) ? PieceColour.BLACK : PieceColour.WHITE;
+                Square king = pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
+
+                foreach (Piece p in pieces) {
+                    //foreach (Square s in p.calculateMovement(true))
+                    //{ c.debug3.Text += p.ToString() + ": " + s.ToString() + "\n"; }
+                    //c.debug3.Text += p.calculateMovement(true).Find(s => s == king).ToString();
+
+                    var a = from s in p.calculateMovement(true) where 
+                            s.ToString() == king.ToString()
+                            select s;
+                    foreach (var b in a) { c.debug3.Text += b.ToString() + "\n"; }
+
+
+                    if (a.Count() != 0) {
+                        state ^= GameState.CHECK; break;
+                    }
                 }
             }
 
@@ -53,7 +77,7 @@ namespace InfiniteChess
                 //    g.DrawRectangle(new Pen(Color.FromArgb(195, c[r.Next(7)])), s.X + 2, s.Y + 2, Chess.sf - 5, Chess.sf - 5);
                 //    g.DrawRectangle(new Pen(Color.FromArgb(145, c[r.Next(7)])), s.X + 3, s.Y + 3, Chess.sf - 7, Chess.sf - 7);
                 //}
-                foreach (Square s in p.calculateMovement()) {
+                foreach (Square s in p.calculateMovement(true)) {
                     g.DrawRectangle(new Pen(Color.FromArgb(255, 206, 17, 22)), s.X + 1, s.Y + 1, sf - 3, sf - 3);
                     g.DrawRectangle(new Pen(Color.FromArgb(195, 206, 17, 22)), s.X + 2, s.Y + 2, sf - 5, sf - 5);
                     g.DrawRectangle(new Pen(Color.FromArgb(145, 206, 17, 22)), s.X + 3, s.Y + 3, sf - 7, sf - 7);
@@ -161,14 +185,22 @@ namespace InfiniteChess
         }
     }
 
-    public class Square
+    public class Square : IEquatable<Square>
     {
         public int X { get; set; }
         public int Y { get; set; } //actual coordinates
         public short indexX { get; set; }
         public short indexY { get; set; } //square reference
-        public static List<Square> emptyList() { return new List<Square> { }; }
+        public static List<Square> emptyList() => new List<Square> { }; 
         public override string ToString() => indexX.ToString() + ", " + indexY.ToString() + ", " + X.ToString() + ", " + Y.ToString();
         public static List<Square> operator +(Square s1, Square s2) => new List<Square> { s1, s2 };
+        public bool Equals(Square s) => ToString() == s.ToString();
+        public override bool Equals(object obj) {
+            if (obj == null) return false;
+            Square s = obj as Square;
+            if (s == null) return false;
+            else return Equals(s);
+        }
+        public override int GetHashCode() => ToString().GetHashCode();
     }
 }

@@ -84,10 +84,10 @@ namespace InfiniteChess
             foreach (int k in i) { if (k > j) j = k; }
             return j;
         }
-        public static int checkSquareForPiece(Square s) {
+        public static int checkSquareForPiece(Square s, bool includeKings) {
             foreach (Piece p in pieces) {
                 if (p.square == s) {
-                    if (p.type == PieceType.KING) return 2;
+                    if (p.type == PieceType.KING && !includeKings) return 2;
                     if (state.HasFlag(GameState.COLOUR) == p.colour.HasFlag(PieceColour.WHITE))
                         return 1;
                     else return 2;
@@ -110,6 +110,7 @@ namespace InfiniteChess
                                            indexY = (short)bounds[3] });
                 }
             }
+            drawBoard();
         }
 
         private void sDown_Click(object sender, EventArgs e)
@@ -125,6 +126,7 @@ namespace InfiniteChess
                                            indexY = (short)bounds[2] });
                 }
             }
+            drawBoard();
         }
 
         private void sRight_Click(object sender, EventArgs e)
@@ -140,6 +142,7 @@ namespace InfiniteChess
                                            indexY = (short)j });
                 }
             }
+            drawBoard();
         }
 
         private void sLeft_Click(object sender, EventArgs e)
@@ -155,6 +158,7 @@ namespace InfiniteChess
                                            indexY = (short)j });
                 }
             }
+            drawBoard();
         }
         #endregion
     }
