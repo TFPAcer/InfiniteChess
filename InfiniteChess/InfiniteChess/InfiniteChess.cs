@@ -15,9 +15,6 @@ namespace InfiniteChess
     public partial class Chess : Form
     {
         //global variables
-        public delegate void drawMovesDelegate(Piece p);
-        public delegate void drawBoardDelegate();
-
         public static List<Square> board = new List<Square>(); //stores all squares of the board
         public static int[] origin = { 0, 570 }; //coordinates of [0,0]
         public static int[] bounds = { 0, 0, 0, 0 }; //boundaries of the generated board
@@ -84,8 +81,8 @@ namespace InfiniteChess
             foreach (int k in i) { if (k > j) j = k; }
             return j;
         }
-        public static int checkSquareForPiece(Square s, bool includeKings) {
-            foreach (Piece p in pieces) {
+        public static int checkSquareForPiece(Square s, bool includeKings, List<Piece> board) {
+            foreach (Piece p in board) {
                 if (p.square == s) {
                     if (p.type == PieceType.KING && !includeKings) return 2;
                     if (state.HasFlag(GameState.COLOUR) == p.colour.HasFlag(PieceColour.WHITE))

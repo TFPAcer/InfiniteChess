@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace InfiniteChess
@@ -21,19 +22,20 @@ namespace InfiniteChess
             icon = new Bitmap($"res/image/{c.ToString()}/{t.ToString()}.png");
         }
 
-        public void move(Square s) {
-            Chess.pieces.Remove(Chess.pieces.Find(p => p.square == s));
-            square = s;    
+        public List<Piece> move(Square s, List<Piece> pieces) {
+            pieces.Remove(pieces.Find(p => p.square == s));
+            square = s;
+            return pieces;
         }
 
-        public List<Square> calculateMovement(bool includeKings) {
+        public List<Square> calculateMovement(bool includeKings, List<Piece> pieces) {
             List<Square> moves = Square.emptyList();
             switch (type) {
                 case (PieceType.PAWN): {
                         int direction = colour == PieceColour.WHITE ? square.indexY + 1 : square.indexY - 1;
                         for (int i = -1; i <= 1; i++) {
                             Square attempt = Chess.GameContainer.findSquareByIndex(square.indexX + i, direction);
-                            if (Chess.checkSquareForPiece(attempt, includeKings) == Math.Abs(i)) moves.Add(attempt);
+                            if (Chess.checkSquareForPiece(attempt, includeKings, pieces) == Math.Abs(i)) moves.Add(attempt);
                         }
                         return moves;
                     }
@@ -46,7 +48,7 @@ namespace InfiniteChess
                             Square s = Chess.GameContainer.findSquareByIndex(
                                 square.indexX + int.Parse(att.Split(',')[0]),
                                 square.indexY + int.Parse(att.Split(',')[1]));
-                            if (Chess.checkSquareForPiece(s, includeKings) != 2 && s != null) moves.Add(s); 
+                            if (Chess.checkSquareForPiece(s, includeKings, pieces) != 2 && s != null) moves.Add(s); 
                         }
                         return moves;
                     }
@@ -64,10 +66,10 @@ namespace InfiniteChess
                             if (tracker[j] != 2) {
                                 Square attempt = Chess.GameContainer.findSquareByIndex( 
                                     square.indexX - i*direction[j][0], square.indexY - i*direction[j][1]) ?? square;
-                                tracker[j] = Chess.checkSquareForPiece(attempt, includeKings);
+                                tracker[j] = Chess.checkSquareForPiece(attempt, includeKings, pieces);
                                 if (tracker[j] != 2) {
                                     moves.Add(attempt);
-                                    if (tracker[j] == 1) tracker[j] = 2;
+                                    if (tracker[j] == 1) tracker[j] = 2; 
                                 }
                             }
                         }
@@ -76,16 +78,16 @@ namespace InfiniteChess
                 }
                 case PieceType.QUEEN: {
                         moves.AddRange(new Piece(
-                            PieceType.BISHOP, square, PieceColour.WHITE).calculateMovement(false));
+                            PieceType.BISHOP, square, PieceColour.WHITE).calculateMovement(includeKings, pieces));
                         moves.AddRange(new Piece(
-                            PieceType.ROOK, square, PieceColour.WHITE).calculateMovement(false));
+                            PieceType.ROOK, square, PieceColour.WHITE).calculateMovement(includeKings, pieces));
                         return moves;
                     } 
                 case PieceType.CHANCELLOR: { //KNIGHT + ROOK
                         moves.AddRange(new Piece(
-                            PieceType.KNIGHT, square, PieceColour.WHITE).calculateMovement(false));
+                            PieceType.KNIGHT, square, PieceColour.WHITE).calculateMovement(includeKings, pieces));
                         moves.AddRange(new Piece(
-                            PieceType.ROOK, square, PieceColour.WHITE).calculateMovement(false));
+                            PieceType.ROOK, square, PieceColour.WHITE).calculateMovement(includeKings, pieces));
                         return moves;
                     }
                 default:

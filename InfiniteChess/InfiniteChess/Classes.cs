@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System;
 using System.Linq;
+using System.Diagnostics;
 
 namespace InfiniteChess
 {
@@ -26,37 +27,39 @@ namespace InfiniteChess
                     }
                 }
                 else {
-                    if (pieceMoving.calculateMovement(false).Contains(s)) {
-                        pieceMoving.move(s);
+                    var colour = state.HasFlag(GameState.COLOUR) ? PieceColour.WHITE : PieceColour.BLACK;
+                    if (pieceMoving.calculateMovement(false, pieces).Contains(s)) {
+                        pieceMoving.move(s, pieces);
+                        if (evaluateCheck(pieces, colour)) {
+                            state ^= GameState.CHECK; evaluateCheckMate(colour);
+                        }
                         state ^= (GameState.MOVE | GameState.COLOUR);
-                        evaluateCheck();
                     }
                     else state ^= GameState.MOVE;
                     c.drawBoard();
                     pieceMoving = null;
-                    //c.debug3.Text = ((int)state).ToString();
                 }
+                c.debug3.Text = ((int)state).ToString();
             }
 
-            public void evaluateCheck() {
-                c.debug3.Text = "";
-                var colour = state.HasFlag(GameState.COLOUR) ? PieceColour.BLACK : PieceColour.WHITE;
-                Square king = pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
-
-                foreach (Piece p in pieces) {
-                    //foreach (Square s in p.calculateMovement(true))
-                    //{ c.debug3.Text += p.ToString() + ": " + s.ToString() + "\n"; }
-                    //c.debug3.Text += p.calculateMovement(true).Find(s => s == king).ToString();
-
-                    var a = from s in p.calculateMovement(true) where 
-                            s.ToString() == king.ToString()
-                            select s;
-                    foreach (var b in a) { c.debug3.Text += b.ToString() + "\n"; }
-
-
-                    if (a.Count() != 0) {
-                        state ^= GameState.CHECK; break;
+            public bool evaluateCheck(List<Piece> board, PieceColour c) {
+                if (state.HasFlag(GameState.CHECK)) { state ^= GameState.CHECK; }
+                Square king = board.Find(p => p.type == PieceType.KING && p.colour == c).square;
+                foreach (Piece p in board) {
+                    if (p.colour == c) continue;
+                    if (p.calculateMovement(true, board).Contains(king)) {
+                        return true;
                     }
+                }
+                return false;
+            }
+
+            public void evaluateCheckMate(PieceColour c) {
+                List<Piece> newBoard = pieces;
+                Piece king = newBoard.Find(p => p.type == PieceType.KING && p.colour == c);
+                foreach (Square s in king.calculateMovement(false, newBoard)) {
+                    var a = evaluateCheck(king.move(s, newBoard), c);
+                    Debug.WriteLine($"{s.ToString()}: {a}");
                 }
             }
 
@@ -77,7 +80,7 @@ namespace InfiniteChess
                 //    g.DrawRectangle(new Pen(Color.FromArgb(195, c[r.Next(7)])), s.X + 2, s.Y + 2, Chess.sf - 5, Chess.sf - 5);
                 //    g.DrawRectangle(new Pen(Color.FromArgb(145, c[r.Next(7)])), s.X + 3, s.Y + 3, Chess.sf - 7, Chess.sf - 7);
                 //}
-                foreach (Square s in p.calculateMovement(true)) {
+                foreach (Square s in p.calculateMovement(true, pieces)) {
                     g.DrawRectangle(new Pen(Color.FromArgb(255, 206, 17, 22)), s.X + 1, s.Y + 1, sf - 3, sf - 3);
                     g.DrawRectangle(new Pen(Color.FromArgb(195, 206, 17, 22)), s.X + 2, s.Y + 2, sf - 5, sf - 5);
                     g.DrawRectangle(new Pen(Color.FromArgb(145, 206, 17, 22)), s.X + 3, s.Y + 3, sf - 7, sf - 7);
@@ -85,25 +88,18 @@ namespace InfiniteChess
                 g.Dispose();
             }
             #region util
-            private static bool pieceSearchParameter(Square s, Piece p) {
-                return p.square == s;
-            }
             public static TForm getForm<TForm>() where TForm : Form {
                 return (TForm)Application.OpenForms[0];
             }
 
             public static Square findSquareByCoords(int x, int y) {
-                foreach (Square s in board) {
-                    if (x >= s.X && x < s.X + sf && y >= s.Y && y < s.Y + sf) return s;
-                }
-                return null;
+                var result = from s in board where x >= s.X && x < s.X + sf && y >= s.Y && y < s.Y + sf select s;
+                return result.Count() > 0 ? result.ToArray()[0] : null;
             }
 
             public static Square findSquareByIndex(int indexX, int indexY) {
-                foreach (Square s in board) {
-                    if (indexX == s.indexX && indexY == s.indexY) return s;
-                }
-                return null;
+                var result = from s in board where indexX == s.indexX && indexY == s.indexY select s;
+                return result.Count() > 0 ? result.ToArray()[0] : null;
             }
             #endregion
             #region debug
@@ -118,59 +114,59 @@ namespace InfiniteChess
                 {
                     if (target != null)
                     {
-                        if (e.KeyChar == '\b') pieces.Remove(target);
-                        if (e.KeyChar == 'c') target.altColour();
+                        if (e.KeyChar == 'e') pieces.Remove(target);
+                        if (e.KeyChar == 'q') target.altColour();
                     }
                     else
                     {
                         switch (e.KeyChar)
                         {
-                            case '0':
+                            case '#':
                                 {
                                     pieces.Add(new Piece(PieceType.NONE, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case '1':
+                            case 'w':
                                 {
                                     pieces.Add(new Piece(PieceType.PAWN, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case '2':
+                            case 'a':
                                 {
                                     pieces.Add(new Piece(PieceType.BISHOP, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case '3':
+                            case 's':
                                 {
                                     pieces.Add(new Piece(PieceType.KNIGHT, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case '4':
+                            case 'd':
                                 {
                                     pieces.Add(new Piece(PieceType.MANN, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case '5':
+                            case 'z':
                                 {
                                     pieces.Add(new Piece(PieceType.HAWK, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case '6':
+                            case 'x':
                                 {
                                     pieces.Add(new Piece(PieceType.ROOK, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case '7':
+                            case 'c':
                                 {
                                     pieces.Add(new Piece(PieceType.CHANCELLOR, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case '8':
+                            case 'r':
                                 {
                                     pieces.Add(new Piece(PieceType.QUEEN, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case '9':
+                            case 'f':
                                 {
                                     pieces.Add(new Piece(PieceType.KING, cursorSquare, PieceColour.WHITE));
                                     break;
@@ -185,7 +181,7 @@ namespace InfiniteChess
         }
     }
 
-    public class Square : IEquatable<Square>
+    public class Square
     {
         public int X { get; set; }
         public int Y { get; set; } //actual coordinates
@@ -194,13 +190,5 @@ namespace InfiniteChess
         public static List<Square> emptyList() => new List<Square> { }; 
         public override string ToString() => indexX.ToString() + ", " + indexY.ToString() + ", " + X.ToString() + ", " + Y.ToString();
         public static List<Square> operator +(Square s1, Square s2) => new List<Square> { s1, s2 };
-        public bool Equals(Square s) => ToString() == s.ToString();
-        public override bool Equals(object obj) {
-            if (obj == null) return false;
-            Square s = obj as Square;
-            if (s == null) return false;
-            else return Equals(s);
-        }
-        public override int GetHashCode() => ToString().GetHashCode();
     }
 }
