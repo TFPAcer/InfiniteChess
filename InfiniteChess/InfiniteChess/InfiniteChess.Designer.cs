@@ -144,7 +144,7 @@
 
         #endregion
 
-        private GameContainer boardPanel;
+        public GameContainer boardPanel;
         private System.Windows.Forms.Button begin;
         private System.Windows.Forms.Label debug2;
         private System.Windows.Forms.Button sUp;

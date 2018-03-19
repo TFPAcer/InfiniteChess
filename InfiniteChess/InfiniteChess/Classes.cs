@@ -27,27 +27,30 @@ namespace InfiniteChess
                     }
                 }
                 else {
+                    //colour of the other player
                     var colour = state.HasFlag(GameState.COLOUR) ? PieceColour.WHITE : PieceColour.BLACK;
-                    if (pieceMoving.calculateMovement(false, pieces).Contains(s)) {
-                        pieceMoving.move(s, pieces);
-                        if (evaluateCheck(pieces, colour)) {
-                            state ^= GameState.CHECK; evaluateCheckMate(colour);
+                    if (pieceMoving.calculateMovement(false).Contains(s)) {
+                        pieceMoving.move(s);
+                        if (evaluateCheck(colour)) {
+                            evaluateCheckMate(colour);
+                            state ^= GameState.CHECK;
                         }
                         state ^= (GameState.MOVE | GameState.COLOUR);
                     }
                     else state ^= GameState.MOVE;
                     c.drawBoard();
-                    pieceMoving = null;
+                    pieceMoving = null; 
                 }
                 c.debug3.Text = ((int)state).ToString();
             }
 
-            public bool evaluateCheck(List<Piece> board, PieceColour c) {
+            public bool evaluateCheck(PieceColour c) {
                 if (state.HasFlag(GameState.CHECK)) { state ^= GameState.CHECK; }
-                Square king = board.Find(p => p.type == PieceType.KING && p.colour == c).square;
-                foreach (Piece p in board) {
+                Square king = pieces.Find(p => p.type == PieceType.KING && p.colour == c).square;
+                List<Piece> newPieces = new List<Piece>(pieces);
+                foreach (Piece p in newPieces) { //change to for loop
                     if (p.colour == c) continue;
-                    if (p.calculateMovement(true, board).Contains(king)) {
+                    if (p.calculateMovement(true).Contains(king)) {
                         return true;
                     }
                 }
@@ -55,12 +58,6 @@ namespace InfiniteChess
             }
 
             public void evaluateCheckMate(PieceColour c) {
-                List<Piece> newBoard = pieces;
-                Piece king = newBoard.Find(p => p.type == PieceType.KING && p.colour == c);
-                foreach (Square s in king.calculateMovement(false, newBoard)) {
-                    var a = evaluateCheck(king.move(s, newBoard), c);
-                    Debug.WriteLine($"{s.ToString()}: {a}");
-                }
             }
 
             protected override void OnMouseMove(MouseEventArgs e) {
@@ -73,14 +70,13 @@ namespace InfiniteChess
             public void drawMoves(Piece p) {
                 if (p == null) return;
                 Graphics g = CreateGraphics();
-                //Color[] c = new Color[] { Color.Aqua, Color.Cornsilk, Color.Red, Color.Violet, Color.SeaGreen, Color.PeachPuff, Color.Navy };
-                //System.Random r = new System.Random();
-                //foreach (Square s in p.calculateMovement()) {
-                //    g.DrawRectangle(new Pen(Color.FromArgb(255, c[r.Next(7)])), s.X + 1, s.Y + 1, Chess.sf - 3, Chess.sf - 3);
-                //    g.DrawRectangle(new Pen(Color.FromArgb(195, c[r.Next(7)])), s.X + 2, s.Y + 2, Chess.sf - 5, Chess.sf - 5);
-                //    g.DrawRectangle(new Pen(Color.FromArgb(145, c[r.Next(7)])), s.X + 3, s.Y + 3, Chess.sf - 7, Chess.sf - 7);
+                //Random r = new Random();
+                //foreach (Square s in p.calculateMovement(false)) {
+                //    g.DrawRectangle(new Pen(Color.FromArgb(255, r.Next(255),r.Next(255),r.Next(255))), s.X + 1, s.Y + 1, Chess.sf - 3, Chess.sf - 3);
+                //    g.DrawRectangle(new Pen(Color.FromArgb(195, r.Next(255),r.Next(255),r.Next(255))), s.X + 2, s.Y + 2, Chess.sf - 5, Chess.sf - 5);
+                //    g.DrawRectangle(new Pen(Color.FromArgb(145, r.Next(255),r.Next(255),r.Next(255))), s.X + 3, s.Y + 3, Chess.sf - 7, Chess.sf - 7);
                 //}
-                foreach (Square s in p.calculateMovement(true, pieces)) {
+                foreach (Square s in p.calculateMovement(false)) {
                     g.DrawRectangle(new Pen(Color.FromArgb(255, 206, 17, 22)), s.X + 1, s.Y + 1, sf - 3, sf - 3);
                     g.DrawRectangle(new Pen(Color.FromArgb(195, 206, 17, 22)), s.X + 2, s.Y + 2, sf - 5, sf - 5);
                     g.DrawRectangle(new Pen(Color.FromArgb(145, 206, 17, 22)), s.X + 3, s.Y + 3, sf - 7, sf - 7);

@@ -23,6 +23,7 @@ namespace InfiniteChess
 
         public static List<Piece> pieces = new List<Piece>();
         public static Piece pieceMoving = null;
+        public static Piece lastMove = null;
         public static GameState state = 0x0;
 
         #region init
@@ -81,11 +82,11 @@ namespace InfiniteChess
             foreach (int k in i) { if (k > j) j = k; }
             return j;
         }
-        public static int checkSquareForPiece(Square s, bool includeKings, List<Piece> board) {
-            foreach (Piece p in board) {
+        public static int checkSquareForPiece(Square s, bool includeKings, PieceColour c) {
+            foreach (Piece p in pieces) {
                 if (p.square == s) {
                     if (p.type == PieceType.KING && !includeKings) return 2;
-                    if (state.HasFlag(GameState.COLOUR) == p.colour.HasFlag(PieceColour.WHITE))
+                    if (c != p.colour)
                         return 1;
                     else return 2;
                 }
