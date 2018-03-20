@@ -31,8 +31,9 @@ namespace InfiniteChess
                     var colour = state.HasFlag(GameState.COLOUR) ? PieceColour.WHITE : PieceColour.BLACK;
                     if (pieceMoving.calculateMovement(false).Contains(s)) {
                         pieceMoving.move(s);
+                        lastMove = null;
                         if (evaluateCheck(colour)) {
-                            evaluateCheckMate(colour);
+                            if (evaluateCheckMate(colour)) { state ^= (GameState.WIN | GameState.COLOUR); }
                             state ^= GameState.CHECK;
                         }
                         state ^= (GameState.MOVE | GameState.COLOUR);
@@ -48,16 +49,23 @@ namespace InfiniteChess
                 if (state.HasFlag(GameState.CHECK)) { state ^= GameState.CHECK; }
                 Square king = pieces.Find(p => p.type == PieceType.KING && p.colour == c).square;
                 List<Piece> newPieces = new List<Piece>(pieces);
-                foreach (Piece p in newPieces) { //change to for loop
-                    if (p.colour == c) continue;
-                    if (p.calculateMovement(true).Contains(king)) {
+                for (int i = 0; i < pieces.Count(); i++) { //change to for loop
+                    if (pieces[i].colour == c) continue;
+                    if (pieces[i].calculateMovement(true).Contains(king)) {
                         return true;
                     }
                 }
                 return false;
             }
 
-            public void evaluateCheckMate(PieceColour c) {
+            public bool evaluateCheckMate(PieceColour c) {
+                Piece king = pieces.Find(p => p.type == PieceType.KING && p.colour == c);
+                if (king.calculateMovement(false).Count() != 0) return false;
+                List<Piece> playerPieces = pieces.FindAll(p => p.colour == c);
+                for (int i = 0; i < playerPieces.Count(); i++) {
+                    if (playerPieces[i].calculateMovement(false).Count() != 0) return false;
+                }
+                return true;
             }
 
             protected override void OnMouseMove(MouseEventArgs e) {
@@ -65,6 +73,10 @@ namespace InfiniteChess
                 Focus();
                 Square cursorSquare = findSquareByCoords(e.X, e.Y);
                 c.debug2.Text = cursorSquare?.ToString() ?? "null";
+                c.listView1.Items.Clear();
+                foreach (Piece p in pieces) {
+                    c.listView1.Items.Add(p.ToString());
+                }
             }
 
             public void drawMoves(Piece p) {
