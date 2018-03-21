@@ -73,10 +73,6 @@ namespace InfiniteChess
                 Focus();
                 Square cursorSquare = findSquareByCoords(e.X, e.Y);
                 c.debug2.Text = cursorSquare?.ToString() ?? "null";
-                c.listView1.Items.Clear();
-                foreach (Piece p in pieces) {
-                    c.listView1.Items.Add(p.ToString());
-                }
             }
 
             public void drawMoves(Piece p) {
@@ -186,6 +182,23 @@ namespace InfiniteChess
                 }
             }
             #endregion
+        }
+    }
+
+    public class MoveHistory : TextBox
+    {
+        public List<string> moves { get; private set; }
+
+        public void addMove(string m) {
+            moves.Add(m);
+            Lines = moves.ToArray();
+        }
+
+        public string undoMove() {
+            string a = moves.Last();
+            moves.Remove(a);
+            Lines = moves.ToArray();
+            return a;
         }
     }
 

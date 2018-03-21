@@ -36,7 +36,7 @@
             this.sRight = new System.Windows.Forms.Button();
             this.debug3 = new System.Windows.Forms.Label();
             this.boardPanel = new InfiniteChess.Chess.GameContainer();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.history = new InfiniteChess.MoveHistory();
             this.SuspendLayout();
             // 
             // begin
@@ -122,15 +122,22 @@
             this.boardPanel.Size = new System.Drawing.Size(608, 608);
             this.boardPanel.TabIndex = 0;
             // 
-            // listView1
+            // history
             // 
-            this.listView1.HoverSelection = true;
-            this.listView1.Location = new System.Drawing.Point(669, 449);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(165, 220);
-            this.listView1.TabIndex = 8;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.List;
+            this.history.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.history.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.history.Cursor = System.Windows.Forms.Cursors.Default;
+            this.history.Location = new System.Drawing.Point(656, 274);
+            this.history.MaxLength = 65535;
+            this.history.Multiline = true;
+            this.history.Name = "history";
+            this.history.ReadOnly = true;
+            this.history.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.history.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.history.ShortcutsEnabled = false;
+            this.history.Size = new System.Drawing.Size(178, 315);
+            this.history.TabIndex = 8;
+            this.history.WordWrap = false;
             // 
             // Chess
             // 
@@ -138,7 +145,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(846, 681);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.history);
             this.Controls.Add(this.debug3);
             this.Controls.Add(this.sRight);
             this.Controls.Add(this.sLeft);
@@ -164,7 +171,7 @@
         private System.Windows.Forms.Button sLeft;
         private System.Windows.Forms.Button sRight;
         private System.Windows.Forms.Label debug3;
-        private System.Windows.Forms.ListView listView1;
+        private MoveHistory history;
     }
 }
 
