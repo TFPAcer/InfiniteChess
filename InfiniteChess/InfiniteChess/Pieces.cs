@@ -22,8 +22,9 @@ namespace InfiniteChess
             icon = new Bitmap($"res/image/{c.ToString()}/{t.ToString()}.png");
         }
 
-        public void move(Square s) {
+        public void move(Square s, out Piece pOut) {
             Piece p = Chess.pieces.Find(q => q.square == s);
+            pOut = p;
             if (p != null) {
                 Chess.pieces.Remove(p);
                 Chess.lastMove = p;
@@ -105,13 +106,13 @@ namespace InfiniteChess
 
             foreach (Square s in moves) {
                 newMoves.Add(s);
-                move(s);
+                move(s, out Piece q);
                 Square king = Chess.pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
                 foreach (Piece p in Chess.pieces) {
                     if (p.colour == colour) continue;
                     if (p.calculateInitMovement(true).Contains(king)) { newMoves.Remove(s); break; }
                 }
-                move(original);
+                move(original, out q);
                 if (Chess.lastMove != null) { Chess.pieces.Add(Chess.lastMove); Chess.lastMove = null; }
             }
             return newMoves;
@@ -142,7 +143,7 @@ namespace InfiniteChess
             return pieces;
         }
 
-        public override string ToString() => $"{type}: {colour}, {square.ToString()}";
+        public override string ToString() => $"{type},{colour},{square.ToString()}";
     }
 
 }

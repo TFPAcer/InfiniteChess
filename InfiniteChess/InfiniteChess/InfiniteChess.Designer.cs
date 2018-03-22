@@ -36,7 +36,7 @@
             this.sRight = new System.Windows.Forms.Button();
             this.debug3 = new System.Windows.Forms.Label();
             this.boardPanel = new InfiniteChess.Chess.GameContainer();
-            this.history = new InfiniteChess.MoveHistory();
+            this.history = new InfiniteChess.Chess.MoveHistory();
             this.SuspendLayout();
             // 
             // begin
