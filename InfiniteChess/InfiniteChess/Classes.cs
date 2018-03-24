@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
-using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Diagnostics;
 
 namespace InfiniteChess
@@ -12,12 +12,6 @@ namespace InfiniteChess
         public class GameContainer : Panel
         {
             public Chess c;
-            protected override void OnMouseClick(MouseEventArgs e)
-            {
-                Square cursorSquare = findSquareByCoords(e.X, e.Y);
-                Piece found = pieces.Find(p => p.square == cursorSquare);
-                handleTurn(found, cursorSquare);
-            }
 
             public void handleTurn(Piece p, Square s) {
                 if (!state.HasFlag(GameState.MOVE)) {
@@ -30,22 +24,32 @@ namespace InfiniteChess
                 else {
                     //colour of the other player
                     var colour = state.HasFlag(GameState.COLOUR) ? PieceColour.WHITE : PieceColour.BLACK;
-                    if (pieceMoving.calculateMovement(false).Contains(s)) {
-                        pieceMoving.move(s);
+                    if (pieceMovingMoves.Contains(s)) {
+                        c.history.addMove(pieceMoving, s);
                         lastMove = null;
+                        bool cm = evaluateCheckMate(colour);
                         if (evaluateCheck(colour)) {
-                            if (evaluateCheckMate(colour)) { state ^= (GameState.WIN | GameState.COLOUR); }
+                            if (cm) {
+                                state ^= (GameState.WIN | GameState.COLOUR);
+                                c.history.addCheck(1);
+                            }
+                            else c.history.addCheck(0);
                             state ^= GameState.CHECK;
+                        }
+                        else if (cm) {
+                            state ^= (GameState.STALE | GameState.COLOUR);
+                            c.history.addCheck(2);
                         }
                         state ^= (GameState.MOVE | GameState.COLOUR);
                     }
                     else state ^= GameState.MOVE;
                     c.drawBoard();
                     pieceMoving = null;
+                    pieceMovingMoves = Square.emptyList();
                 }
-                c.debug3.Text = ((int)state).ToString();
+                c.debug3.Text = $"{parseState(state)}";
             }
-
+            #region check
             public bool evaluateCheck(PieceColour c) {
                 if (state.HasFlag(GameState.CHECK)) { state ^= GameState.CHECK; }
                 Square king = pieces.Find(p => p.type == PieceType.KING && p.colour == c).square;
@@ -68,6 +72,14 @@ namespace InfiniteChess
                 }
                 return true;
             }
+            #endregion
+            #region mouse stuff
+            protected override void OnMouseClick(MouseEventArgs e)
+            {
+                Square cursorSquare = findSquareByCoords(e.X, e.Y);
+                Piece found = pieces.Find(p => p.square == cursorSquare);
+                handleTurn(found, cursorSquare);
+            }
 
             protected override void OnMouseMove(MouseEventArgs e)
             {
@@ -76,7 +88,8 @@ namespace InfiniteChess
                 Square cursorSquare = findSquareByCoords(e.X, e.Y);
                 c.debug2.Text = cursorSquare?.ToString() ?? "null";
             }
-
+            #endregion
+            #region util
             public void drawMoves(Piece p)
             {
                 if (p == null) return;
@@ -89,13 +102,16 @@ namespace InfiniteChess
                 //}
                 foreach (Square s in p.calculateMovement(false))
                 {
-                    g.DrawRectangle(new Pen(Color.FromArgb(255, 206, 17, 22)), s.X + 1, s.Y + 1, sf - 3, sf - 3);
-                    g.DrawRectangle(new Pen(Color.FromArgb(195, 206, 17, 22)), s.X + 2, s.Y + 2, sf - 5, sf - 5);
-                    g.DrawRectangle(new Pen(Color.FromArgb(145, 206, 17, 22)), s.X + 3, s.Y + 3, sf - 7, sf - 7);
+                    int param = s.indexX + s.indexY;
+                    //Color c = param % 2 == 0 ? Color.FromArgb(206,17,22) : Color.FromArgb(255,34,44);
+                    Color c = Color.FromArgb(206, 17, 22);
+                    g.DrawRectangle(new Pen(Color.FromArgb(255, c)), s.X + 1, s.Y + 1, sf - 3, sf - 3);
+                    g.DrawRectangle(new Pen(Color.FromArgb(195, c)), s.X + 2, s.Y + 2, sf - 5, sf - 5);
+                    g.DrawRectangle(new Pen(Color.FromArgb(145, c)), s.X + 3, s.Y + 3, sf - 7, sf - 7);
+                    pieceMovingMoves.Add(s);
                 }
                 g.Dispose();
             }
-            #region util
             public static TForm getForm<TForm>() where TForm : Form
             {
                 return (TForm)Application.OpenForms[0];
@@ -190,34 +206,75 @@ namespace InfiniteChess
             }
             #endregion
         }
-
+        #region history
         public class MoveHistory : TextBox
         {
-            public List<string> moves { get; private set; }
+            public List<string> moves { get; private set; } = new List<string>();
 
             public void addMove(Piece p, Square s) {
-                p.move(s, out Piece pOut);
                 string[] data = p.ToString().Split(',');
-                string moveText = $"{data[0].Substring(0,1)}({data[2]},{data[3]})-";
+                string moveText = $"{prefixFromType(p.type)}({data[2]},{data[3]})";
+                p.move(s, out Piece pOut);
                 if (pOut != null) {
                     data = pOut.ToString().Split(',');
-                    moveText += $"{data[0].Substring(0,1)}({data[2]},{data[3]})";
+                    moveText += $"x{prefixFromType(pOut.type)}({data[2]},{data[3]})";
                 }
                 else {
-                    moveText += $"({s.indexX},{s.indexY})";
+                    moveText += $"-({s.indexX},{s.indexY})";
                 }
                 moves.Add(moveText);
-                Lines = moves.ToArray();
+                updateMoves();
             }
 
             public void undoMove() {
-                string a = moves.Last();
-                moves.Remove(a);
-                Lines = moves.ToArray();
+                if (moves.Count() == 0) return;
+                string lastMove = moves.Last();
+                state ^= GameState.COLOUR;
+                moves.Remove(lastMove);
+                MatchCollection matchSquares = Regex.Matches(lastMove, "-?\\d+,-?\\d+");
+                MatchCollection matchPieces = Regex.Matches(lastMove, "[A-Z]");
+                Square to = GameContainer.findSquareByIndex(
+                    int.Parse(matchSquares[1].Value.Split(',')[0]), 
+                    int.Parse(matchSquares[1].Value.Split(',')[1])
+                    );
+                Square from = GameContainer.findSquareByIndex(
+                    int.Parse(matchSquares[0].Value.Split(',')[0]),
+                    int.Parse(matchSquares[0].Value.Split(',')[1])
+                    );
+                Piece p = pieces.Find(q => q.square == to);
+                p.move(from, out Piece r);
+                if (lastMove.Contains("x")) {
+                    PieceType type = typeFromPrefix(matchPieces[1].Value);
+                    PieceColour colour = moves.Count() % 2 == 0 ? PieceColour.BLACK : PieceColour.WHITE;
+                    pieces.Add(new Piece(type, to, colour));
+                }
+                if (lastMove.Contains('+')) state ^= (GameState)5;
+                if (lastMove.Contains('#')) state ^= (GameState)13;
+                if (lastMove.Contains('~')) state ^= (GameState)17;
+                updateMoves();
+            }
+
+            public void updateMoves() {
+                List<string> result = new List<string>();
+                for (int i = 0; i < moves.Count(); i += 2) {
+                    int lineNo = (i + 1) / 2;
+                    string line = $"{lineNo+1}. {moves[i]}".PadRight(36);
+                    if (moves.Count() != i+1) line += $"{moves[i+1]}";
+                    result.Add(line);
+                }
+                Lines = result.ToArray();
+            }
+
+            public void addCheck(int state) {
+                if (state < 0 || state > 2) return;
+                string[] symbols = { "+", "#", "~"};
+                moves[moves.Count()-1] += symbols[state];
+                updateMoves();
             }
         }
     }
-
+    #endregion
+    #region square
     public class Square
     {
         public int X { get; set; }
@@ -228,4 +285,5 @@ namespace InfiniteChess
         public override string ToString() => $"{indexX.ToString()},{indexY.ToString()},{X.ToString()},{Y.ToString()}";
         public static List<Square> operator +(Square s1, Square s2) => new List<Square> { s1, s2 };
     }
+    #endregion
 }

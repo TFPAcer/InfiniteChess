@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace InfiniteChess
 {
-    [Flags] public enum GameState { COLOUR = 0x01, MOVE = 0x02, CHECK = 0x04, WIN = 0x08, STALE = 0x0F }
+    [Flags] public enum GameState { COLOUR = 0x01, MOVE = 0x02, CHECK = 0x04, WIN = 0x08, STALE = 0x10 }
 
     public partial class Chess : Form
     {
@@ -23,6 +23,7 @@ namespace InfiniteChess
 
         public static List<Piece> pieces = new List<Piece>();
         public static Piece pieceMoving = null;
+        public static List<Square> pieceMovingMoves = Square.emptyList();
         public static Piece lastMove = null;
         public static GameState state = 0x0;
 
@@ -50,8 +51,7 @@ namespace InfiniteChess
 
         }
         #endregion
-
-
+        #region util
         public void drawBoard() {
             Graphics g = boardPanel.CreateGraphics();
             //for (int i = 0; i < size[0]; i++) {
@@ -63,13 +63,8 @@ namespace InfiniteChess
                 g.DrawImage(b, p.square.X+3, p.square.Y+3);
             }
             g.Dispose();
+            if (state.HasFlag(GameState.MOVE)) { boardPanel.drawMoves(pieceMoving); }
         }
-
-        private void begin_Click(object sender, EventArgs e)
-        {
-            drawBoard();
-        }
-        #region util
         public void updateSquares(int amount, bool isX, object sender)
         {
             origin[isX ? 0 : 1] += sf * amount;
@@ -92,6 +87,58 @@ namespace InfiniteChess
                 }
             }
             return 0;
+        }
+        private void begin_Click(object sender, EventArgs e)
+        {
+            drawBoard();
+        }
+        private void debug3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void undo_Click(object sender, EventArgs e)
+        {
+            history.undoMove();
+            drawBoard();
+        }
+        public static string prefixFromType(PieceType t) {
+            switch (t) {
+                case PieceType.BISHOP: return "B";
+                case PieceType.CHANCELLOR: return "C";
+                case PieceType.HAWK: return "H";
+                case PieceType.KING: return "K";
+                case PieceType.KNIGHT: return "N";
+                case PieceType.MANN: return "M";
+                case PieceType.NONE: return "Z";
+                case PieceType.PAWN: return "P";
+                case PieceType.QUEEN: return "Q";
+                case PieceType.ROOK: return "R";
+            }
+            return "#";
+        }
+        public static PieceType typeFromPrefix(string c) {
+            switch (c) {
+                case "B": return PieceType.BISHOP;
+                case "C": return PieceType.CHANCELLOR;
+                case "H": return PieceType.HAWK;
+                case "K": return PieceType.KING;
+                case "N": return PieceType.KNIGHT;
+                case "M": return PieceType.MANN;
+                case "Z": return PieceType.NONE;
+                case "P": return PieceType.PAWN;
+                case "Q": return PieceType.QUEEN;
+                case "R": return PieceType.ROOK;
+            }
+            return PieceType.NONE;
+        }
+        public static string parseState(GameState g) {
+            string info = "'s turn";
+            string colour = g.HasFlag((GameState)1) ? "Black" : "White";
+            if (g.HasFlag((GameState)4)) { info = " in check"; }
+            if (g.HasFlag((GameState)8)) { info = " has won"; }
+            if (g.HasFlag((GameState)16)) { colour = ""; info = "Stalemate"; }
+            return colour + info;
         }
         #endregion
         #region scrolling

@@ -21,7 +21,7 @@ namespace InfiniteChess
             type = t; colour = c; square = s;
             icon = new Bitmap($"res/image/{c.ToString()}/{t.ToString()}.png");
         }
-
+        #region movement
         public void move(Square s, out Piece pOut) {
             Piece p = Chess.pieces.Find(q => q.square == s);
             pOut = p;
@@ -117,12 +117,14 @@ namespace InfiniteChess
             }
             return newMoves;
         }
-
+        #endregion
+        #region util
         public void altColour(){
             colour = colour == PieceColour.WHITE ? PieceColour.BLACK : PieceColour.WHITE;
             icon = new Bitmap($"res/image/{colour.ToString()}/{type.ToString()}.png");
         }
-
+        public override string ToString() => $"{type},{colour},{square.ToString()}";
+        #endregion
         public static List<Piece> IntializePieces()
         {
             List<Piece> pieces = new List<Piece>();
@@ -142,8 +144,5 @@ namespace InfiniteChess
             }
             return pieces;
         }
-
-        public override string ToString() => $"{type},{colour},{square.ToString()}";
     }
-
 }
