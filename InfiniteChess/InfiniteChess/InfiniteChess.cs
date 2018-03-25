@@ -27,6 +27,11 @@ namespace InfiniteChess
         public static Piece lastMove = null;
         public static GameState state = 0x0;
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+        }
+
         #region init
         public Chess()
         {
