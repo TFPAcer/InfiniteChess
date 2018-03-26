@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System;
 
 namespace InfiniteChess
 {
@@ -137,65 +138,67 @@ namespace InfiniteChess
                 Piece target = null;
                 foreach (Piece p in pieces) { if (p.square == cursorSquare) { target = p; } }
 
-                if (cursorSquare != null)
-                {
-                    if (target != null)
-                    {
+                if (cursorSquare != null) {
+                    if (target != null) {
                         if (e.KeyChar == 'e') pieces.Remove(target);
                         if (e.KeyChar == 'q') target.altColour();
                     }
-                    else
-                    {
-                        switch (e.KeyChar)
-                        {
-                            case '#':
-                                {
+                    else{
+                        switch (e.KeyChar) {
+                            case '#': {
                                     pieces.Add(new Piece(PieceType.NONE, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case 'w':
-                                {
+                            case 'w': {
                                     pieces.Add(new Piece(PieceType.PAWN, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case 'a':
-                                {
+                            case 'a': {
                                     pieces.Add(new Piece(PieceType.BISHOP, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case 's':
-                                {
+                            case 's': {
                                     pieces.Add(new Piece(PieceType.KNIGHT, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case 'd':
-                                {
+                            case 'd': {
                                     pieces.Add(new Piece(PieceType.MANN, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case 'z':
-                                {
+                            case 'z': {
                                     pieces.Add(new Piece(PieceType.HAWK, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case 'x':
-                                {
+                            case 'x': {
                                     pieces.Add(new Piece(PieceType.ROOK, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case 'c':
-                                {
+                            case 'c': {
                                     pieces.Add(new Piece(PieceType.CHANCELLOR, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case 'r':
-                                {
+                            case 'r': {
                                     pieces.Add(new Piece(PieceType.QUEEN, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case 'f':
-                                {
+                            case 'f': {
                                     pieces.Add(new Piece(PieceType.KING, cursorSquare, PieceColour.WHITE));
+                                    break;
+                                }
+                            case 'i': {
+                                    c.sUp.PerformClick();
+                                    break;
+                                }
+                            case 'j': {
+                                    c.sLeft.PerformClick();
+                                    break;
+                                }
+                            case 'k': {
+                                    c.sDown.PerformClick();
+                                    break;
+                                }
+                            case 'l': {
+                                    c.sRight.PerformClick();
                                     break;
                                 }
                         }
@@ -219,8 +222,10 @@ namespace InfiniteChess
                     data = pOut.ToString().Split(',');
                     moveText += $"x{prefixFromType(pOut.type)}({data[2]},{data[3]})";
                 }
-                else {
-                    moveText += $"-({s.indexX},{s.indexY})";
+                else moveText += $"-({s.indexX},{s.indexY})";
+                if (p.type == PieceType.PAWN && p.PawnData == true) {
+                    p.PawnData = false;
+                    moveText += "`";
                 }
                 moves.Add(moveText);
                 updateMoves();
@@ -248,6 +253,7 @@ namespace InfiniteChess
                     PieceColour colour = moves.Count() % 2 == 0 ? PieceColour.BLACK : PieceColour.WHITE;
                     pieces.Add(new Piece(type, to, colour));
                 }
+                if (lastMove.Contains("`")) p.PawnData = true;
                 if (lastMove.Contains('+')) state ^= (GameState)5;
                 if (lastMove.Contains('#')) state ^= (GameState)13;
                 if (lastMove.Contains('~')) state ^= (GameState)17;

@@ -16,10 +16,12 @@ namespace InfiniteChess
         public Square square { get; private set; }
         public Bitmap icon { get; private set; }
         public PieceColour colour { get; private set; }
+        public bool PawnData { get; set; } = false;
 
         public Piece(PieceType t, Square s, PieceColour c) {
             type = t; colour = c; square = s;
             icon = new Bitmap($"res/image/{c.ToString()}/{t.ToString()}.png");
+            if (t == PieceType.PAWN) { PawnData = true; }
         }
         #region movement
         public void move(Square s, out Piece pOut) {
@@ -40,6 +42,12 @@ namespace InfiniteChess
                         for (int i = -1; i <= 1; i++) {
                             Square attempt = Chess.GameContainer.findSquareByIndex(square.indexX + i, direction);
                             if (Chess.checkSquareForPiece(attempt, includeKings, colour) == Math.Abs(i)) moves.Add(attempt);
+                        }
+                        if (PawnData) {
+                            int direction2 = colour == PieceColour.WHITE ? square.indexY + 2 : square.indexY - 2;
+                            Square attempt = Chess.GameContainer.findSquareByIndex(square.indexX, direction2);
+                            if (Chess.checkSquareForPiece(attempt, includeKings, colour) == 0)
+                                moves.Add(attempt);
                         }
                         return moves;
                     }
@@ -125,24 +133,18 @@ namespace InfiniteChess
         }
         public override string ToString() => $"{type},{colour},{square.ToString()}";
         #endregion
+        #region init
         public static List<Piece> IntializePieces()
         {
             List<Piece> pieces = new List<Piece>();
-            for (int i = 0; i < 2; i++) {
-                var w = i == 0 ? PieceColour.WHITE : PieceColour.BLACK;
-                //pieces.AddRange(new List<Piece> {
-                //new Piece(PieceType.PAWN, GameContainer.findSquareByIndex(3, 4 + 2*i), w),
-                //new Piece(PieceType.KNIGHT, GameContainer.findSquareByIndex(4, 4 + 2*i), w),
-                //new Piece(PieceType.ROOK, GameContainer.findSquareByIndex(5, 4 + 2*i), w),
-                //new Piece(PieceType.BISHOP, GameContainer.findSquareByIndex(6, 4 + 2*i), w),
-                //new Piece(PieceType.QUEEN, GameContainer.findSquareByIndex(7, 4 + 2*i), w),
-                //new Piece(PieceType.KING, GameContainer.findSquareByIndex(8, 4 + 2*i), w),
-                //new Piece(PieceType.HAWK, GameContainer.findSquareByIndex(9, 4 + 2*i), w),
-                //new Piece(PieceType.CHANCELLOR, GameContainer.findSquareByIndex(10, 4 + 2*i), w),
-                //new Piece(PieceType.MANN, GameContainer.findSquareByIndex(11, 4 + 2*i), w),
-                //new Piece(PieceType.NONE, GameContainer.findSquareByIndex(12, 4 + 2*i), w) });
+            string[] data = File.ReadAllLines("res/config/start.txt");
+            foreach (string d in data) {
+                string[] ds = d.Split(',');
+                PieceColour colour = ds[3] == "W" ? PieceColour.WHITE : PieceColour.BLACK;
+                pieces.Add(new Piece(Chess.typeFromPrefix(ds[0]), Chess.GameContainer.findSquareByIndex(int.Parse(ds[1]), int.Parse(ds[2])), colour));
             }
             return pieces;
         }
+        #endregion
     }
 }

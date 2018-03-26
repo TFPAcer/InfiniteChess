@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Chess));
             this.begin = new System.Windows.Forms.Button();
             this.debug2 = new System.Windows.Forms.Label();
             this.sUp = new System.Windows.Forms.Button();
@@ -187,6 +188,7 @@
             this.Controls.Add(this.debug2);
             this.Controls.Add(this.begin);
             this.Controls.Add(this.boardPanel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Chess";
             this.Text = "InfiniteChess";
             this.ResumeLayout(false);

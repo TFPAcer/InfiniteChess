@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace InfiniteChess
 {
@@ -17,7 +18,7 @@ namespace InfiniteChess
         //global variables
         public static List<Square> board = new List<Square>(); //stores all squares of the board
         public static int[] origin = { 0, 570 }; //coordinates of [0,0]
-        public static int[] bounds = { 0, 0, 0, 0 }; //boundaries of the generated board
+        public static int[] bounds = { -1, 17, -1, 17 }; //boundaries of the generated board
         public static int[] size = { 16, 16 }; //size of the visible board
         public static int sf = 38;
 
@@ -27,24 +28,19 @@ namespace InfiniteChess
         public static Piece lastMove = null;
         public static GameState state = 0x0;
 
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-        }
-
         #region init
         public Chess()
         {
             InitializeComponent();
             InitialiseBoard();
             pieces.AddRange(Piece.IntializePieces());
-            bounds[1] = (size[0] - 1); bounds[3] = (size[1] - 1); //initialises the boundaries
+            //bounds[1] = (size[0] - 1)+1; bounds[3] = (size[1] - 1)+1; //initialises the boundaries
         }
 
         //create the logical board
         public void InitialiseBoard() {
-            for (int i = 0; i < size[0]; i++) { //columns 
-                for (int j = 0; j < size[1]; j++) { //rows
+            for (int i = bounds[0]; i < bounds[1]; i++) { //columns 
+                for (int j = bounds[2]; j < bounds[3]; j++) { //rows
                     board.Add(new Square {
                         X = origin[0] + sf * i,
                         Y = origin[1] - sf * j,
