@@ -88,6 +88,7 @@ namespace InfiniteChess
                 Focus();
                 Square cursorSquare = findSquareByCoords(e.X, e.Y);
                 c.debug2.Text = cursorSquare?.ToString() ?? "null";
+                //c.debug2.Text = bounds[]
             }
             #endregion
             #region util

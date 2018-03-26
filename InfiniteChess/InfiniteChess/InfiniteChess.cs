@@ -39,8 +39,8 @@ namespace InfiniteChess
 
         //create the logical board
         public void InitialiseBoard() {
-            for (int i = bounds[0]; i < bounds[1]; i++) { //columns 
-                for (int j = bounds[2]; j < bounds[3]; j++) { //rows
+            for (int i = bounds[0]; i < bounds[1]+1; i++) { //columns 
+                for (int j = bounds[2]; j < bounds[3]+1; j++) { //rows
                     board.Add(new Square {
                         X = origin[0] + sf * i,
                         Y = origin[1] - sf * j,
@@ -179,6 +179,8 @@ namespace InfiniteChess
         {
             Square edge = GameContainer.findSquareByCoords((size[0] - 1) * sf + 1, (size[1] - 1) * sf + 1);
             updateSquares(-1, true, sender);
+            Debug.WriteLine("e" + edge.indexX);
+            Debug.WriteLine("b" + bounds[1]);
             if (edge.indexX == bounds[1]) {
                 bounds[1]++;
                 for (int j = bounds[2]; j <= bounds[3]; j++) {
