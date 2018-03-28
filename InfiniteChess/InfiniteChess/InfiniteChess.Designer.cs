@@ -62,7 +62,6 @@
             // 
             // sUp
             // 
-            this.sUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.sUp.BackColor = System.Drawing.Color.Silver;
             this.sUp.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.sUp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
@@ -79,7 +78,6 @@
             // 
             // sDown
             // 
-            this.sDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.sDown.BackColor = System.Drawing.Color.Silver;
             this.sDown.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.sDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
@@ -96,7 +94,6 @@
             // 
             // sLeft
             // 
-            this.sLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.sLeft.BackColor = System.Drawing.Color.Silver;
             this.sLeft.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.sLeft.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
@@ -113,7 +110,6 @@
             // 
             // sRight
             // 
-            this.sRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.sRight.BackColor = System.Drawing.Color.Silver;
             this.sRight.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.sRight.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
@@ -147,7 +143,7 @@
             // 
             // history
             // 
-            this.history.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.history.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.history.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.history.Cursor = System.Windows.Forms.Cursors.Default;
             this.history.Font = new System.Drawing.Font("Perpetua", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -164,12 +160,15 @@
             // 
             // undo
             // 
-            this.undo.Location = new System.Drawing.Point(855, 342);
+            this.undo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.undo.BackColor = System.Drawing.Color.Silver;
+            this.undo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.undo.Location = new System.Drawing.Point(941, 342);
             this.undo.Name = "undo";
             this.undo.Size = new System.Drawing.Size(75, 23);
             this.undo.TabIndex = 9;
             this.undo.Text = "Undo";
-            this.undo.UseVisualStyleBackColor = true;
+            this.undo.UseVisualStyleBackColor = false;
             this.undo.Click += new System.EventHandler(this.undo_Click);
             // 
             // Chess

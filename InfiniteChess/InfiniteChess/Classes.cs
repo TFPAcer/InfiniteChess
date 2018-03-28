@@ -3,8 +3,10 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Diagnostics;
 using System;
+using System.Threading.Tasks;
 
 namespace InfiniteChess
 {
@@ -44,23 +46,28 @@ namespace InfiniteChess
                         state ^= (GameState.MOVE | GameState.COLOUR);
                     }
                     else state ^= GameState.MOVE;
-                    c.drawBoard();
                     pieceMoving = null;
                     pieceMovingMoves = Square.emptyList();
+                    c.drawBoard();
                 }
                 c.debug3.Text = $"{parseState(state)}";
             }
+
             #region check
             public bool evaluateCheck(PieceColour c) {
                 if (state.HasFlag(GameState.CHECK)) { state ^= GameState.CHECK; }
                 Square king = pieces.Find(p => p.type == PieceType.KING && p.colour == c).square;
-                List<Piece> newPieces = new List<Piece>(pieces);
-                for (int i = 0; i < pieces.Count(); i++)
-                { //change to for loop
-                    if (pieces[i].colour == c) continue;
-                    if (pieces[i].calculateMovement(true).Contains(king)) return true;
-                }
-                return false;
+                List<Piece> piecesOfColour = pieces.FindAll(p => p.colour != c);
+                bool check = false;
+                //for (int i = 0; i < pieces.Count(); i++) {
+                //    if (pieces[i].colour == c) continue;
+                //    if (pieces[i].calculateMovement(true).Contains(king)) return true;
+                //}
+                Parallel.For(0, piecesOfColour.Count(), i =>
+                {
+                    if (piecesOfColour[i].calculateMovement(true).Contains(king)) check = true;
+                });
+                return check;
             }
 
             public bool evaluateCheckMate(PieceColour c)
@@ -77,6 +84,7 @@ namespace InfiniteChess
             #region mouse stuff
             protected override void OnMouseClick(MouseEventArgs e)
             {
+                Focus();
                 Square cursorSquare = findSquareByCoords(e.X, e.Y);
                 Piece found = pieces.Find(p => p.square == cursorSquare);
                 handleTurn(found, cursorSquare);
@@ -85,7 +93,6 @@ namespace InfiniteChess
             protected override void OnMouseMove(MouseEventArgs e)
             {
                 c = getForm<Chess>();
-                Focus();
                 Square cursorSquare = findSquareByCoords(e.X, e.Y);
                 c.debug2.Text = cursorSquare?.ToString() ?? "null";
                 //c.debug2.Text = bounds[]
@@ -228,6 +235,15 @@ namespace InfiniteChess
                     p.PawnData = false;
                     moveText += "`";
                 }
+                if (p.type == PieceType.PAWN) {
+                    if (p.square.indexY == 11 && p.colour == PieceColour.WHITE
+                        || p.square.indexY == 4 && p.colour == PieceColour.BLACK) {
+                        Promote pForm = new Promote();
+                        pForm.ShowDialog();
+                        p.changeType(pForm.choice);
+                        moveText += pForm.choicePrefix;
+                    }
+                }
                 moves.Add(moveText);
                 updateMoves();
             }
@@ -249,10 +265,16 @@ namespace InfiniteChess
                     );
                 Piece p = pieces.Find(q => q.square == to);
                 p.move(from, out Piece r);
-                if (lastMove.Contains("x")) {
-                    PieceType type = typeFromPrefix(matchPieces[1].Value);
-                    PieceColour colour = moves.Count() % 2 == 0 ? PieceColour.BLACK : PieceColour.WHITE;
-                    pieces.Add(new Piece(type, to, colour));
+                if (matchPieces.Count == 2) {
+                    if (lastMove.Contains("x")) {
+                        PieceType type = typeFromPrefix(matchPieces[1].Value);
+                        PieceColour colour = moves.Count() % 2 == 0 ? PieceColour.BLACK : PieceColour.WHITE;
+                        pieces.Add(new Piece(type, to, colour));
+                    }
+                    else {
+                        p.changeType(PieceType.PAWN);
+                        p.PawnData = false;
+                    }
                 }
                 if (lastMove.Contains("`")) p.PawnData = true;
                 if (lastMove.Contains('+')) state ^= (GameState)5;

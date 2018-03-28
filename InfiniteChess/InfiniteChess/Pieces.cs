@@ -4,6 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace InfiniteChess
 {
@@ -115,10 +117,20 @@ namespace InfiniteChess
             foreach (Square s in moves) {
                 newMoves.Add(s);
                 move(s, out Piece q);
-                Square king = Chess.pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
-                foreach (Piece p in Chess.pieces) {
-                    if (p.colour == colour) continue;
-                    if (p.calculateInitMovement(true).Contains(king)) { newMoves.Remove(s); break; }
+                Square king = new Square();
+                try {
+                    king = Chess.pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
+                }
+                catch {
+                    Thread.Sleep(40);
+                    king = Chess.pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
+                }
+                //foreach (Piece y in Chess.pieces) {
+                Piece y;
+                for (int i = 0; i < Chess.pieces.Count; i++) {
+                    y = Chess.pieces[i];
+                    if (y.colour == colour) continue;
+                    if (y.calculateInitMovement(true).Contains(king)) { newMoves.Remove(s); break; }
                 }
                 move(original, out q);
                 if (Chess.lastMove != null) { Chess.pieces.Add(Chess.lastMove); Chess.lastMove = null; }
@@ -127,9 +139,14 @@ namespace InfiniteChess
         }
         #endregion
         #region util
-        public void altColour(){
+        public void altColour() {
             colour = colour == PieceColour.WHITE ? PieceColour.BLACK : PieceColour.WHITE;
             icon = new Bitmap($"res/image/{colour.ToString()}/{type.ToString()}.png");
+        }
+        public void changeType(PieceType t) {
+            type = t;
+            icon = new Bitmap($"res/image/{colour.ToString()}/{type.ToString()}.png");
+            PawnData = true;
         }
         public override string ToString() => $"{type},{colour},{square.ToString()}";
         #endregion

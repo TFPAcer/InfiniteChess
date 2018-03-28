@@ -34,7 +34,24 @@ namespace InfiniteChess
             InitializeComponent();
             InitialiseBoard();
             pieces.AddRange(Piece.IntializePieces());
+            InitialiseStyle();
             //bounds[1] = (size[0] - 1)+1; bounds[3] = (size[1] - 1)+1; //initialises the boundaries
+        }
+
+        public void InitialiseStyle() {
+            BackColor = Color.FromArgb(28, 32, 40);
+            foreach (Control c in Controls) {
+                if (c.GetType() == typeof(Button)) {
+                    Button b = c as Button;
+                    b.FlatStyle = FlatStyle.Flat;
+                    b.BackColor = Color.DimGray;
+                    b.FlatAppearance.BorderColor = Color.Black;
+                    b.FlatAppearance.BorderSize = 1;
+                    b.FlatAppearance.MouseDownBackColor = Color.Gray;
+                    b.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224);
+                    
+                }
+            }
         }
 
         //create the logical board
@@ -79,7 +96,10 @@ namespace InfiniteChess
             return j;
         }
         public static int checkSquareForPiece(Square s, bool includeKings, PieceColour c) {
-            foreach (Piece p in pieces) {
+            //foreach (Piece p in pieces) {
+            Piece p;
+            for (int i = 0; i < pieces.Count; i++) {
+                p = pieces[i];
                 if (p.square == s) {
                     if (p.type == PieceType.KING && !includeKings) return 2;
                     if (c != p.colour)
@@ -179,8 +199,6 @@ namespace InfiniteChess
         {
             Square edge = GameContainer.findSquareByCoords((size[0] - 1) * sf + 1, (size[1] - 1) * sf + 1);
             updateSquares(-1, true, sender);
-            Debug.WriteLine("e" + edge.indexX);
-            Debug.WriteLine("b" + bounds[1]);
             if (edge.indexX == bounds[1]) {
                 bounds[1]++;
                 for (int j = bounds[2]; j <= bounds[3]; j++) {
