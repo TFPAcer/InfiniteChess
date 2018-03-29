@@ -122,8 +122,8 @@ namespace InfiniteChess
                     king = Chess.pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
                 }
                 catch {
-                    Thread.Sleep(40);
-                    king = Chess.pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
+                    Thread.Sleep(100);
+                    //king = Chess.pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
                 }
                 //foreach (Piece y in Chess.pieces) {
                 Piece y;

@@ -33,9 +33,9 @@ namespace InfiniteChess
                     b.FlatAppearance.BorderSize = 1;
                     b.FlatAppearance.MouseDownBackColor = Color.Gray;
                     b.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224);
-                    b.ForeColor = Color.White;
-                    
+                    b.ForeColor = Color.White;   
                 }
+                c.Font = new Font("Perpetua", 9, FontStyle.Bold);
             }
         }
 

@@ -39,19 +39,27 @@ namespace InfiniteChess
         }
 
         public void InitialiseStyle() {
-            BackColor = Color.FromArgb(28, 32, 40);
+            Color highlight = Color.LightGray;
+            BackColor = Color.FromArgb(128,128,128);
             foreach (Control c in Controls) {
                 if (c.GetType() == typeof(Button)) {
                     Button b = c as Button;
                     b.FlatStyle = FlatStyle.Flat;
-                    b.BackColor = Color.DimGray;
+                    b.BackColor = highlight;
                     b.FlatAppearance.BorderColor = Color.Black;
                     b.FlatAppearance.BorderSize = 1;
                     b.FlatAppearance.MouseDownBackColor = Color.Gray;
                     b.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224);
-                    
                 }
+                c.Font = new Font("Perpetua", 9, FontStyle.Bold);
+                c.ForeColor = Color.Black;
             }
+            debug3.Font = new Font("Perpetua", 14, FontStyle.Bold);
+            menu.ForeColor = Color.Black;
+            menu.BackColor = highlight;
+            history.BackColor = highlight;
+            history.ForeColor = Color.Black;
+            history.Font = new Font("Perpetua", 11, FontStyle.Bold);
         }
 
         //create the logical board
