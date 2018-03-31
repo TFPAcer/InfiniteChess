@@ -59,8 +59,8 @@
             this.menu_settings = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_setting_ai = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_setting_opp = new System.Windows.Forms.ToolStripMenuItem();
-            this.humanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_opp_human = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_opp_ai = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_setting_sep1 = new System.Windows.Forms.ToolStripSeparator();
             this.menu_setting_scroll = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_setting_scroll_scroll = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,6 +82,7 @@
             this.menu_help_app = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_about = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_about_about = new System.Windows.Forms.ToolStripMenuItem();
+            this.AIThread = new System.ComponentModel.BackgroundWorker();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -415,32 +416,33 @@
             // menu_setting_opp
             // 
             this.menu_setting_opp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.humanToolStripMenuItem,
-            this.aIToolStripMenuItem});
+            this.menu_setting_opp_human,
+            this.menu_setting_opp_ai});
             this.menu_setting_opp.Image = ((System.Drawing.Image)(resources.GetObject("menu_setting_opp.Image")));
             this.menu_setting_opp.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_setting_opp.Name = "menu_setting_opp";
             this.menu_setting_opp.Size = new System.Drawing.Size(183, 22);
             this.menu_setting_opp.Text = "Opponent..";
             // 
-            // humanToolStripMenuItem
+            // menu_setting_opp_human
             // 
-            this.humanToolStripMenuItem.Checked = true;
-            this.humanToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.humanToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("humanToolStripMenuItem.Image")));
-            this.humanToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.humanToolStripMenuItem.Name = "humanToolStripMenuItem";
-            this.humanToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
-            this.humanToolStripMenuItem.Text = "Human";
+            this.menu_setting_opp_human.Checked = true;
+            this.menu_setting_opp_human.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.menu_setting_opp_human.Image = ((System.Drawing.Image)(resources.GetObject("menu_setting_opp_human.Image")));
+            this.menu_setting_opp_human.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_setting_opp_human.Name = "menu_setting_opp_human";
+            this.menu_setting_opp_human.Size = new System.Drawing.Size(114, 22);
+            this.menu_setting_opp_human.Text = "Human";
+            this.menu_setting_opp_human.Click += new System.EventHandler(this.menu_setting_opp_human_Click);
             // 
-            // aIToolStripMenuItem
+            // menu_setting_opp_ai
             // 
-            this.aIToolStripMenuItem.Enabled = false;
-            this.aIToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("aIToolStripMenuItem.Image")));
-            this.aIToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.aIToolStripMenuItem.Name = "aIToolStripMenuItem";
-            this.aIToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
-            this.aIToolStripMenuItem.Text = "AI";
+            this.menu_setting_opp_ai.Image = ((System.Drawing.Image)(resources.GetObject("menu_setting_opp_ai.Image")));
+            this.menu_setting_opp_ai.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_setting_opp_ai.Name = "menu_setting_opp_ai";
+            this.menu_setting_opp_ai.Size = new System.Drawing.Size(114, 22);
+            this.menu_setting_opp_ai.Text = "AI";
+            this.menu_setting_opp_ai.Click += new System.EventHandler(this.menu_setting_opp_ai_Click);
             // 
             // menu_setting_sep1
             // 
@@ -466,7 +468,7 @@
             this.menu_setting_scroll_scroll_left,
             this.menu_setting_scroll_scroll_right});
             this.menu_setting_scroll_scroll.Name = "menu_setting_scroll_scroll";
-            this.menu_setting_scroll_scroll.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_scroll.Size = new System.Drawing.Size(125, 22);
             this.menu_setting_scroll_scroll.Text = "Scroll";
             // 
             // menu_setting_scroll_scroll_up
@@ -509,7 +511,7 @@
             this.menu_setting_scroll_mult_3,
             this.menu_setting_scroll_mult_4});
             this.menu_setting_scroll_mult.Name = "menu_setting_scroll_mult";
-            this.menu_setting_scroll_mult.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_mult.Size = new System.Drawing.Size(125, 22);
             this.menu_setting_scroll_mult.Text = "Multiplier";
             // 
             // menu_setting_scroll_mult_1
@@ -518,7 +520,7 @@
             this.menu_setting_scroll_mult_1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.menu_setting_scroll_mult_1.Name = "menu_setting_scroll_mult_1";
             this.menu_setting_scroll_mult_1.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.menu_setting_scroll_mult_1.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_mult_1.Size = new System.Drawing.Size(104, 22);
             this.menu_setting_scroll_mult_1.Text = "1x";
             this.menu_setting_scroll_mult_1.Click += new System.EventHandler(this.menu_setting_scroll_mult_1_Click);
             // 
@@ -526,7 +528,7 @@
             // 
             this.menu_setting_scroll_mult_2.Name = "menu_setting_scroll_mult_2";
             this.menu_setting_scroll_mult_2.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.menu_setting_scroll_mult_2.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_mult_2.Size = new System.Drawing.Size(104, 22);
             this.menu_setting_scroll_mult_2.Text = "2x";
             this.menu_setting_scroll_mult_2.Click += new System.EventHandler(this.menu_setting_scroll_mult_2_Click);
             // 
@@ -534,7 +536,7 @@
             // 
             this.menu_setting_scroll_mult_3.Name = "menu_setting_scroll_mult_3";
             this.menu_setting_scroll_mult_3.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this.menu_setting_scroll_mult_3.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_mult_3.Size = new System.Drawing.Size(104, 22);
             this.menu_setting_scroll_mult_3.Text = "3x";
             this.menu_setting_scroll_mult_3.Click += new System.EventHandler(this.menu_setting_scroll_mult_3_Click);
             // 
@@ -542,7 +544,7 @@
             // 
             this.menu_setting_scroll_mult_4.Name = "menu_setting_scroll_mult_4";
             this.menu_setting_scroll_mult_4.ShortcutKeys = System.Windows.Forms.Keys.F4;
-            this.menu_setting_scroll_mult_4.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_mult_4.Size = new System.Drawing.Size(104, 22);
             this.menu_setting_scroll_mult_4.Tag = "";
             this.menu_setting_scroll_mult_4.Text = "4x";
             this.menu_setting_scroll_mult_4.Click += new System.EventHandler(this.menu_setting_scroll_mult_4_Click);
@@ -625,6 +627,11 @@
             this.menu_about_about.Size = new System.Drawing.Size(184, 22);
             this.menu_about_about.Text = "About InfinteChess...";
             // 
+            // AIThread
+            // 
+            this.AIThread.DoWork += new System.ComponentModel.DoWorkEventHandler(this.boardPanel.AIThread_DoWork);
+            this.AIThread.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.boardPanel.AIThread_WorkCompleted);
+            // 
             // Chess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -693,8 +700,8 @@
         private System.Windows.Forms.ToolStripSeparator menu_window_sep1;
         private System.Windows.Forms.ToolStripSeparator menu_setting_sep1;
         private System.Windows.Forms.ToolStripSeparator menu_help_sep1;
-        private System.Windows.Forms.ToolStripMenuItem humanToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_opp_human;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_opp_ai;
         private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_scroll;
         private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_scroll_up;
         private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_scroll_down;
@@ -708,6 +715,7 @@
         private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_mult_2;
         private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_mult_3;
         private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_mult_4;
+        private System.ComponentModel.BackgroundWorker AIThread;
     }
 }
 

@@ -44,6 +44,19 @@ namespace InfiniteChess
         }
         #endregion
         #region setting
+        private void menu_setting_opp_human_Click(object sender, EventArgs e)
+        {
+            setOpponent(false);
+        }
+        private void menu_setting_opp_ai_Click(object sender, EventArgs e)
+        {
+            setOpponent(true);
+        }
+        private void setOpponent(bool ai) {
+            menu_setting_opp_human.Checked = !ai;
+            menu_setting_opp_ai.Checked = ai;
+            opponentAI = ai;
+        }
         private void menu_setting_scroll_scroll_up_Click(object sender, EventArgs e)
         {
             sUp.PerformClick();

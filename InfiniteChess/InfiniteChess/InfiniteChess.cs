@@ -30,6 +30,7 @@ namespace InfiniteChess
 
         public static bool movementIndicators = true;
         public static int scrollMultiplier = 1;
+        public static bool opponentAI = false;
 
         public Chess()
         {

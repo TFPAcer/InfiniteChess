@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System;
 using System.Threading.Tasks;
 using System.Timers;
+using System.ComponentModel;
 
 namespace InfiniteChess
 {
@@ -50,7 +51,54 @@ namespace InfiniteChess
                     pieceMoving = null;
                     pieceMovingMoves = Square.emptyList();
                     c.drawBoard();
+                    if (opponentAI && state.HasFlag((GameState)1)) {
+                        Debug.WriteLine("beginning");
+                        c.AIThread.RunWorkerAsync();
+                    }
                 }
+                c.stateLabel.Text = $"{parseState(state)}";
+            }
+
+            public AIMove handleAITurn(BackgroundWorker bw) {
+                List<Piece> aipieces = pieces.FindAll(p => p.colour == PieceColour.BLACK);
+                List<AIMove> moves = new List<AIMove>();
+                foreach (Piece p in aipieces) {
+                    foreach (Square s in p.calculateMovement(false)) {
+                        moves.Add(new AIMove(p, s));
+                    }
+                }
+                int a = new Random().Next(moves.Count-1);
+                return moves[a];
+            }
+
+            public void AIThread_DoWork(object sender, DoWorkEventArgs e)
+            {
+                state ^= GameState.MOVE;
+                BackgroundWorker bw = sender as BackgroundWorker;
+                e.Result = handleAITurn(bw);
+            }
+            public void AIThread_WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
+            {
+                Debug.WriteLine($"Returned Move: {e.Result}");
+                var colour = state.HasFlag(GameState.COLOUR) ? PieceColour.WHITE : PieceColour.BLACK;
+                AIMove result = e.Result as AIMove;
+                c.history.addMove(result.p, result.s);
+                lastMove = null;
+                bool cm = evaluateCheckMate(colour);
+                if (evaluateCheck(colour)) {
+                    if (cm) {
+                        state ^= (GameState.WIN | GameState.COLOUR);
+                        c.history.addCheck(1);
+                    }
+                    else c.history.addCheck(0);
+                    state ^= GameState.CHECK;
+                }
+                else if (cm) {
+                    state ^= (GameState.STALE | GameState.COLOUR);
+                    c.history.addCheck(2);
+                }
+                state ^= (GameState.MOVE | GameState.COLOUR);
+                c.drawBoard();
                 c.stateLabel.Text = $"{parseState(state)}";
             }
 
@@ -247,7 +295,7 @@ namespace InfiniteChess
             }
             #endregion
         }
-        #region history
+         #region history
         public class MoveHistory : TextBox
         {
             public List<string> moves { get; private set; } = new List<string>();
@@ -295,19 +343,19 @@ namespace InfiniteChess
                     );
                 Piece p = pieces.Find(q => q.square == to);
                 p.move(from, out Piece r);
-                if (matchPieces.Count == 2) {
+                if (matchPieces.Count >= 2) {
                     if (lastMove.Contains("x")) {
                         PieceType type = typeFromPrefix(matchPieces[1].Value);
                         PieceColour colour = moves.Count() % 2 == 0 ? PieceColour.BLACK : PieceColour.WHITE;
                         pieces.Add(new Piece(type, to, colour));
                     }
-                    else {
+                    if (Regex.IsMatch(lastMove.Substring(lastMove.Length - 2), "[A-Z]")) {
                         p.changeType(PieceType.PAWN);
                         p.PawnData = false;
                     }
                 }
                 if (lastMove.Contains("\x0091")) p.PawnData = true;
-                if (lastMove.Contains('+')) state ^= (GameState)5;
+                if (lastMove.Contains('+')) state ^= (GameState)4;
                 if (lastMove.Contains('#')) state ^= (GameState)13;
                 if (lastMove.Contains('~')) state ^= (GameState)17;
                 if (state.HasFlag((GameState)2)) { state ^= (GameState)2; }
@@ -348,6 +396,17 @@ namespace InfiniteChess
         public static List<Square> emptyList() => new List<Square> { }; 
         public override string ToString() => $"{indexX.ToString()},{indexY.ToString()},{X.ToString()},{Y.ToString()}";
         public static List<Square> operator +(Square s1, Square s2) => new List<Square> { s1, s2 };
+    }
+    #endregion
+    #region AIMove
+    public class AIMove
+    {
+        public Square s;
+        public Piece p;
+        public AIMove(Piece piece, Square square) {
+            p = piece; s = square;
+        }
+        public override string ToString() => $"{p.ToString()} -> ({s.indexX}, {s.indexY})";
     }
     #endregion
 }
