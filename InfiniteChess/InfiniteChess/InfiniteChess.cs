@@ -16,31 +16,49 @@ namespace InfiniteChess
     public partial class Chess : Form
     {
         //global variables
-        public static List<Square> board = new List<Square>(); //stores all squares of the board
-        public static int[] origin = { 0, 570 }; //coordinates of [0,0]
-        public static int[] bounds = { -1, 17, -1, 17 }; //boundaries of the generated board
+        public static List<Square> board = Square.emptyList(); //stores all squares of the board
+        public static int[] origin = new int[2]; //coordinates of [0,0]
+        public static int[] bounds = new int[4];//boundaries of the generated board
         public static int[] size = { 16, 16 }; //size of the visible board
         public static int sf = 38;
 
         public static List<Piece> pieces = new List<Piece>();
         public static Piece pieceMoving = null;
-        public static List<Square> pieceMovingMoves = Square.emptyList();
+        public static List<Square> pieceMovingMoves = new List<Square>();
         public static Piece lastMove = null;
-        public static GameState state = 0x0;
+        public static GameState state = 0;
 
-        #region init
+        public static bool movementIndicators = true;
+        public static int scrollMultiplier = 1;
+
         public Chess()
         {
             InitializeComponent();
-            InitialiseBoard();
-            pieces.AddRange(Piece.IntializePieces());
+            Init();
+        }
+        #region init
+        public void Init()
+        {
+            InitialiseVars();
             InitialiseStyle();
-            //bounds[1] = (size[0] - 1)+1; bounds[3] = (size[1] - 1)+1; //initialises the boundaries
+            InitialiseFeatures();
+            InitialiseBoard();
+
+        }
+        public void InitialiseVars() {
+            board = Square.emptyList();
+            bounds = new int[] { -1, size[0]+1, -1, size[1]+1};
+            origin = new int[] { 0, sf * (size[1]-1) };
+
+            pieceMoving = null;
+            pieceMovingMoves = Square.emptyList(); ;
+            lastMove = null;
+            state = 0;
         }
 
         public void InitialiseStyle() {
-            Color highlight = Color.LightGray;
-            BackColor = Color.FromArgb(128,128,128);
+            Color highlight = Color.FromKnownColor(KnownColor.Control);
+            BackColor = Color.FromArgb(200,200,200);
             foreach (Control c in Controls) {
                 if (c.GetType() == typeof(Button)) {
                     Button b = c as Button;
@@ -48,13 +66,13 @@ namespace InfiniteChess
                     b.BackColor = highlight;
                     b.FlatAppearance.BorderColor = Color.Black;
                     b.FlatAppearance.BorderSize = 1;
-                    b.FlatAppearance.MouseDownBackColor = Color.Gray;
+                    b.FlatAppearance.MouseDownBackColor = Color.LightGray;
                     b.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224);
                 }
                 c.Font = new Font("Perpetua", 9, FontStyle.Bold);
                 c.ForeColor = Color.Black;
             }
-            debug3.Font = new Font("Perpetua", 14, FontStyle.Bold);
+            stateLabel.Font = new Font("Perpetua", 13, FontStyle.Bold);
             menu.ForeColor = Color.Black;
             menu.BackColor = highlight;
             history.BackColor = highlight;
@@ -73,8 +91,13 @@ namespace InfiniteChess
                         indexY = (short)j });
                 }
             }
+            pieces = Piece.IntializePieces();
             drawBoard();
+        }
 
+        public void InitialiseFeatures() {
+            history.moves.Clear();
+            history.Text = "";
         }
         #endregion
         #region util
@@ -85,17 +108,17 @@ namespace InfiniteChess
             //        g.DrawRectangle(new Pen(Color.Green), origin[0] + sf * i, origin[1] - sf * j, sf, sf); } }
             g.DrawImage(new Bitmap(new Bitmap("res/image/board.png"), new Size(sf*size[0], sf*size[1])), 0, 0);
             foreach (Piece p in pieces) {
-                Bitmap b = new Bitmap(p.icon, new Size(sf-6, sf-6));
-                g.DrawImage(b, p.square.X+3, p.square.Y+3);
+                g.DrawImage(new Bitmap(p.icon, new Size(sf - 6, sf - 6)), p.square.X+3, p.square.Y+3);
             }
             g.Dispose();
             if (state.HasFlag(GameState.MOVE)) { boardPanel.drawMoves(pieceMoving); }
+            stateLabel.Text = $"{parseState(state)}";
         }
         public void updateSquares(int amount, bool isX, object sender)
         {
             origin[isX ? 0 : 1] += sf * amount;
-            if (isX) { foreach (Square s in board) { s.X += sf * amount; } }
-            else { foreach (Square s in board) { s.Y += sf * amount; } }
+            if (isX) { board.ForEach(s => s.X += sf * amount); }
+            else { board.ForEach(s => s.Y += sf * amount); }
         }
 
         public static int findLargest(int[] i) {
@@ -162,26 +185,34 @@ namespace InfiniteChess
             return PieceType.NONE;
         }
         public static string parseState(GameState g) {
-            string info = "'s turn";
             string colour = g.HasFlag((GameState)1) ? "Black" : "White";
-            if (g.HasFlag((GameState)4)) { info = " in check"; }
-            if (g.HasFlag((GameState)8)) { info = " has won"; }
-            if (g.HasFlag((GameState)16)) { colour = ""; info = "Stalemate"; }
-            return colour + info;
+            string final = $"{colour}'s turn.";
+            if (g.HasFlag((GameState)4)) { final = $"{colour} in check!"; }
+            if (g.HasFlag((GameState)2)) {
+                if (pieceMovingMoves.Count == 0)
+                    final = $"That piece cannot move!";
+                else
+                    final = $"{colour} moving {pieceMoving.type.ToString().ToLowerInvariant()}.";
+            }
+            if (g.HasFlag((GameState)8)) { final = $"{colour} has won!"; }
+            if (g.HasFlag((GameState)16)) { final= "Stalemate"; }
+            return final;
         }
         #endregion
         #region scrolling
         private void sUp_Click(object sender, EventArgs e)
         {
-            Square edge = GameContainer.findSquareByCoords(0, 0);
-            updateSquares(1, false, sender);
-            if (edge.indexY == bounds[3]) {
-                bounds[3]++;
-                for (int j = bounds[0]; j <= bounds[1]; j++) {
-                    board.Add(new Square { X = origin[0] + sf * j,
-                                           Y = origin[1] - bounds[3] * sf,
-                                           indexX = (short)j,
-                                           indexY = (short)bounds[3] });
+            for (int i = 0; i < scrollMultiplier; i++) { 
+                Square edge = GameContainer.findSquareByCoords(0, 0);
+                updateSquares(1, false, sender);
+                if (edge.indexY == bounds[3]) {
+                    bounds[3]++;
+                    for (int j = bounds[0]; j <= bounds[1]; j++) {
+                        board.Add(new Square { X = origin[0] + sf * j,
+                                               Y = origin[1] - bounds[3] * sf,
+                                               indexX = (short)j,
+                                               indexY = (short)bounds[3] });
+                    }
                 }
             }
             drawBoard();
@@ -189,15 +220,18 @@ namespace InfiniteChess
 
         private void sDown_Click(object sender, EventArgs e)
         {
-            Square edge = GameContainer.findSquareByCoords((size[0] - 1) * sf + 1, (size[1] - 1) * sf + 1);
-            updateSquares(-1, false, sender);
-            if (edge.indexY == bounds[2]) {
-                bounds[2]--;
-                for (int j = bounds[0]; j <= bounds[1]; j++) {
-                    board.Add(new Square { X = origin[0] + sf * j,
-                                           Y = origin[1] - bounds[2] * sf,
-                                           indexX = (short)j,
-                                           indexY = (short)bounds[2] });
+            for (int i = 0; i < scrollMultiplier; i++)
+            {
+                Square edge = GameContainer.findSquareByCoords((size[0] - 1) * sf + 1, (size[1] - 1) * sf + 1);
+                updateSquares(-1, false, sender);
+                if (edge.indexY == bounds[2]) {
+                    bounds[2]--;
+                    for (int j = bounds[0]; j <= bounds[1]; j++) {
+                        board.Add(new Square { X = origin[0] + sf * j,
+                                               Y = origin[1] - bounds[2] * sf,
+                                               indexX = (short)j,
+                                               indexY = (short)bounds[2] });
+                    }
                 }
             }
             drawBoard();
@@ -205,15 +239,18 @@ namespace InfiniteChess
 
         private void sRight_Click(object sender, EventArgs e)
         {
-            Square edge = GameContainer.findSquareByCoords((size[0] - 1) * sf + 1, (size[1] - 1) * sf + 1);
-            updateSquares(-1, true, sender);
-            if (edge.indexX == bounds[1]) {
-                bounds[1]++;
-                for (int j = bounds[2]; j <= bounds[3]; j++) {
-                    board.Add(new Square { X = origin[0] + bounds[1] * sf,
-                                           Y = origin[1] - sf * j,
-                                           indexX = (short)bounds[1],
-                                           indexY = (short)j });
+            for (int i = 0; i < scrollMultiplier; i++)
+            {
+                Square edge = GameContainer.findSquareByCoords((size[0] - 1) * sf + 1, (size[1] - 1) * sf + 1);
+                updateSquares(-1, true, sender);
+                if (edge.indexX == bounds[1]) {
+                    bounds[1]++;
+                    for (int j = bounds[2]; j <= bounds[3]; j++) {
+                        board.Add(new Square { X = origin[0] + bounds[1] * sf,
+                                               Y = origin[1] - sf * j,
+                                               indexX = (short)bounds[1],
+                                               indexY = (short)j });
+                    }
                 }
             }
             drawBoard();
@@ -221,15 +258,18 @@ namespace InfiniteChess
 
         private void sLeft_Click(object sender, EventArgs e)
         {
-            Square edge = GameContainer.findSquareByCoords(0, 0);
-            updateSquares(1, true, sender);
-            if (edge.indexX == bounds[0]) {
-                bounds[0]--;
-                for (int j = bounds[2]; j <= bounds[3]; j++) {
-                    board.Add(new Square { X = origin[0] + bounds[0] * sf,
-                                           Y = origin[1] - sf * j,
-                                           indexX = (short)bounds[0],
-                                           indexY = (short)j });
+            for (int i = 0; i < scrollMultiplier; i++)
+            {
+                Square edge = GameContainer.findSquareByCoords(0, 0);
+                updateSquares(1, true, sender);
+                if (edge.indexX == bounds[0]) {
+                    bounds[0]--;
+                    for (int j = bounds[2]; j <= bounds[3]; j++) {
+                        board.Add(new Square { X = origin[0] + bounds[0] * sf,
+                                               Y = origin[1] - sf * j,
+                                               indexX = (short)bounds[0],
+                                               indexY = (short)j });
+                    }
                 }
             }
             drawBoard();

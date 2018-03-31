@@ -7,6 +7,7 @@ using System.Threading;
 using System.Diagnostics;
 using System;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace InfiniteChess
 {
@@ -50,24 +51,67 @@ namespace InfiniteChess
                     pieceMovingMoves = Square.emptyList();
                     c.drawBoard();
                 }
-                c.debug3.Text = $"{parseState(state)}";
+                c.stateLabel.Text = $"{parseState(state)}";
             }
 
             #region check
             public bool evaluateCheck(PieceColour c) {
                 if (state.HasFlag(GameState.CHECK)) { state ^= GameState.CHECK; }
                 Square king = pieces.Find(p => p.type == PieceType.KING && p.colour == c).square;
-                List<Piece> piecesOfColour = pieces.FindAll(p => p.colour != c);
-                bool check = false;
-                //for (int i = 0; i < pieces.Count(); i++) {
-                //    if (pieces[i].colour == c) continue;
-                //    if (pieces[i].calculateMovement(true).Contains(king)) return true;
-                //}
-                Parallel.For(0, piecesOfColour.Count(), i =>
-                {
-                    if (piecesOfColour[i].calculateMovement(true).Contains(king)) check = true;
-                });
-                return check;
+                for (int i = 0; i < pieces.Count(); i++) {
+                    Piece p = pieces[i];
+                    if (p.colour == c) continue;
+                    short[] ps = new short[] { p.square.indexX, p.square.indexY };
+                    short[] ks = new short[] { king.indexX, king.indexY };
+                    switch (p.type) {
+                        case (PieceType.ROOK): {
+                                if (ps[0] != ks[0] & ps[1] != ks[1]) continue;
+                                break;
+                            }
+                        case (PieceType.BISHOP): {
+                                if (ps[0] - ps[1] != ks[0] - ks[1]) continue;
+                                break;
+                            }
+                        case (PieceType.QUEEN): {
+                                if (ps[0] != ks[0] & ps[1] != ks[1] & ps[0] - ks[0] != ps[1] - ks[1])
+                                    continue;
+                                break;
+                            }
+                        case (PieceType.CHANCELLOR): {
+                                if (ps[0] != ks[0] & ps[1] != ks[1] &
+                                    (Math.Abs(ps[0] - ks[0]) > 3 |
+                                    Math.Abs(ps[1] - ks[1]) > 3)) continue;
+                                break;
+                            }
+                        case (PieceType.HAWK): {
+                                if (Math.Abs(ps[0] - ks[0]) > 3 |
+                                    Math.Abs(ps[1] - ks[1]) > 3) continue;
+                                break;
+                            }
+                        case (PieceType.PAWN): {
+                                if (Math.Abs(ps[0] - ks[0]) > 2 |
+                                    Math.Abs(ps[1] - ks[1]) > 2) continue;
+                                break;
+                            }
+                        case (PieceType.MANN): {
+                                if (Math.Abs(ps[0] - ks[0]) > 1 |
+                                    Math.Abs(ps[1] - ks[1]) > 1) continue;
+                                break;
+                            }
+                        case (PieceType.KNIGHT): {
+                                if (Math.Abs(ps[0] - ks[0]) > 2 |
+                                    Math.Abs(ps[1] - ks[1]) > 2) continue;
+                                break;
+                            }
+                        case (PieceType.KING): {
+                                if (Math.Abs(ps[0] - ks[0]) > 1 |
+                                    Math.Abs(ps[1] - ks[1]) > 1) continue;
+                                break;
+                            }
+                    }
+                    if (p.calculateMovement(true).Contains(king)) return true;
+                }
+                return false;
             }
 
             public bool evaluateCheckMate(PieceColour c)
@@ -111,13 +155,15 @@ namespace InfiniteChess
                 //}
                 foreach (Square s in p.calculateMovement(false))
                 {
+                    pieceMovingMoves.Add(s);
+                    if (!movementIndicators) continue;
                     int param = s.indexX + s.indexY;
                     //Color c = param % 2 == 0 ? Color.FromArgb(206,17,22) : Color.FromArgb(255,34,44);
                     Color c = Color.FromArgb(206, 17, 22);
                     g.DrawRectangle(new Pen(Color.FromArgb(255, c)), s.X + 1, s.Y + 1, sf - 3, sf - 3);
                     g.DrawRectangle(new Pen(Color.FromArgb(195, c)), s.X + 2, s.Y + 2, sf - 5, sf - 5);
                     g.DrawRectangle(new Pen(Color.FromArgb(145, c)), s.X + 3, s.Y + 3, sf - 7, sf - 7);
-                    pieceMovingMoves.Add(s);
+
                 }
                 g.Dispose();
             }
@@ -193,22 +239,6 @@ namespace InfiniteChess
                                     pieces.Add(new Piece(PieceType.KING, cursorSquare, PieceColour.WHITE));
                                     break;
                                 }
-                            case 'i': {
-                                    c.sUp.PerformClick();
-                                    break;
-                                }
-                            case 'j': {
-                                    c.sLeft.PerformClick();
-                                    break;
-                                }
-                            case 'k': {
-                                    c.sDown.PerformClick();
-                                    break;
-                                }
-                            case 'l': {
-                                    c.sRight.PerformClick();
-                                    break;
-                                }
                         }
 
                     }
@@ -233,7 +263,7 @@ namespace InfiniteChess
                 else moveText += $"-({s.indexX},{s.indexY})";
                 if (p.type == PieceType.PAWN && p.PawnData == true) {
                     p.PawnData = false;
-                    moveText += "`";
+                    moveText += "\x0091";
                 }
                 if (p.type == PieceType.PAWN) {
                     if (p.square.indexY == 11 && p.colour == PieceColour.WHITE
@@ -276,10 +306,13 @@ namespace InfiniteChess
                         p.PawnData = false;
                     }
                 }
-                if (lastMove.Contains("`")) p.PawnData = true;
+                if (lastMove.Contains("\x0091")) p.PawnData = true;
                 if (lastMove.Contains('+')) state ^= (GameState)5;
                 if (lastMove.Contains('#')) state ^= (GameState)13;
                 if (lastMove.Contains('~')) state ^= (GameState)17;
+                if (state.HasFlag((GameState)2)) { state ^= (GameState)2; }
+                pieceMoving = null;
+                pieceMovingMoves = Square.emptyList();
                 updateMoves();
             }
 
@@ -292,6 +325,8 @@ namespace InfiniteChess
                     result.Add(line);
                 }
                 Lines = result.ToArray();
+                SelectionStart = TextLength;
+                ScrollToCaret();
             }
 
             public void addCheck(int state) {

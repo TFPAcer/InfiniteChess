@@ -124,7 +124,7 @@
             // 
             this.label.AutoSize = true;
             this.label.BackColor = System.Drawing.Color.Transparent;
-            this.label.ForeColor = System.Drawing.Color.White;
+            this.label.ForeColor = System.Drawing.Color.Black;
             this.label.Location = new System.Drawing.Point(111, 24);
             this.label.Name = "label";
             this.label.Size = new System.Drawing.Size(232, 14);
@@ -135,7 +135,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BackColor = System.Drawing.Color.Silver;
             this.ClientSize = new System.Drawing.Size(465, 267);
             this.Controls.Add(this.label);
             this.Controls.Add(this.pP);

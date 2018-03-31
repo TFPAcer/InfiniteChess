@@ -118,17 +118,8 @@ namespace InfiniteChess
                 newMoves.Add(s);
                 move(s, out Piece q);
                 Square king = new Square();
-                try {
-                    king = Chess.pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
-                }
-                catch {
-                    Thread.Sleep(100);
-                    //king = Chess.pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
-                }
-                //foreach (Piece y in Chess.pieces) {
-                Piece y;
-                for (int i = 0; i < Chess.pieces.Count; i++) {
-                    y = Chess.pieces[i];
+                king = Chess.pieces.Find(p => p.type == PieceType.KING && p.colour == colour).square;
+                foreach (Piece y in Chess.pieces) {
                     if (y.colour == colour) continue;
                     if (y.calculateInitMovement(true).Contains(king)) { newMoves.Remove(s); break; }
                 }

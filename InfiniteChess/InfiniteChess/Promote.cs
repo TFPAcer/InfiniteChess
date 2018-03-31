@@ -23,17 +23,18 @@ namespace InfiniteChess
         }
 
         public void InitialiseStyle() {
-            BackColor = Color.FromArgb(28, 32, 40);
+            Color highlight = Color.FromKnownColor(KnownColor.Control);
+            BackColor = Color.FromArgb(200, 200, 200);
             foreach (Control c in Controls) {
                 if (c.GetType() == typeof(Button)) {
                     Button b = c as Button;
                     b.FlatStyle = FlatStyle.Flat;
-                    b.BackColor = Color.DimGray;
+                    b.BackColor = highlight;
                     b.FlatAppearance.BorderColor = Color.Black;
                     b.FlatAppearance.BorderSize = 1;
-                    b.FlatAppearance.MouseDownBackColor = Color.Gray;
+                    b.FlatAppearance.MouseDownBackColor = Color.LightGray;
                     b.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224);
-                    b.ForeColor = Color.White;   
+                    b.ForeColor = Color.Black;   
                 }
                 c.Font = new Font("Perpetua", 9, FontStyle.Bold);
             }

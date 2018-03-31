@@ -35,38 +35,53 @@
             this.sDown = new System.Windows.Forms.Button();
             this.sLeft = new System.Windows.Forms.Button();
             this.sRight = new System.Windows.Forms.Button();
-            this.debug3 = new System.Windows.Forms.Label();
+            this.stateLabel = new System.Windows.Forms.Label();
             this.boardPanel = new InfiniteChess.Chess.GameContainer();
             this.history = new InfiniteChess.Chess.MoveHistory();
             this.undo = new System.Windows.Forms.Button();
             this.menu = new System.Windows.Forms.MenuStrip();
             this.menu_game = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_game_sep1 = new System.Windows.Forms.ToolStripSeparator();
             this.menu_game_new = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_game_sep1 = new System.Windows.Forms.ToolStripSeparator();
             this.menu_game_undo = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_game_forfeit = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_game_sep2 = new System.Windows.Forms.ToolStripSeparator();
             this.menu_game_exit = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_window = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_settings = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_help = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_about = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_game_forfeit = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_window_res = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_window_res_720 = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_setting_ai = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_setting_opp = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_setting_scroll = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_help_chess = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_help_ichess = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_help_app = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_window_res_1080 = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_window_ui = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_window_ui_hist = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_window_ui_capt = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_window_ui_move = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_window_sep1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menu_window_res = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_window_res_720 = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_window_res_1080 = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_settings = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_ai = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_opp = new System.Windows.Forms.ToolStripMenuItem();
+            this.humanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_setting_sep1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menu_setting_scroll = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_scroll_scroll = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_scroll_scroll_up = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_scroll_scroll_down = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_scroll_scroll_left = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_scroll_scroll_right = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_scroll_mult = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_scroll_mult_1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_scroll_mult_2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_scroll_mult_3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setting_scroll_mult_4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menu_setting_undo = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_help = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_help_chess = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_help_ichess = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_help_sep1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menu_help_app = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_about = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_about_about = new System.Windows.Forms.ToolStripMenuItem();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,7 +98,7 @@
             // debug2
             // 
             this.debug2.AutoSize = true;
-            this.debug2.ForeColor = System.Drawing.Color.White;
+            this.debug2.ForeColor = System.Drawing.Color.Black;
             this.debug2.Location = new System.Drawing.Point(684, 67);
             this.debug2.Name = "debug2";
             this.debug2.Size = new System.Drawing.Size(37, 13);
@@ -154,16 +169,18 @@
             this.sRight.UseVisualStyleBackColor = false;
             this.sRight.Click += new System.EventHandler(this.sRight_Click);
             // 
-            // debug3
+            // stateLabel
             // 
-            this.debug3.AutoSize = true;
-            this.debug3.ForeColor = System.Drawing.Color.White;
-            this.debug3.Location = new System.Drawing.Point(684, 91);
-            this.debug3.Name = "debug3";
-            this.debug3.Size = new System.Drawing.Size(63, 13);
-            this.debug3.TabIndex = 7;
-            this.debug3.Text = "White\'s turn";
-            this.debug3.Click += new System.EventHandler(this.debug3_Click);
+            this.stateLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.stateLabel.AutoSize = true;
+            this.stateLabel.BackColor = System.Drawing.SystemColors.Control;
+            this.stateLabel.Font = new System.Drawing.Font("Perpetua", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stateLabel.ForeColor = System.Drawing.Color.Black;
+            this.stateLabel.Location = new System.Drawing.Point(806, 2);
+            this.stateLabel.Name = "stateLabel";
+            this.stateLabel.Size = new System.Drawing.Size(0, 20);
+            this.stateLabel.TabIndex = 7;
+            this.stateLabel.Click += new System.EventHandler(this.debug3_Click);
             // 
             // boardPanel
             // 
@@ -225,47 +242,151 @@
             this.menu_game_forfeit,
             this.menu_game_sep2,
             this.menu_game_exit});
+            this.menu_game.Image = ((System.Drawing.Image)(resources.GetObject("menu_game.Image")));
+            this.menu_game.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_game.Name = "menu_game";
-            this.menu_game.Size = new System.Drawing.Size(50, 20);
+            this.menu_game.Size = new System.Drawing.Size(66, 20);
             this.menu_game.Text = "Game";
+            // 
+            // menu_game_new
+            // 
+            this.menu_game_new.Image = ((System.Drawing.Image)(resources.GetObject("menu_game_new.Image")));
+            this.menu_game_new.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_game_new.Name = "menu_game_new";
+            this.menu_game_new.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.menu_game_new.Size = new System.Drawing.Size(177, 22);
+            this.menu_game_new.Text = "New Game";
+            this.menu_game_new.Click += new System.EventHandler(this.menu_game_new_Click);
             // 
             // menu_game_sep1
             // 
             this.menu_game_sep1.Name = "menu_game_sep1";
-            this.menu_game_sep1.Size = new System.Drawing.Size(139, 6);
-            // 
-            // menu_game_new
-            // 
-            this.menu_game_new.Name = "menu_game_new";
-            this.menu_game_new.Size = new System.Drawing.Size(142, 22);
-            this.menu_game_new.Text = "New Game";
+            this.menu_game_sep1.Size = new System.Drawing.Size(174, 6);
             // 
             // menu_game_undo
             // 
+            this.menu_game_undo.Image = ((System.Drawing.Image)(resources.GetObject("menu_game_undo.Image")));
+            this.menu_game_undo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_game_undo.Name = "menu_game_undo";
-            this.menu_game_undo.Size = new System.Drawing.Size(142, 22);
+            this.menu_game_undo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.menu_game_undo.Size = new System.Drawing.Size(177, 22);
             this.menu_game_undo.Text = "Undo Move";
+            this.menu_game_undo.Click += new System.EventHandler(this.menu_game_undo_Click);
+            // 
+            // menu_game_forfeit
+            // 
+            this.menu_game_forfeit.Image = ((System.Drawing.Image)(resources.GetObject("menu_game_forfeit.Image")));
+            this.menu_game_forfeit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_game_forfeit.Name = "menu_game_forfeit";
+            this.menu_game_forfeit.Size = new System.Drawing.Size(177, 22);
+            this.menu_game_forfeit.Text = "Forfeit Game";
+            this.menu_game_forfeit.Click += new System.EventHandler(this.menu_game_forfeit_Click);
             // 
             // menu_game_sep2
             // 
             this.menu_game_sep2.Name = "menu_game_sep2";
-            this.menu_game_sep2.Size = new System.Drawing.Size(139, 6);
+            this.menu_game_sep2.Size = new System.Drawing.Size(174, 6);
             // 
             // menu_game_exit
             // 
+            this.menu_game_exit.Image = ((System.Drawing.Image)(resources.GetObject("menu_game_exit.Image")));
+            this.menu_game_exit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_game_exit.Name = "menu_game_exit";
-            this.menu_game_exit.Size = new System.Drawing.Size(142, 22);
+            this.menu_game_exit.Size = new System.Drawing.Size(177, 22);
             this.menu_game_exit.Text = "Exit";
+            this.menu_game_exit.Click += new System.EventHandler(this.menu_game_exit_Click);
             // 
             // menu_window
             // 
             this.menu_window.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_window_res,
+            this.menu_window_ui,
             this.menu_window_sep1,
-            this.menu_window_ui});
+            this.menu_window_res});
+            this.menu_window.Image = ((System.Drawing.Image)(resources.GetObject("menu_window.Image")));
+            this.menu_window.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_window.Name = "menu_window";
-            this.menu_window.Size = new System.Drawing.Size(63, 20);
+            this.menu_window.Size = new System.Drawing.Size(79, 20);
             this.menu_window.Text = "Window";
+            // 
+            // menu_window_ui
+            // 
+            this.menu_window_ui.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_window_ui_hist,
+            this.menu_window_ui_capt,
+            this.menu_window_ui_move});
+            this.menu_window_ui.Image = ((System.Drawing.Image)(resources.GetObject("menu_window_ui.Image")));
+            this.menu_window_ui.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_window_ui.Name = "menu_window_ui";
+            this.menu_window_ui.Size = new System.Drawing.Size(174, 22);
+            this.menu_window_ui.Text = "UI Features";
+            // 
+            // menu_window_ui_hist
+            // 
+            this.menu_window_ui_hist.Checked = true;
+            this.menu_window_ui_hist.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.menu_window_ui_hist.Image = ((System.Drawing.Image)(resources.GetObject("menu_window_ui_hist.Image")));
+            this.menu_window_ui_hist.Name = "menu_window_ui_hist";
+            this.menu_window_ui_hist.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.H)));
+            this.menu_window_ui_hist.Size = new System.Drawing.Size(264, 22);
+            this.menu_window_ui_hist.Text = "Move History";
+            this.menu_window_ui_hist.Click += new System.EventHandler(this.menu_window_ui_hist_Click);
+            // 
+            // menu_window_ui_capt
+            // 
+            this.menu_window_ui_capt.Checked = true;
+            this.menu_window_ui_capt.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.menu_window_ui_capt.Enabled = false;
+            this.menu_window_ui_capt.Image = ((System.Drawing.Image)(resources.GetObject("menu_window_ui_capt.Image")));
+            this.menu_window_ui_capt.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_window_ui_capt.Name = "menu_window_ui_capt";
+            this.menu_window_ui_capt.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.C)));
+            this.menu_window_ui_capt.Size = new System.Drawing.Size(264, 22);
+            this.menu_window_ui_capt.Text = "Capture Indicators";
+            // 
+            // menu_window_ui_move
+            // 
+            this.menu_window_ui_move.Checked = true;
+            this.menu_window_ui_move.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.menu_window_ui_move.Image = ((System.Drawing.Image)(resources.GetObject("menu_window_ui_move.Image")));
+            this.menu_window_ui_move.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_window_ui_move.Name = "menu_window_ui_move";
+            this.menu_window_ui_move.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.M)));
+            this.menu_window_ui_move.Size = new System.Drawing.Size(264, 22);
+            this.menu_window_ui_move.Text = "Movement Indicators";
+            this.menu_window_ui_move.Click += new System.EventHandler(this.menu_window_ui_move_Click);
+            // 
+            // menu_window_sep1
+            // 
+            this.menu_window_sep1.Name = "menu_window_sep1";
+            this.menu_window_sep1.Size = new System.Drawing.Size(171, 6);
+            // 
+            // menu_window_res
+            // 
+            this.menu_window_res.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_window_res_720,
+            this.menu_window_res_1080});
+            this.menu_window_res.Image = ((System.Drawing.Image)(resources.GetObject("menu_window_res.Image")));
+            this.menu_window_res.Name = "menu_window_res";
+            this.menu_window_res.Size = new System.Drawing.Size(174, 22);
+            this.menu_window_res.Text = "Change Resolution";
+            // 
+            // menu_window_res_720
+            // 
+            this.menu_window_res_720.Checked = true;
+            this.menu_window_res_720.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.menu_window_res_720.Name = "menu_window_res_720";
+            this.menu_window_res_720.Size = new System.Drawing.Size(105, 22);
+            this.menu_window_res_720.Text = "720p";
+            // 
+            // menu_window_res_1080
+            // 
+            this.menu_window_res_1080.Enabled = false;
+            this.menu_window_res_1080.Name = "menu_window_res_1080";
+            this.menu_window_res_1080.Size = new System.Drawing.Size(105, 22);
+            this.menu_window_res_1080.Text = "1080p";
             // 
             // menu_settings
             // 
@@ -273,10 +394,172 @@
             this.menu_setting_ai,
             this.menu_setting_opp,
             this.menu_setting_sep1,
-            this.menu_setting_scroll});
+            this.menu_setting_scroll,
+            this.toolStripSeparator1,
+            this.menu_setting_undo});
+            this.menu_settings.Image = ((System.Drawing.Image)(resources.GetObject("menu_settings.Image")));
+            this.menu_settings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_settings.Name = "menu_settings";
-            this.menu_settings.Size = new System.Drawing.Size(61, 20);
+            this.menu_settings.Size = new System.Drawing.Size(77, 20);
             this.menu_settings.Text = "Settings";
+            // 
+            // menu_setting_ai
+            // 
+            this.menu_setting_ai.Enabled = false;
+            this.menu_setting_ai.Image = ((System.Drawing.Image)(resources.GetObject("menu_setting_ai.Image")));
+            this.menu_setting_ai.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_setting_ai.Name = "menu_setting_ai";
+            this.menu_setting_ai.Size = new System.Drawing.Size(183, 22);
+            this.menu_setting_ai.Text = "AI Difficulty...";
+            // 
+            // menu_setting_opp
+            // 
+            this.menu_setting_opp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.humanToolStripMenuItem,
+            this.aIToolStripMenuItem});
+            this.menu_setting_opp.Image = ((System.Drawing.Image)(resources.GetObject("menu_setting_opp.Image")));
+            this.menu_setting_opp.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_setting_opp.Name = "menu_setting_opp";
+            this.menu_setting_opp.Size = new System.Drawing.Size(183, 22);
+            this.menu_setting_opp.Text = "Opponent..";
+            // 
+            // humanToolStripMenuItem
+            // 
+            this.humanToolStripMenuItem.Checked = true;
+            this.humanToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.humanToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("humanToolStripMenuItem.Image")));
+            this.humanToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.humanToolStripMenuItem.Name = "humanToolStripMenuItem";
+            this.humanToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.humanToolStripMenuItem.Text = "Human";
+            // 
+            // aIToolStripMenuItem
+            // 
+            this.aIToolStripMenuItem.Enabled = false;
+            this.aIToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("aIToolStripMenuItem.Image")));
+            this.aIToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.aIToolStripMenuItem.Name = "aIToolStripMenuItem";
+            this.aIToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.aIToolStripMenuItem.Text = "AI";
+            // 
+            // menu_setting_sep1
+            // 
+            this.menu_setting_sep1.Name = "menu_setting_sep1";
+            this.menu_setting_sep1.Size = new System.Drawing.Size(180, 6);
+            // 
+            // menu_setting_scroll
+            // 
+            this.menu_setting_scroll.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_setting_scroll_scroll,
+            this.menu_setting_scroll_mult});
+            this.menu_setting_scroll.Image = ((System.Drawing.Image)(resources.GetObject("menu_setting_scroll.Image")));
+            this.menu_setting_scroll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_setting_scroll.Name = "menu_setting_scroll";
+            this.menu_setting_scroll.Size = new System.Drawing.Size(183, 22);
+            this.menu_setting_scroll.Text = "Scrolling";
+            // 
+            // menu_setting_scroll_scroll
+            // 
+            this.menu_setting_scroll_scroll.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_setting_scroll_scroll_up,
+            this.menu_setting_scroll_scroll_down,
+            this.menu_setting_scroll_scroll_left,
+            this.menu_setting_scroll_scroll_right});
+            this.menu_setting_scroll_scroll.Name = "menu_setting_scroll_scroll";
+            this.menu_setting_scroll_scroll.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_scroll.Text = "Scroll";
+            // 
+            // menu_setting_scroll_scroll_up
+            // 
+            this.menu_setting_scroll_scroll_up.Name = "menu_setting_scroll_scroll_up";
+            this.menu_setting_scroll_scroll_up.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Up)));
+            this.menu_setting_scroll_scroll_up.Size = new System.Drawing.Size(170, 22);
+            this.menu_setting_scroll_scroll_up.Text = "Up";
+            this.menu_setting_scroll_scroll_up.Click += new System.EventHandler(this.menu_setting_scroll_scroll_up_Click);
+            // 
+            // menu_setting_scroll_scroll_down
+            // 
+            this.menu_setting_scroll_scroll_down.Name = "menu_setting_scroll_scroll_down";
+            this.menu_setting_scroll_scroll_down.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Down)));
+            this.menu_setting_scroll_scroll_down.Size = new System.Drawing.Size(170, 22);
+            this.menu_setting_scroll_scroll_down.Text = "Down";
+            this.menu_setting_scroll_scroll_down.Click += new System.EventHandler(this.menu_setting_scroll_scroll_down_Click);
+            // 
+            // menu_setting_scroll_scroll_left
+            // 
+            this.menu_setting_scroll_scroll_left.Name = "menu_setting_scroll_scroll_left";
+            this.menu_setting_scroll_scroll_left.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Left)));
+            this.menu_setting_scroll_scroll_left.Size = new System.Drawing.Size(170, 22);
+            this.menu_setting_scroll_scroll_left.Text = "Left";
+            this.menu_setting_scroll_scroll_left.Click += new System.EventHandler(this.menu_setting_scroll_scroll_left_Click);
+            // 
+            // menu_setting_scroll_scroll_right
+            // 
+            this.menu_setting_scroll_scroll_right.Name = "menu_setting_scroll_scroll_right";
+            this.menu_setting_scroll_scroll_right.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Right)));
+            this.menu_setting_scroll_scroll_right.Size = new System.Drawing.Size(170, 22);
+            this.menu_setting_scroll_scroll_right.Text = "Right";
+            this.menu_setting_scroll_scroll_right.Click += new System.EventHandler(this.menu_setting_scroll_scroll_right_Click);
+            // 
+            // menu_setting_scroll_mult
+            // 
+            this.menu_setting_scroll_mult.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_setting_scroll_mult_1,
+            this.menu_setting_scroll_mult_2,
+            this.menu_setting_scroll_mult_3,
+            this.menu_setting_scroll_mult_4});
+            this.menu_setting_scroll_mult.Name = "menu_setting_scroll_mult";
+            this.menu_setting_scroll_mult.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_mult.Text = "Multiplier";
+            // 
+            // menu_setting_scroll_mult_1
+            // 
+            this.menu_setting_scroll_mult_1.Checked = true;
+            this.menu_setting_scroll_mult_1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.menu_setting_scroll_mult_1.Name = "menu_setting_scroll_mult_1";
+            this.menu_setting_scroll_mult_1.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.menu_setting_scroll_mult_1.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_mult_1.Text = "1x";
+            this.menu_setting_scroll_mult_1.Click += new System.EventHandler(this.menu_setting_scroll_mult_1_Click);
+            // 
+            // menu_setting_scroll_mult_2
+            // 
+            this.menu_setting_scroll_mult_2.Name = "menu_setting_scroll_mult_2";
+            this.menu_setting_scroll_mult_2.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.menu_setting_scroll_mult_2.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_mult_2.Text = "2x";
+            this.menu_setting_scroll_mult_2.Click += new System.EventHandler(this.menu_setting_scroll_mult_2_Click);
+            // 
+            // menu_setting_scroll_mult_3
+            // 
+            this.menu_setting_scroll_mult_3.Name = "menu_setting_scroll_mult_3";
+            this.menu_setting_scroll_mult_3.ShortcutKeys = System.Windows.Forms.Keys.F3;
+            this.menu_setting_scroll_mult_3.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_mult_3.Text = "3x";
+            this.menu_setting_scroll_mult_3.Click += new System.EventHandler(this.menu_setting_scroll_mult_3_Click);
+            // 
+            // menu_setting_scroll_mult_4
+            // 
+            this.menu_setting_scroll_mult_4.Name = "menu_setting_scroll_mult_4";
+            this.menu_setting_scroll_mult_4.ShortcutKeys = System.Windows.Forms.Keys.F4;
+            this.menu_setting_scroll_mult_4.Size = new System.Drawing.Size(180, 22);
+            this.menu_setting_scroll_mult_4.Tag = "";
+            this.menu_setting_scroll_mult_4.Text = "4x";
+            this.menu_setting_scroll_mult_4.Click += new System.EventHandler(this.menu_setting_scroll_mult_4_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(180, 6);
+            // 
+            // menu_setting_undo
+            // 
+            this.menu_setting_undo.Image = ((System.Drawing.Image)(resources.GetObject("menu_setting_undo.Image")));
+            this.menu_setting_undo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_setting_undo.Name = "menu_setting_undo";
+            this.menu_setting_undo.Size = new System.Drawing.Size(183, 22);
+            this.menu_setting_undo.Text = "Disable Undo Button";
+            this.menu_setting_undo.Click += new System.EventHandler(this.menu_setting_undo_Click);
             // 
             // menu_help
             // 
@@ -285,132 +568,73 @@
             this.menu_help_ichess,
             this.menu_help_sep1,
             this.menu_help_app});
+            this.menu_help.Image = ((System.Drawing.Image)(resources.GetObject("menu_help.Image")));
+            this.menu_help.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_help.Name = "menu_help";
-            this.menu_help.Size = new System.Drawing.Size(44, 20);
+            this.menu_help.Size = new System.Drawing.Size(60, 20);
             this.menu_help.Text = "Help";
-            // 
-            // menu_about
-            // 
-            this.menu_about.Name = "menu_about";
-            this.menu_about.Size = new System.Drawing.Size(58, 20);
-            this.menu_about.Text = "About..";
-            // 
-            // menu_game_forfeit
-            // 
-            this.menu_game_forfeit.Name = "menu_game_forfeit";
-            this.menu_game_forfeit.Size = new System.Drawing.Size(142, 22);
-            this.menu_game_forfeit.Text = "Forfeit Game";
-            // 
-            // menu_window_res
-            // 
-            this.menu_window_res.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_window_res_720,
-            this.menu_window_res_1080});
-            this.menu_window_res.Name = "menu_window_res";
-            this.menu_window_res.Size = new System.Drawing.Size(174, 22);
-            this.menu_window_res.Text = "Change Resolution";
-            // 
-            // menu_window_res_720
-            // 
-            this.menu_window_res_720.Name = "menu_window_res_720";
-            this.menu_window_res_720.Size = new System.Drawing.Size(105, 22);
-            this.menu_window_res_720.Text = "720p";
-            // 
-            // menu_setting_ai
-            // 
-            this.menu_setting_ai.Name = "menu_setting_ai";
-            this.menu_setting_ai.Size = new System.Drawing.Size(142, 22);
-            this.menu_setting_ai.Text = "AI Difficulty..";
-            // 
-            // menu_setting_opp
-            // 
-            this.menu_setting_opp.Name = "menu_setting_opp";
-            this.menu_setting_opp.Size = new System.Drawing.Size(142, 22);
-            this.menu_setting_opp.Text = "Opponent..";
-            // 
-            // menu_setting_scroll
-            // 
-            this.menu_setting_scroll.Name = "menu_setting_scroll";
-            this.menu_setting_scroll.Size = new System.Drawing.Size(142, 22);
-            this.menu_setting_scroll.Text = "Scrolling..";
             // 
             // menu_help_chess
             // 
+            this.menu_help_chess.Enabled = false;
+            this.menu_help_chess.Image = ((System.Drawing.Image)(resources.GetObject("menu_help_chess.Image")));
+            this.menu_help_chess.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_help_chess.Name = "menu_help_chess";
-            this.menu_help_chess.Size = new System.Drawing.Size(179, 22);
-            this.menu_help_chess.Text = "Chess Help..";
+            this.menu_help_chess.Size = new System.Drawing.Size(211, 22);
+            this.menu_help_chess.Text = "Chess Help...";
             // 
             // menu_help_ichess
             // 
+            this.menu_help_ichess.Enabled = false;
+            this.menu_help_ichess.Image = ((System.Drawing.Image)(resources.GetObject("menu_help_ichess.Image")));
+            this.menu_help_ichess.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_help_ichess.Name = "menu_help_ichess";
-            this.menu_help_ichess.Size = new System.Drawing.Size(179, 22);
-            this.menu_help_ichess.Text = "Infinite Chess Help..";
-            // 
-            // menu_help_app
-            // 
-            this.menu_help_app.Name = "menu_help_app";
-            this.menu_help_app.Size = new System.Drawing.Size(179, 22);
-            this.menu_help_app.Text = "Application Help";
-            // 
-            // menu_window_res_1080
-            // 
-            this.menu_window_res_1080.Name = "menu_window_res_1080";
-            this.menu_window_res_1080.Size = new System.Drawing.Size(105, 22);
-            this.menu_window_res_1080.Text = "1080p";
-            // 
-            // menu_window_ui
-            // 
-            this.menu_window_ui.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_window_ui_hist,
-            this.menu_window_ui_capt,
-            this.menu_window_ui_move});
-            this.menu_window_ui.Name = "menu_window_ui";
-            this.menu_window_ui.Size = new System.Drawing.Size(174, 22);
-            this.menu_window_ui.Text = "UI Features";
-            // 
-            // menu_window_ui_hist
-            // 
-            this.menu_window_ui_hist.Name = "menu_window_ui_hist";
-            this.menu_window_ui_hist.Size = new System.Drawing.Size(187, 22);
-            this.menu_window_ui_hist.Text = "Move History";
-            // 
-            // menu_window_ui_capt
-            // 
-            this.menu_window_ui_capt.Name = "menu_window_ui_capt";
-            this.menu_window_ui_capt.Size = new System.Drawing.Size(187, 22);
-            this.menu_window_ui_capt.Text = "Capture Indicators";
-            // 
-            // menu_window_ui_move
-            // 
-            this.menu_window_ui_move.Name = "menu_window_ui_move";
-            this.menu_window_ui_move.Size = new System.Drawing.Size(187, 22);
-            this.menu_window_ui_move.Text = "Movement Indicators";
-            // 
-            // menu_window_sep1
-            // 
-            this.menu_window_sep1.Name = "menu_window_sep1";
-            this.menu_window_sep1.Size = new System.Drawing.Size(171, 6);
-            // 
-            // menu_setting_sep1
-            // 
-            this.menu_setting_sep1.Name = "menu_setting_sep1";
-            this.menu_setting_sep1.Size = new System.Drawing.Size(6, 6);
+            this.menu_help_ichess.Size = new System.Drawing.Size(211, 22);
+            this.menu_help_ichess.Text = "Infinite Chess Help...";
             // 
             // menu_help_sep1
             // 
             this.menu_help_sep1.Name = "menu_help_sep1";
-            this.menu_help_sep1.Size = new System.Drawing.Size(6, 6);
+            this.menu_help_sep1.Size = new System.Drawing.Size(208, 6);
+            // 
+            // menu_help_app
+            // 
+            this.menu_help_app.Enabled = false;
+            this.menu_help_app.Image = ((System.Drawing.Image)(resources.GetObject("menu_help_app.Image")));
+            this.menu_help_app.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_help_app.Name = "menu_help_app";
+            this.menu_help_app.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
+            this.menu_help_app.Size = new System.Drawing.Size(211, 22);
+            this.menu_help_app.Text = "Application Help...";
+            // 
+            // menu_about
+            // 
+            this.menu_about.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_about_about});
+            this.menu_about.Image = ((System.Drawing.Image)(resources.GetObject("menu_about.Image")));
+            this.menu_about.Name = "menu_about";
+            this.menu_about.Size = new System.Drawing.Size(68, 20);
+            this.menu_about.Text = "About";
+            // 
+            // menu_about_about
+            // 
+            this.menu_about_about.Enabled = false;
+            this.menu_about_about.Image = ((System.Drawing.Image)(resources.GetObject("menu_about_about.Image")));
+            this.menu_about_about.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_about_about.Name = "menu_about_about";
+            this.menu_about_about.Size = new System.Drawing.Size(184, 22);
+            this.menu_about_about.Text = "About InfinteChess...";
             // 
             // Chess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BackColor = System.Drawing.Color.Silver;
             this.ClientSize = new System.Drawing.Size(1028, 681);
+            this.Controls.Add(this.stateLabel);
             this.Controls.Add(this.menu);
             this.Controls.Add(this.undo);
             this.Controls.Add(this.history);
-            this.Controls.Add(this.debug3);
             this.Controls.Add(this.sRight);
             this.Controls.Add(this.sLeft);
             this.Controls.Add(this.sDown);
@@ -438,7 +662,7 @@
         private System.Windows.Forms.Button sDown;
         private System.Windows.Forms.Button sLeft;
         private System.Windows.Forms.Button sRight;
-        private System.Windows.Forms.Label debug3;
+        private System.Windows.Forms.Label stateLabel;
         private MoveHistory history;
         private System.Windows.Forms.Button undo;
         private System.Windows.Forms.MenuStrip menu;
@@ -469,6 +693,21 @@
         private System.Windows.Forms.ToolStripSeparator menu_window_sep1;
         private System.Windows.Forms.ToolStripSeparator menu_setting_sep1;
         private System.Windows.Forms.ToolStripSeparator menu_help_sep1;
+        private System.Windows.Forms.ToolStripMenuItem humanToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_scroll;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_scroll_up;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_scroll_down;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_scroll_left;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_scroll_right;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_mult;
+        private System.Windows.Forms.ToolStripMenuItem menu_about_about;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_undo;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_mult_1;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_mult_2;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_mult_3;
+        private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_mult_4;
     }
 }
 
