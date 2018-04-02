@@ -31,6 +31,7 @@ namespace InfiniteChess
         public static bool movementIndicators = true;
         public static int scrollMultiplier = 1;
         public static bool opponentAI = false;
+        public static int AIDIfficulty = 0;
 
         public Chess()
         {
@@ -141,6 +142,33 @@ namespace InfiniteChess
             }
             return 0;
         }
+        public static void updateValues() {
+            pieces.ForEach(q => q.addedValue = 0);
+            foreach (Piece p in pieces) {
+                if (p.type == PieceType.PAWN) {
+                    int colour = p.colour == PieceColour.WHITE ? 1 : -1;
+                    var query = from q in pieces
+                                where q.square.indexY == p.square.indexY + colour
+                                && Math.Abs(q.square.indexX - p.square.indexX) == 1
+                                select q;
+                    foreach (Piece t in query)
+                        t.addedValue += 500 * (t.colour == PieceColour.WHITE ? 1 : -1);
+                    if (colour == 1) {
+                        if (p.square.indexY == 7) p.addedValue += 200;
+                        if (p.square.indexY == 8) p.addedValue += 800;
+                        if (p.square.indexY == 9) p.addedValue += 1500;
+                        if (p.square.indexY == 10) p.addedValue += 2500;
+                    }
+                    else {
+                        if (p.square.indexY == 8) p.addedValue -= 200;
+                        if (p.square.indexY == 7) p.addedValue -= 800;
+                        if (p.square.indexY == 6) p.addedValue -= 1500;
+                        if (p.square.indexY == 5) p.addedValue -= 2500;
+                    }
+                }
+            }
+        }
+
         private void begin_Click(object sender, EventArgs e)
         {
             drawBoard();
@@ -150,10 +178,14 @@ namespace InfiniteChess
 
         }
 
-        private void undo_Click(object sender, EventArgs e)
+        private void undo_Click(object sender, EventArgs e) => undo(1);
+        private void undo2_Click(object sender, EventArgs e) => undo(2);
+        private void undo(int i)
         {
-            history.undoMove();
+            history.undoMove(i);
             drawBoard();
+            if (opponentAI && state.HasFlag((GameState)1)) 
+                AIThread.RunWorkerAsync();
         }
         public static string prefixFromType(PieceType t) {
             switch (t) {
@@ -194,10 +226,20 @@ namespace InfiniteChess
                     final = $"That piece cannot move!";
                 else
                     final = $"{colour} moving {pieceMoving.type.ToString().ToLowerInvariant()}.";
+                if (g.HasFlag((GameState)1) && opponentAI) { final = "AI Moving..."; }
             }
             if (g.HasFlag((GameState)8)) { final = $"{colour} has won!"; }
             if (g.HasFlag((GameState)16)) { final= "Stalemate"; }
             return final;
+        }
+        private void AIThread_DoWork(object sender, DoWorkEventArgs e)
+        {
+            boardPanel.AIThread_DoWork(sender, e);
+        }
+
+        private void AIThread_RunWorkCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            boardPanel.AIThread_WorkCompleted(sender, e);
         }
         #endregion
         #region scrolling

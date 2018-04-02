@@ -19,11 +19,26 @@ namespace InfiniteChess
         public Bitmap icon { get; private set; }
         public PieceColour colour { get; private set; }
         public bool PawnData { get; set; } = false;
+        public int baseValue { get; set; }
+        public int addedValue { get; set; }
 
         public Piece(PieceType t, Square s, PieceColour c) {
             type = t; colour = c; square = s;
             icon = new Bitmap($"res/image/{c.ToString()}/{t.ToString()}.png");
             if (t == PieceType.PAWN) { PawnData = true; }
+            int sign = colour == PieceColour.WHITE ? 1 : -1;
+            switch (type) {
+                case PieceType.PAWN: { baseValue = 1000 * sign; break; }
+                case PieceType.BISHOP: { baseValue = 7000 * sign; break; }
+                case PieceType.ROOK: { baseValue = 15000 * sign; break; }
+                case PieceType.KNIGHT: { baseValue = 4000 * sign; break; }
+                case PieceType.MANN: { baseValue = 30000 * sign; break; }
+                case PieceType.HAWK: { baseValue = 12000 * sign; break; }
+                case PieceType.CHANCELLOR: { baseValue = 18000 * sign; break; }
+                case PieceType.QUEEN: { baseValue = 25000 * sign; break; }
+                case PieceType.KING: { baseValue = 200000 * sign; break; }
+                case PieceType.NONE: { baseValue = 0; break; }
+            }
         }
         #region movement
         public void move(Square s, out Piece pOut) {
@@ -34,6 +49,7 @@ namespace InfiniteChess
                 Chess.lastMove = p;
             }
             square = s;
+            Chess.updateValues();
         }
 
         public List<Square> calculateInitMovement(bool includeKings) {

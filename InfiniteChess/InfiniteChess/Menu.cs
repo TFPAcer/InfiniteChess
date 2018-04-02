@@ -10,23 +10,30 @@ namespace InfiniteChess
     public partial class Chess : Form
     {
         #region game
+        private void menu_game_new_Click(object sender, EventArgs e)
+        {
+            Init();
+        }
         private void menu_game_undo_Click(object sender, EventArgs e)
         {
-            undo.PerformClick();
+            undo1.PerformClick();
+        }
+        private void menu_game_undo2_Click(object sender, EventArgs e)
+        {
+            undo2.PerformClick();
         }
         private void menu_game_exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
-        private void menu_game_new_Click(object sender, EventArgs e)
-        {
-            Init();
-        }
         private void menu_game_forfeit_Click(object sender, EventArgs e)
         {
-            state ^= ((GameState)9);
-            history.addCheck(1);
-            stateLabel.Text = $"{parseState(state)}";
+            if (history.moves.Count > 0) {
+                state ^= ((GameState)9);
+                history.addCheck(1);
+                stateLabel.Text = $"{parseState(state)}";
+            }
+            else stateLabel.Text = "Cannot forfeit on first turn!";
         }
         #endregion
         #region window
@@ -44,6 +51,13 @@ namespace InfiniteChess
         }
         #endregion
         #region setting
+        private void menu_setting_ai_Click(object sender, EventArgs e)
+        {
+            AIDiff d = new AIDiff();
+            d.ShowDialog();
+            AIDIfficulty = d.difficulty;
+            d.Dispose();
+        }
         private void menu_setting_opp_human_Click(object sender, EventArgs e)
         {
             setOpponent(false);
@@ -99,10 +113,13 @@ namespace InfiniteChess
         }
         private void menu_setting_undo_Click(object sender, EventArgs e)
         {
-            bool enabled = !undo.Enabled;
-            undo.Enabled = enabled;
-            undo.Visible = enabled;
+            bool enabled = !undo1.Enabled;
+            undo1.Enabled = enabled;
+            undo1.Visible = enabled;
+            undo2.Enabled = enabled;
+            undo2.Visible = enabled;
             menu_game_undo.Enabled = enabled;
+            menu_game_undo2.Enabled = enabled;
             menu_setting_undo.Checked = !enabled;
         }
         #endregion

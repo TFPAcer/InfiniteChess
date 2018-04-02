@@ -38,12 +38,13 @@
             this.stateLabel = new System.Windows.Forms.Label();
             this.boardPanel = new InfiniteChess.Chess.GameContainer();
             this.history = new InfiniteChess.Chess.MoveHistory();
-            this.undo = new System.Windows.Forms.Button();
+            this.undo1 = new System.Windows.Forms.Button();
             this.menu = new System.Windows.Forms.MenuStrip();
             this.menu_game = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_game_new = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_game_sep1 = new System.Windows.Forms.ToolStripSeparator();
             this.menu_game_undo = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_game_undo2 = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_game_forfeit = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_game_sep2 = new System.Windows.Forms.ToolStripSeparator();
             this.menu_game_exit = new System.Windows.Forms.ToolStripMenuItem();
@@ -83,6 +84,8 @@
             this.menu_about = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_about_about = new System.Windows.Forms.ToolStripMenuItem();
             this.AIThread = new System.ComponentModel.BackgroundWorker();
+            this.undo2 = new System.Windows.Forms.Button();
+            this.valueLabel = new System.Windows.Forms.Label();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -208,18 +211,18 @@
             this.history.TabIndex = 8;
             this.history.WordWrap = false;
             // 
-            // undo
+            // undo1
             // 
-            this.undo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.undo.BackColor = System.Drawing.Color.Silver;
-            this.undo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.undo.Location = new System.Drawing.Point(941, 342);
-            this.undo.Name = "undo";
-            this.undo.Size = new System.Drawing.Size(75, 23);
-            this.undo.TabIndex = 9;
-            this.undo.Text = "Undo";
-            this.undo.UseVisualStyleBackColor = false;
-            this.undo.Click += new System.EventHandler(this.undo_Click);
+            this.undo1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.undo1.BackColor = System.Drawing.Color.Silver;
+            this.undo1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.undo1.Location = new System.Drawing.Point(941, 342);
+            this.undo1.Name = "undo1";
+            this.undo1.Size = new System.Drawing.Size(75, 23);
+            this.undo1.TabIndex = 9;
+            this.undo1.Text = "Undo Ply";
+            this.undo1.UseVisualStyleBackColor = false;
+            this.undo1.Click += new System.EventHandler(this.undo_Click);
             // 
             // menu
             // 
@@ -240,6 +243,7 @@
             this.menu_game_new,
             this.menu_game_sep1,
             this.menu_game_undo,
+            this.menu_game_undo2,
             this.menu_game_forfeit,
             this.menu_game_sep2,
             this.menu_game_exit});
@@ -255,14 +259,14 @@
             this.menu_game_new.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_game_new.Name = "menu_game_new";
             this.menu_game_new.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.menu_game_new.Size = new System.Drawing.Size(177, 22);
+            this.menu_game_new.Size = new System.Drawing.Size(195, 22);
             this.menu_game_new.Text = "New Game";
             this.menu_game_new.Click += new System.EventHandler(this.menu_game_new_Click);
             // 
             // menu_game_sep1
             // 
             this.menu_game_sep1.Name = "menu_game_sep1";
-            this.menu_game_sep1.Size = new System.Drawing.Size(174, 6);
+            this.menu_game_sep1.Size = new System.Drawing.Size(192, 6);
             // 
             // menu_game_undo
             // 
@@ -270,30 +274,41 @@
             this.menu_game_undo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_game_undo.Name = "menu_game_undo";
             this.menu_game_undo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.menu_game_undo.Size = new System.Drawing.Size(177, 22);
+            this.menu_game_undo.Size = new System.Drawing.Size(195, 22);
             this.menu_game_undo.Text = "Undo Move";
             this.menu_game_undo.Click += new System.EventHandler(this.menu_game_undo_Click);
+            // 
+            // menu_game_undo2
+            // 
+            this.menu_game_undo2.Image = ((System.Drawing.Image)(resources.GetObject("menu_game_undo2.Image")));
+            this.menu_game_undo2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menu_game_undo2.Name = "menu_game_undo2";
+            this.menu_game_undo2.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.Z)));
+            this.menu_game_undo2.Size = new System.Drawing.Size(195, 22);
+            this.menu_game_undo2.Text = "Undo Ply";
+            this.menu_game_undo2.Click += new System.EventHandler(this.menu_game_undo2_Click);
             // 
             // menu_game_forfeit
             // 
             this.menu_game_forfeit.Image = ((System.Drawing.Image)(resources.GetObject("menu_game_forfeit.Image")));
             this.menu_game_forfeit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_game_forfeit.Name = "menu_game_forfeit";
-            this.menu_game_forfeit.Size = new System.Drawing.Size(177, 22);
+            this.menu_game_forfeit.Size = new System.Drawing.Size(195, 22);
             this.menu_game_forfeit.Text = "Forfeit Game";
             this.menu_game_forfeit.Click += new System.EventHandler(this.menu_game_forfeit_Click);
             // 
             // menu_game_sep2
             // 
             this.menu_game_sep2.Name = "menu_game_sep2";
-            this.menu_game_sep2.Size = new System.Drawing.Size(174, 6);
+            this.menu_game_sep2.Size = new System.Drawing.Size(192, 6);
             // 
             // menu_game_exit
             // 
             this.menu_game_exit.Image = ((System.Drawing.Image)(resources.GetObject("menu_game_exit.Image")));
             this.menu_game_exit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_game_exit.Name = "menu_game_exit";
-            this.menu_game_exit.Size = new System.Drawing.Size(177, 22);
+            this.menu_game_exit.Size = new System.Drawing.Size(195, 22);
             this.menu_game_exit.Text = "Exit";
             this.menu_game_exit.Click += new System.EventHandler(this.menu_game_exit_Click);
             // 
@@ -406,12 +421,12 @@
             // 
             // menu_setting_ai
             // 
-            this.menu_setting_ai.Enabled = false;
             this.menu_setting_ai.Image = ((System.Drawing.Image)(resources.GetObject("menu_setting_ai.Image")));
             this.menu_setting_ai.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_setting_ai.Name = "menu_setting_ai";
             this.menu_setting_ai.Size = new System.Drawing.Size(183, 22);
             this.menu_setting_ai.Text = "AI Difficulty...";
+            this.menu_setting_ai.Click += new System.EventHandler(this.menu_setting_ai_Click);
             // 
             // menu_setting_opp
             // 
@@ -629,8 +644,31 @@
             // 
             // AIThread
             // 
-            this.AIThread.DoWork += new System.ComponentModel.DoWorkEventHandler(this.boardPanel.AIThread_DoWork);
-            this.AIThread.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.boardPanel.AIThread_WorkCompleted);
+            this.AIThread.DoWork += new System.ComponentModel.DoWorkEventHandler(this.AIThread_DoWork);
+            this.AIThread.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.AIThread_RunWorkCompleted);
+            // 
+            // undo2
+            // 
+            this.undo2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.undo2.BackColor = System.Drawing.Color.Silver;
+            this.undo2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.undo2.Location = new System.Drawing.Point(810, 342);
+            this.undo2.Name = "undo2";
+            this.undo2.Size = new System.Drawing.Size(75, 23);
+            this.undo2.TabIndex = 12;
+            this.undo2.Text = "Undo Move";
+            this.undo2.UseVisualStyleBackColor = false;
+            this.undo2.Click += new System.EventHandler(this.undo2_Click);
+            // 
+            // valueLabel
+            // 
+            this.valueLabel.AutoSize = true;
+            this.valueLabel.ForeColor = System.Drawing.Color.Black;
+            this.valueLabel.Location = new System.Drawing.Point(684, 90);
+            this.valueLabel.Name = "valueLabel";
+            this.valueLabel.Size = new System.Drawing.Size(37, 13);
+            this.valueLabel.TabIndex = 13;
+            this.valueLabel.Text = "debug";
             // 
             // Chess
             // 
@@ -638,9 +676,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
             this.ClientSize = new System.Drawing.Size(1028, 681);
+            this.Controls.Add(this.valueLabel);
+            this.Controls.Add(this.undo2);
             this.Controls.Add(this.stateLabel);
             this.Controls.Add(this.menu);
-            this.Controls.Add(this.undo);
+            this.Controls.Add(this.undo1);
             this.Controls.Add(this.history);
             this.Controls.Add(this.sRight);
             this.Controls.Add(this.sLeft);
@@ -671,7 +711,7 @@
         private System.Windows.Forms.Button sRight;
         private System.Windows.Forms.Label stateLabel;
         private MoveHistory history;
-        private System.Windows.Forms.Button undo;
+        private System.Windows.Forms.Button undo1;
         private System.Windows.Forms.MenuStrip menu;
         private System.Windows.Forms.ToolStripMenuItem menu_game;
         private System.Windows.Forms.ToolStripMenuItem menu_window;
@@ -716,6 +756,9 @@
         private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_mult_3;
         private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll_mult_4;
         private System.ComponentModel.BackgroundWorker AIThread;
+        private System.Windows.Forms.Button undo2;
+        private System.Windows.Forms.ToolStripMenuItem menu_game_undo2;
+        private System.Windows.Forms.Label valueLabel;
     }
 }
 

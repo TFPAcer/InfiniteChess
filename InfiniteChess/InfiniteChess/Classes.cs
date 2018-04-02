@@ -51,24 +51,46 @@ namespace InfiniteChess
                     pieceMoving = null;
                     pieceMovingMoves = Square.emptyList();
                     c.drawBoard();
-                    if (opponentAI && state.HasFlag((GameState)1)) {
-                        Debug.WriteLine("beginning");
+                    if (opponentAI && state.HasFlag((GameState)1)) 
                         c.AIThread.RunWorkerAsync();
-                    }
                 }
                 c.stateLabel.Text = $"{parseState(state)}";
             }
 
+            #region AI
             public AIMove handleAITurn(BackgroundWorker bw) {
                 List<Piece> aipieces = pieces.FindAll(p => p.colour == PieceColour.BLACK);
                 List<AIMove> moves = new List<AIMove>();
                 foreach (Piece p in aipieces) {
-                    foreach (Square s in p.calculateMovement(false)) {
+                    List<Square> pieceMoves = p.calculateMovement(false);
+                    Parallel.ForEach(pieceMoves, s => {
                         moves.Add(new AIMove(p, s));
+                    });
+                }
+                int best = 9999999;
+                List<AIMove> bestMoves = new List<AIMove>();
+                foreach (AIMove m in moves) {
+                    int current = 0;
+                    Square original = m.p.square;
+                    m.p.move(m.s, out Piece q);
+                    Parallel.ForEach(pieces, y => {
+                        int i = y.baseValue + y.addedValue;
+                        Interlocked.Add(ref current, i);
+                        });
+                    m.p.move(original, out Piece _q);
+                    if (q != null) { pieces.Add(q); }
+                    if (current < best) {
+                        best = current;
+                        bestMoves.Clear();
+                        bestMoves.Add(m);
+                    }
+                    if (current == best) {
+                        bestMoves.Add(m);
                     }
                 }
-                int a = new Random().Next(moves.Count-1);
-                return moves[a];
+                Debug.WriteLine(best);
+                if (new Random().NextDouble() > (0.25*(AIDIfficulty/100) + 0.82)) bestMoves = moves;
+                return bestMoves[(new Random()).Next(bestMoves.Count - 1)];
             }
 
             public void AIThread_DoWork(object sender, DoWorkEventArgs e)
@@ -79,7 +101,6 @@ namespace InfiniteChess
             }
             public void AIThread_WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
             {
-                Debug.WriteLine($"Returned Move: {e.Result}");
                 var colour = state.HasFlag(GameState.COLOUR) ? PieceColour.WHITE : PieceColour.BLACK;
                 AIMove result = e.Result as AIMove;
                 c.history.addMove(result.p, result.s);
@@ -101,7 +122,7 @@ namespace InfiniteChess
                 c.drawBoard();
                 c.stateLabel.Text = $"{parseState(state)}";
             }
-
+            #endregion
             #region check
             public bool evaluateCheck(PieceColour c) {
                 if (state.HasFlag(GameState.CHECK)) { state ^= GameState.CHECK; }
@@ -177,6 +198,7 @@ namespace InfiniteChess
             protected override void OnMouseClick(MouseEventArgs e)
             {
                 Focus();
+                if (opponentAI & state.HasFlag((GameState)3)) return;
                 Square cursorSquare = findSquareByCoords(e.X, e.Y);
                 Piece found = pieces.Find(p => p.square == cursorSquare);
                 handleTurn(found, cursorSquare);
@@ -187,6 +209,8 @@ namespace InfiniteChess
                 c = getForm<Chess>();
                 Square cursorSquare = findSquareByCoords(e.X, e.Y);
                 c.debug2.Text = cursorSquare?.ToString() ?? "null";
+                Piece p = pieces.Find(q => q.square == cursorSquare) ?? null;
+                c.valueLabel.Text = (p?.addedValue).ToString();
                 //c.debug2.Text = bounds[]
             }
             #endregion
@@ -316,51 +340,64 @@ namespace InfiniteChess
                 if (p.type == PieceType.PAWN) {
                     if (p.square.indexY == 11 && p.colour == PieceColour.WHITE
                         || p.square.indexY == 4 && p.colour == PieceColour.BLACK) {
-                        Promote pForm = new Promote();
-                        pForm.ShowDialog();
-                        p.changeType(pForm.choice);
-                        moveText += pForm.choicePrefix;
+                        if (opponentAI & state.HasFlag((GameState)1)) {
+                            p.changeType(PieceType.QUEEN);
+                            moveText += "Q";
+                        }
+                        else {
+                            Promote pForm = new Promote();
+                            pForm.ShowDialog();
+                            p.changeType(pForm.choice);
+                            moveText += pForm.choicePrefix;
+                            pForm.Dispose();
+                        }
                     }
                 }
                 moves.Add(moveText);
                 updateMoves();
             }
 
-            public void undoMove() {
-                if (moves.Count() == 0) return;
-                string lastMove = moves.Last();
-                state ^= GameState.COLOUR;
-                moves.Remove(lastMove);
-                MatchCollection matchSquares = Regex.Matches(lastMove, "-?\\d+,-?\\d+");
-                MatchCollection matchPieces = Regex.Matches(lastMove, "[A-Z]");
-                Square to = GameContainer.findSquareByIndex(
-                    int.Parse(matchSquares[1].Value.Split(',')[0]), 
-                    int.Parse(matchSquares[1].Value.Split(',')[1])
-                    );
-                Square from = GameContainer.findSquareByIndex(
-                    int.Parse(matchSquares[0].Value.Split(',')[0]),
-                    int.Parse(matchSquares[0].Value.Split(',')[1])
-                    );
-                Piece p = pieces.Find(q => q.square == to);
-                p.move(from, out Piece r);
-                if (matchPieces.Count >= 2) {
-                    if (lastMove.Contains("x")) {
-                        PieceType type = typeFromPrefix(matchPieces[1].Value);
-                        PieceColour colour = moves.Count() % 2 == 0 ? PieceColour.BLACK : PieceColour.WHITE;
-                        pieces.Add(new Piece(type, to, colour));
+            public void undoMove(int num) {
+                for (int i = 0; i < num; i++) {
+                    if (moves.Count() == 0) break;
+                    string lastMove = moves.Last();
+                    state ^= GameState.COLOUR;
+                    moves.Remove(lastMove);
+                    MatchCollection matchSquares = Regex.Matches(lastMove, "-?\\d+,-?\\d+");
+                    MatchCollection matchPieces = Regex.Matches(lastMove, "[A-Z]");
+                    Square to = GameContainer.findSquareByIndex(
+                        int.Parse(matchSquares[1].Value.Split(',')[0]), 
+                        int.Parse(matchSquares[1].Value.Split(',')[1])
+                        );
+                    Square from = GameContainer.findSquareByIndex(
+                        int.Parse(matchSquares[0].Value.Split(',')[0]),
+                        int.Parse(matchSquares[0].Value.Split(',')[1])
+                        );
+                    Piece p = pieces.Find(q => q.square == to);
+                    try {
+                        p.move(from, out Piece r);
                     }
-                    if (Regex.IsMatch(lastMove.Substring(lastMove.Length - 2), "[A-Z]")) {
-                        p.changeType(PieceType.PAWN);
-                        p.PawnData = false;
+                    catch { Debug.WriteLine("p was null"); break; }
+                    if (matchPieces.Count >= 2) {
+                        if (lastMove.Contains("x")) {
+                            PieceType type = typeFromPrefix(matchPieces[1].Value);
+                            PieceColour colour = moves.Count() % 2 == 0 ? PieceColour.BLACK : PieceColour.WHITE;
+                            pieces.Add(new Piece(type, to, colour));
+                        }
+                        if (Regex.IsMatch(lastMove.Substring(lastMove.Length - 2), "[A-Z]")) {
+                            p.changeType(PieceType.PAWN);
+                            p.PawnData = false;
+                        }
                     }
+                    if (lastMove.Contains("\x0091")) p.PawnData = true;
+                    if (lastMove.Contains('+')) state ^= (GameState)4;
+                    if (lastMove.Contains('#')) state ^= (GameState)13;
+                    if (lastMove.Contains('~')) state ^= (GameState)17;
+                    if (state.HasFlag((GameState)2)) { state ^= (GameState)2; }
+                    updateValues();
+                    pieceMoving = null;
+                    pieceMovingMoves = Square.emptyList();
                 }
-                if (lastMove.Contains("\x0091")) p.PawnData = true;
-                if (lastMove.Contains('+')) state ^= (GameState)4;
-                if (lastMove.Contains('#')) state ^= (GameState)13;
-                if (lastMove.Contains('~')) state ^= (GameState)17;
-                if (state.HasFlag((GameState)2)) { state ^= (GameState)2; }
-                pieceMoving = null;
-                pieceMovingMoves = Square.emptyList();
                 updateMoves();
             }
 
