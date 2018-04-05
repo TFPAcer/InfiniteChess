@@ -45,6 +45,7 @@ namespace InfiniteChess
             InitialiseStyle();
             InitialiseFeatures();
             InitialiseBoard();
+            InitialisePieces(Piece.IntializePieces());
 
         }
         public void InitialiseVars() {
@@ -93,13 +94,109 @@ namespace InfiniteChess
                         indexY = (short)j });
                 }
             }
-            pieces = Piece.IntializePieces();
+        }
+
+        public void InitialisePieces(List<Piece> ps) {
+            pieces = ps;
             drawBoard();
         }
 
         public void InitialiseFeatures() {
             history.moves.Clear();
             history.Text = "";
+        }
+        #endregion
+        #region values
+        public static void updateValues() {
+            pieces.ForEach(q => q.addedValue = 0);
+            foreach (Piece p in pieces) {
+                int colour = p.colour == PieceColour.WHITE ? 1 : -1;
+                var far = from q in pieces
+                            where Math.Abs(p.square.indexX - q.square.indexX) < 4
+                            && Math.Abs(p.square.indexY - q.square.indexY) < 4
+                            && q.colour == p.colour
+                            select q;
+                if (far.Count() == 1) { p.addedValue -= 4000 * colour; }
+                if (far.Count() == 2) { p.addedValue -= 100 * colour; }
+
+                switch (p.type) {
+                    case PieceType.PAWN: {
+                        var query = from q in pieces
+                                    where q.square.indexY == p.square.indexY + colour
+                                    && Math.Abs(q.square.indexX - p.square.indexX) == 1
+                                    select q;
+                        foreach (Piece t in query)
+                            t.addedValue += 200 * (t.colour == PieceColour.WHITE ? 1 : -1);
+                        if (colour == 1) {
+                            if (p.square.indexY == 7) p.addedValue += 400;
+                            if (p.square.indexY == 8) p.addedValue += 1000;
+                            if (p.square.indexY == 9) p.addedValue += 1500;
+                            if (p.square.indexY == 10) p.addedValue += 2500;
+                        }
+                        else {
+                            if (p.square.indexY == 8) p.addedValue -= 400;
+                            if (p.square.indexY == 7) p.addedValue -= 1000;
+                            if (p.square.indexY == 6) p.addedValue -= 1500;
+                            if (p.square.indexY == 5) p.addedValue -= 2500;
+                        }
+                        break;
+                    }
+                    case PieceType.MANN: {
+                        var query = from q in pieces
+                                    where Math.Abs(q.square.indexY - p.square.indexY) < 2
+                                    && Math.Abs(q.square.indexX - p.square.indexX) < 2
+                                    && q.colour == p.colour
+                                    select q;
+                        if (query.Count() > 0) p.addedValue += 1000 * colour;
+                        break;
+                    }
+                    case PieceType.ROOK: {
+                        var query = from q in pieces
+                                    where (p.square.indexX == q.square.indexX
+                                    || p.square.indexY == q.square.indexY)
+                                    && q.colour != p.colour
+                                    select q;
+                        var king = from t in query
+                                   where t.type == PieceType.KING
+                                   select t;
+                        if (query.Count() > 0) p.addedValue += 2000 * colour;
+                        if (king.Count() > 0) p.addedValue += 2000 * colour;
+                        break;
+                    }
+                    case PieceType.CHANCELLOR: { goto case PieceType.ROOK; }
+                    case PieceType.BISHOP: {
+                        var query = from q in pieces
+                                    where (p.square.indexX - q.square.indexX 
+                                    == p.square.indexY - q.square.indexY)
+                                    && q.colour != p.colour
+                                    select q;
+                        var king = from t in query
+                                    where t.type == PieceType.KING
+                                    select t;
+                        if (query.Count() > 0) p.addedValue += 1500 * colour;
+                        if (king.Count() > 0) p.addedValue += 1500 * colour;
+                        break;
+                    }
+                    case PieceType.QUEEN: {
+                        var query = from q in pieces
+                                    where (p.square.indexX - q.square.indexX
+                                    == p.square.indexY - q.square.indexY)
+                                    || (p.square.indexX == q.square.indexX
+                                    || p.square.indexY == q.square.indexY)
+                                    && q.colour != p.colour
+                                    select q;
+                        var king = from t in query
+                                    where t.type == PieceType.KING
+                                    select t;
+                        if (query.Count() > 0) p.addedValue += 2500 * colour;
+                        if (king.Count() > 0) p.addedValue += 2500 * colour;
+                        break;
+                    }
+                }
+                if (colour == 1) p.addedValue = Math.Max(p.addedValue - (1000 - 10 * AIDIfficulty), 0);
+                else p.addedValue = Math.Min(p.addedValue + (1000 - 10 * AIDIfficulty), 0);
+
+            }
         }
         #endregion
         #region util
@@ -141,32 +238,6 @@ namespace InfiniteChess
                 }
             }
             return 0;
-        }
-        public static void updateValues() {
-            pieces.ForEach(q => q.addedValue = 0);
-            foreach (Piece p in pieces) {
-                if (p.type == PieceType.PAWN) {
-                    int colour = p.colour == PieceColour.WHITE ? 1 : -1;
-                    var query = from q in pieces
-                                where q.square.indexY == p.square.indexY + colour
-                                && Math.Abs(q.square.indexX - p.square.indexX) == 1
-                                select q;
-                    foreach (Piece t in query)
-                        t.addedValue += 500 * (t.colour == PieceColour.WHITE ? 1 : -1);
-                    if (colour == 1) {
-                        if (p.square.indexY == 7) p.addedValue += 200;
-                        if (p.square.indexY == 8) p.addedValue += 800;
-                        if (p.square.indexY == 9) p.addedValue += 1500;
-                        if (p.square.indexY == 10) p.addedValue += 2500;
-                    }
-                    else {
-                        if (p.square.indexY == 8) p.addedValue -= 200;
-                        if (p.square.indexY == 7) p.addedValue -= 800;
-                        if (p.square.indexY == 6) p.addedValue -= 1500;
-                        if (p.square.indexY == 5) p.addedValue -= 2500;
-                    }
-                }
-            }
         }
 
         private void begin_Click(object sender, EventArgs e)

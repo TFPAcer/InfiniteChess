@@ -420,6 +420,11 @@ namespace InfiniteChess
                 moves[moves.Count()-1] += symbols[state];
                 updateMoves();
             }
+
+            public void setMoves(List<string> m) {
+                moves = m;
+                updateMoves();
+            }
         }
     }
     #endregion

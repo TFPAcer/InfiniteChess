@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace InfiniteChess
 {
@@ -13,6 +14,73 @@ namespace InfiniteChess
         private void menu_game_new_Click(object sender, EventArgs e)
         {
             Init();
+        }
+        private void menu_game_save_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "Infinite Chess Game|*.icg";
+            save.Title = "Save Game";
+            save.InitialDirectory = "res/saves";
+            save.ShowDialog();
+            if (save.FileName != "")
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (Piece p in pieces) {
+                    sb.Append($"{prefixFromType(p.type)},{p.square.indexX},{p.square.indexY},{p.colour},{p.PawnData},{p.addedValue};");
+                }
+                sb.Append("|");
+                foreach (string s in history.moves) {
+                    sb.Append($"{s};");
+                }
+                sb.Remove(sb.Length - 1, 1);
+                sb.Append($"|{bounds[0]};{bounds[1]};{bounds[2]};{bounds[3]};{(int)state}");
+                using (StreamWriter sw = new StreamWriter(save.FileName))
+                {
+                    sw.WriteLine(sb);
+                    sw.Close();
+                }
+            }
+        }
+        private void menu_game_load_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "Infinite Chess Game|*.icg";
+            open.Title = "Open Game";
+            open.InitialDirectory = "res/saves";
+            open.ShowDialog();
+            string data = "";
+            if (open.FileName != "") {
+                using (StreamReader sr = new StreamReader(open.FileName))
+                {
+                    data = sr.ReadToEnd();
+                    sr.Close();
+                }
+            }
+            string[] data_pieces = data.Split('|')[0].Split(';');
+            string[] data_history = data.Split('|')[1].Split(';');
+            string[] data_state = data.Split('|')[2].Split(';');
+
+            List<Piece> piecesLoad = new List<Piece>();
+            bounds = new int[4];
+            board = new List<Square>();
+            origin = new int[] { 0, sf * (size[1] - 1) };
+            state = (GameState)int.Parse(data_state[4]);
+            for (int i = 0; i < 4; i++) {
+                bounds[i] = int.Parse(data_state[i]);
+            }
+            InitialiseBoard();
+            foreach (string s in data_pieces) {
+                if (s == "") continue;
+                string[] p = s.Split(',');
+                PieceType t = typeFromPrefix(p[0]);
+                Square sq = GameContainer.findSquareByIndex(int.Parse(p[1]), int.Parse(p[2]));
+                PieceColour c = p[3] == "WHITE" ? PieceColour.WHITE : PieceColour.BLACK;
+                bool pd = bool.Parse(p[4]);
+                int av = int.Parse(p[5]);
+                piecesLoad.Add(new Piece(t, sq, c, pd, av));
+            }
+            InitialisePieces(piecesLoad);
+            history.setMoves(data_history.ToList());
         }
         private void menu_game_undo_Click(object sender, EventArgs e)
         {
@@ -48,6 +116,13 @@ namespace InfiniteChess
             bool enabled = movementIndicators;
             movementIndicators = !enabled;
             menu_window_ui_move.Checked = !enabled;
+        }
+        private void menu_window_res_1080_Click(object sender, EventArgs e)
+        {
+            setResolution(true);
+        }
+        private void setResolution(bool is1080) {
+
         }
         #endregion
         #region setting
