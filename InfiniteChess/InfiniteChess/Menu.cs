@@ -117,12 +117,19 @@ namespace InfiniteChess
             movementIndicators = !enabled;
             menu_window_ui_move.Checked = !enabled;
         }
+        private void menu_window_res_720_Click(object sender, EventArgs e)
+        {
+            setResolution(false);
+        }
         private void menu_window_res_1080_Click(object sender, EventArgs e)
         {
             setResolution(true);
         }
-        private void setResolution(bool is1080) {
-
+        private void setResolution(bool b) {
+            is1080 = b;
+            menu_window_res_720.Checked = !b;
+            menu_window_res_1080.Checked = b;
+            InitialiseStyle();
         }
         #endregion
         #region setting
