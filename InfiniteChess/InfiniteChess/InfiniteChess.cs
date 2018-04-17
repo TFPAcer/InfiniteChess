@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using System.Diagnostics;
 
@@ -233,10 +233,15 @@ namespace InfiniteChess
         public void drawBoard() {
             Graphics g = boardPanel.CreateGraphics();
             g.Clear(Color.FromArgb(200,200,200));
-            for (int i = bounds[0]; i < bounds[1]+1; i++) { //columns 
-                for (int j = bounds[2]; j < bounds[3]+1; j++) { //rows
-                    g.DrawRectangle(new Pen(Color.Green), origin[0] + sf * i, origin[1] - sf * j, sf, sf); } }
-            //g.DrawImage(new Bitmap(new Bitmap("res/image/board.png"), new Size(sf*size[0], sf*size[1])), 0, 0);
+            //for (int i = bounds[0]; i < bounds[1]+1; i++) { //columns 
+            //    for (int j = bounds[2]; j < bounds[3]+1; j++) { //rows
+            //        g.DrawRectangle(new Pen(Color.Green), origin[0] + sf * i, origin[1] - sf * j, sf, sf); } }
+            int boardPolarity = (origin[0] / sf + origin[1] / sf) % 2;
+            g.DrawImage(
+                new Bitmap(
+                    new Bitmap($"res/image/board/{boardPolarity.ToString()}board{size[0].ToString()}.png"), 
+                    new Size(sf * size[0], sf * size[1])), 0, 0
+                );
             foreach (Piece p in pieces) {
                 g.DrawImage(new Bitmap(p.icon, new Size(sf - 6, sf - 6)), p.square.X+3, p.square.Y+3);
             }
