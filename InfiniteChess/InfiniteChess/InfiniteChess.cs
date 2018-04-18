@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using System.Diagnostics;
 
@@ -32,6 +32,7 @@ namespace InfiniteChess
         public static int scrollMultiplier = 1;
         public static bool opponentAI = false;
         public static int AIDIfficulty = 0;
+        public static bool is1080 = false;
 
         public Chess()
         {
@@ -42,16 +43,22 @@ namespace InfiniteChess
         public void Init()
         {
             InitialiseVars();
-            InitialiseStyle();
             InitialiseFeatures();
             InitialiseBoard();
+            InitialiseStyle();
             InitialisePieces(Piece.IntializePieces());
 
         }
         public void InitialiseVars() {
             board = Square.emptyList();
-            bounds = new int[] { -1, size[0]+1, -1, size[1]+1};
-            origin = new int[] { 0, sf * (size[1]-1) };
+            if (is1080) {
+                origin = new int[] { 114, 684 };
+                bounds = new int[] { -4, size[0] + 1, -4, size[1] + 1 };
+            }
+            else {
+                bounds = new int[] { -1, size[0] + 1, -1, size[1] + 1 };
+                origin = new int[] { 0, sf * (size[1] - 1) };
+            }
 
             pieceMoving = null;
             pieceMovingMoves = Square.emptyList(); ;
@@ -61,9 +68,11 @@ namespace InfiniteChess
 
         public void InitialiseStyle() {
             Color highlight = Color.FromKnownColor(KnownColor.Control);
-            BackColor = Color.FromArgb(200,200,200);
-            foreach (Control c in Controls) {
-                if (c.GetType() == typeof(Button)) {
+            BackColor = Color.FromArgb(200, 200, 200);
+            foreach (Control c in Controls)
+            {
+                if (c.GetType() == typeof(Button))
+                {
                     Button b = c as Button;
                     b.FlatStyle = FlatStyle.Flat;
                     b.BackColor = highlight;
@@ -80,7 +89,28 @@ namespace InfiniteChess
             menu.BackColor = highlight;
             history.BackColor = highlight;
             history.ForeColor = Color.Black;
-            history.Font = new Font("Perpetua", 11, FontStyle.Bold);
+
+            int s = scrollMultiplier;
+            Size = is1080 ? new Size(1520, 960) : new Size(1040, 720);
+            if (is1080) {
+                scrollMultiplier = 5;
+                sLeft.PerformClick(); sUp.PerformClick();
+            }
+            size = is1080 ? new int[] { 22, 22 } : new int[] { 16, 16 };
+            boardPanel.Size = new Size(size[0] * sf, size[1] * sf);
+            if (is1080) {
+                scrollMultiplier = 5;
+                sRight.PerformClick(); sDown.PerformClick();
+                scrollMultiplier = s;
+                history.Size = new Size(548, 424);
+                history.Location = new Point(930, 380);
+                history.Font = new Font("Perpetua", 15, FontStyle.Bold);
+            }
+            else {
+                history.Size = new Size(348, 223);
+                history.Location = new Point(668, 333);
+                history.Font = new Font("Perpetua", 11, FontStyle.Bold);
+            }
         }
 
         //create the logical board
@@ -202,10 +232,16 @@ namespace InfiniteChess
         #region util
         public void drawBoard() {
             Graphics g = boardPanel.CreateGraphics();
-            //for (int i = 0; i < size[0]; i++) {
-            //    for (int j = 0; j < size[1]; j++) {
+            g.Clear(Color.FromArgb(200,200,200));
+            //for (int i = bounds[0]; i < bounds[1]+1; i++) { //columns 
+            //    for (int j = bounds[2]; j < bounds[3]+1; j++) { //rows
             //        g.DrawRectangle(new Pen(Color.Green), origin[0] + sf * i, origin[1] - sf * j, sf, sf); } }
-            g.DrawImage(new Bitmap(new Bitmap("res/image/board.png"), new Size(sf*size[0], sf*size[1])), 0, 0);
+            int boardPolarity = (origin[0] / sf + origin[1] / sf) % 2;
+            g.DrawImage(
+                new Bitmap(
+                    new Bitmap($"res/image/board/{boardPolarity.ToString()}board{size[0].ToString()}.png"), 
+                    new Size(sf * size[0], sf * size[1])), 0, 0
+                );
             foreach (Piece p in pieces) {
                 g.DrawImage(new Bitmap(p.icon, new Size(sf - 6, sf - 6)), p.square.X+3, p.square.Y+3);
             }
