@@ -83,13 +83,13 @@
             this.menu_about_about = new System.Windows.Forms.ToolStripMenuItem();
             this.AIThread = new System.ComponentModel.BackgroundWorker();
             this.undo2 = new System.Windows.Forms.Button();
-            this.valueLabel = new System.Windows.Forms.Label();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
             // begin
             // 
-            this.begin.Location = new System.Drawing.Point(668, 41);
+            this.begin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.begin.Location = new System.Drawing.Point(941, 648);
             this.begin.Name = "begin";
             this.begin.Size = new System.Drawing.Size(75, 23);
             this.begin.TabIndex = 1;
@@ -99,6 +99,7 @@
             // 
             // debug2
             // 
+            this.debug2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.debug2.AutoSize = true;
             this.debug2.ForeColor = System.Drawing.Color.Black;
             this.debug2.Location = new System.Drawing.Point(684, 67);
@@ -109,6 +110,7 @@
             // 
             // sUp
             // 
+            this.sUp.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.sUp.BackColor = System.Drawing.Color.Silver;
             this.sUp.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.sUp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
@@ -125,6 +127,7 @@
             // 
             // sDown
             // 
+            this.sDown.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.sDown.BackColor = System.Drawing.Color.Silver;
             this.sDown.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.sDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
@@ -141,6 +144,7 @@
             // 
             // sLeft
             // 
+            this.sLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.sLeft.BackColor = System.Drawing.Color.Silver;
             this.sLeft.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.sLeft.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
@@ -157,6 +161,7 @@
             // 
             // sRight
             // 
+            this.sRight.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.sRight.BackColor = System.Drawing.Color.Silver;
             this.sRight.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.sRight.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
@@ -198,7 +203,7 @@
             this.history.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.history.Cursor = System.Windows.Forms.Cursors.Default;
             this.history.Font = new System.Drawing.Font("Perpetua", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.history.Location = new System.Drawing.Point(668, 371);
+            this.history.Location = new System.Drawing.Point(668, 339);
             this.history.MaxLength = 65535;
             this.history.Multiline = true;
             this.history.Name = "history";
@@ -211,10 +216,10 @@
             // 
             // undo1
             // 
-            this.undo1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.undo1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.undo1.BackColor = System.Drawing.Color.Silver;
             this.undo1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.undo1.Location = new System.Drawing.Point(918, 342);
+            this.undo1.Location = new System.Drawing.Point(869, 310);
             this.undo1.Name = "undo1";
             this.undo1.Size = new System.Drawing.Size(98, 23);
             this.undo1.TabIndex = 9;
@@ -351,7 +356,7 @@
             this.menu_window_ui.Image = ((System.Drawing.Image)(resources.GetObject("menu_window_ui.Image")));
             this.menu_window_ui.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_window_ui.Name = "menu_window_ui";
-            this.menu_window_ui.Size = new System.Drawing.Size(180, 22);
+            this.menu_window_ui.Size = new System.Drawing.Size(174, 22);
             this.menu_window_ui.Text = "UI Features";
             // 
             // menu_window_ui_hist
@@ -382,7 +387,7 @@
             // menu_window_sep1
             // 
             this.menu_window_sep1.Name = "menu_window_sep1";
-            this.menu_window_sep1.Size = new System.Drawing.Size(177, 6);
+            this.menu_window_sep1.Size = new System.Drawing.Size(171, 6);
             // 
             // menu_window_res
             // 
@@ -391,7 +396,7 @@
             this.menu_window_res_1080});
             this.menu_window_res.Image = ((System.Drawing.Image)(resources.GetObject("menu_window_res.Image")));
             this.menu_window_res.Name = "menu_window_res";
-            this.menu_window_res.Size = new System.Drawing.Size(180, 22);
+            this.menu_window_res.Size = new System.Drawing.Size(174, 22);
             this.menu_window_res.Text = "Change Resolution";
             // 
             // menu_window_res_720
@@ -399,13 +404,14 @@
             this.menu_window_res_720.Checked = true;
             this.menu_window_res_720.CheckState = System.Windows.Forms.CheckState.Checked;
             this.menu_window_res_720.Name = "menu_window_res_720";
-            this.menu_window_res_720.Size = new System.Drawing.Size(180, 22);
+            this.menu_window_res_720.Size = new System.Drawing.Size(105, 22);
             this.menu_window_res_720.Text = "720p";
+            this.menu_window_res_720.Click += new System.EventHandler(this.menu_window_res_720_Click);
             // 
             // menu_window_res_1080
             // 
             this.menu_window_res_1080.Name = "menu_window_res_1080";
-            this.menu_window_res_1080.Size = new System.Drawing.Size(180, 22);
+            this.menu_window_res_1080.Size = new System.Drawing.Size(105, 22);
             this.menu_window_res_1080.Text = "1080p";
             this.menu_window_res_1080.Click += new System.EventHandler(this.menu_window_res_1080_Click);
             // 
@@ -628,10 +634,10 @@
             // 
             // undo2
             // 
-            this.undo2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.undo2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.undo2.BackColor = System.Drawing.Color.Silver;
             this.undo2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.undo2.Location = new System.Drawing.Point(787, 342);
+            this.undo2.Location = new System.Drawing.Point(738, 310);
             this.undo2.Name = "undo2";
             this.undo2.Size = new System.Drawing.Size(98, 23);
             this.undo2.TabIndex = 12;
@@ -639,23 +645,12 @@
             this.undo2.UseVisualStyleBackColor = false;
             this.undo2.Click += new System.EventHandler(this.undo2_Click);
             // 
-            // valueLabel
-            // 
-            this.valueLabel.AutoSize = true;
-            this.valueLabel.ForeColor = System.Drawing.Color.Black;
-            this.valueLabel.Location = new System.Drawing.Point(684, 90);
-            this.valueLabel.Name = "valueLabel";
-            this.valueLabel.Size = new System.Drawing.Size(37, 13);
-            this.valueLabel.TabIndex = 13;
-            this.valueLabel.Text = "debug";
-            // 
             // Chess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
             this.ClientSize = new System.Drawing.Size(1028, 681);
-            this.Controls.Add(this.valueLabel);
             this.Controls.Add(this.undo2);
             this.Controls.Add(this.stateLabel);
             this.Controls.Add(this.menu);
@@ -733,7 +728,6 @@
         private System.ComponentModel.BackgroundWorker AIThread;
         private System.Windows.Forms.Button undo2;
         private System.Windows.Forms.ToolStripMenuItem menu_game_undo2;
-        private System.Windows.Forms.Label valueLabel;
         private System.Windows.Forms.ToolStripMenuItem menu_game_save;
         private System.Windows.Forms.ToolStripMenuItem menu_game_load;
     }
