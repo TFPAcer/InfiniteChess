@@ -198,12 +198,10 @@ namespace InfiniteChess
             protected override void OnMouseClick(MouseEventArgs e)
             {
                 Focus();
-                if (e.Button == MouseButtons.Left) {
-                    if (opponentAI & state.HasFlag((GameState)3)) return;
-                    Square cursorSquare = findSquareByCoords(e.X, e.Y);
-                    Piece found = pieces.Find(p => p.square == cursorSquare);
-                    handleTurn(found, cursorSquare);
-                }
+                if (opponentAI & state.HasFlag((GameState)3)) return;
+                Square cursorSquare = findSquareByCoords(e.X, e.Y);
+                Piece found = pieces.Find(p => p.square == cursorSquare);
+                handleTurn(found, cursorSquare);
             }
 
             protected override void OnMouseMove(MouseEventArgs e)
@@ -212,6 +210,7 @@ namespace InfiniteChess
                 Square cursorSquare = findSquareByCoords(e.X, e.Y);
                 c.debug2.Text = cursorSquare?.ToString() ?? "null";
                 Piece p = pieces.Find(q => q.square == cursorSquare) ?? null;
+                c.valueLabel.Text = (p?.addedValue).ToString();
                 //c.debug2.Text = bounds[]
             }
             #endregion

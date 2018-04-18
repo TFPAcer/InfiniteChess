@@ -38,10 +38,6 @@ namespace InfiniteChess
             }
         }
 
-        public void setSliderValue(int d) {
-            AIDiffSlider.Value = d;
-        }
-
         private void AIDiffSlider_Scroll(object sender, EventArgs e) {
             difficulty = AIDiffSlider.Value;
         }

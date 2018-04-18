@@ -24,7 +24,7 @@ namespace InfiniteChess
 
         public Piece(PieceType t, Square s, PieceColour c) {
             type = t; colour = c; square = s;
-            icon = new Bitmap($"res/image/pieces/letter/{c.ToString()}/{t.ToString()}.png");
+            icon = new Bitmap($"res/image/{c.ToString()}/{t.ToString()}.png");
             if (t == PieceType.PAWN) { PawnData = true; }
             int sign = colour == PieceColour.WHITE ? 1 : -1;
             switch (type) {
