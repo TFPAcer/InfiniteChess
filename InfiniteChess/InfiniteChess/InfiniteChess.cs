@@ -37,25 +37,46 @@ namespace InfiniteChess
         public Chess()
         {
             InitializeComponent();
-            Init();
+            InitialiseStyle();
+            InitialiseButtons(false);
+            //Init();
         }
         #region init
         public void Init()
         {
+            InitialiseButtons(true);
             InitialiseVars();
             InitialiseFeatures();
             InitialiseBoard();
-            InitialiseStyle();
             InitialisePieces(Piece.IntializePieces());
-
         }
-        public void InitialiseVars() {
+
+        public void InitialiseButtons(bool b) {
+            sUp.Enabled = b;
+            sDown.Enabled = b;
+            sRight.Enabled = b;
+            sLeft.Enabled = b;
+            undo1.Enabled = b;
+            undo2.Enabled = b;
+            menu_game_undo.Enabled = b;
+            menu_game_undo2.Enabled = b;
+            menu_game_save.Enabled = b;
+            menu_game_forfeit.Enabled = b;
+            menu_setting_scroll_scroll.Enabled = b;
+            menu_setting_undo.Enabled = b;
+            history.Enabled = b;
+        }
+
+        public void InitialiseVars()
+        {
             board = Square.emptyList();
-            if (is1080) {
+            if (is1080)
+            {
                 origin = new int[] { 114, 684 };
                 bounds = new int[] { -4, size[0] + 1, -4, size[1] + 1 };
             }
-            else {
+            else
+            {
                 bounds = new int[] { -1, size[0] + 1, -1, size[1] + 1 };
                 origin = new int[] { 0, sf * (size[1] - 1) };
             }
@@ -66,7 +87,8 @@ namespace InfiniteChess
             state = 0;
         }
 
-        public void InitialiseStyle() {
+        public void InitialiseStyle()
+        {
             Color highlight = Color.FromKnownColor(KnownColor.Control);
             BackColor = Color.FromArgb(200, 200, 200);
             foreach (Control c in Controls)
@@ -85,6 +107,7 @@ namespace InfiniteChess
                 c.ForeColor = Color.Black;
             }
             stateLabel.Font = new Font("Perpetua", 13, FontStyle.Bold);
+            cursorLabel.Font = new Font("Perpetua", 13, FontStyle.Bold);
             menu.ForeColor = Color.Black;
             menu.BackColor = highlight;
             history.BackColor = highlight;
@@ -92,13 +115,15 @@ namespace InfiniteChess
 
             int s = scrollMultiplier;
             Size = is1080 ? new Size(1520, 960) : new Size(1040, 720);
-            if (is1080) {
+            if (is1080)
+            {
                 scrollMultiplier = 5;
                 sLeft.PerformClick(); sUp.PerformClick();
             }
             size = is1080 ? new int[] { 22, 22 } : new int[] { 16, 16 };
             boardPanel.Size = new Size(size[0] * sf, size[1] * sf);
-            if (is1080) {
+            if (is1080)
+            {
                 scrollMultiplier = 5;
                 sRight.PerformClick(); sDown.PerformClick();
                 scrollMultiplier = s;
@@ -106,122 +131,143 @@ namespace InfiniteChess
                 history.Location = new Point(930, 380);
                 history.Font = new Font("Perpetua", 15, FontStyle.Bold);
             }
-            else {
+            else
+            {
                 history.Size = new Size(348, 223);
                 history.Location = new Point(668, 333);
                 history.Font = new Font("Perpetua", 11, FontStyle.Bold);
             }
+            stateLabel.Text = "";
+            cursorLabel.Text = "";
         }
 
         //create the logical board
-        public void InitialiseBoard() {
-            for (int i = bounds[0]; i < bounds[1]+1; i++) { //columns 
-                for (int j = bounds[2]; j < bounds[3]+1; j++) { //rows
-                    board.Add(new Square {
+        public void InitialiseBoard()
+        {
+            for (int i = bounds[0]; i < bounds[1] + 1; i++)
+            { //columns 
+                for (int j = bounds[2]; j < bounds[3] + 1; j++)
+                { //rows
+                    board.Add(new Square
+                    {
                         X = origin[0] + sf * i,
                         Y = origin[1] - sf * j,
                         indexX = (short)i,
-                        indexY = (short)j });
+                        indexY = (short)j
+                    });
                 }
             }
         }
 
-        public void InitialisePieces(List<Piece> ps) {
+        public void InitialisePieces(List<Piece> ps)
+        {
             pieces = ps;
             drawBoard();
         }
 
-        public void InitialiseFeatures() {
+        public void InitialiseFeatures()
+        {
             history.moves.Clear();
             history.Text = "";
         }
+
         #endregion
         #region values
-        public static void updateValues() {
+        public static void updateValues()
+        {
             pieces.ForEach(q => q.addedValue = 0);
-            foreach (Piece p in pieces) {
+            foreach (Piece p in pieces)
+            {
                 int colour = p.colour == PieceColour.WHITE ? 1 : -1;
                 var far = from q in pieces
-                            where Math.Abs(p.square.indexX - q.square.indexX) < 4
-                            && Math.Abs(p.square.indexY - q.square.indexY) < 4
-                            && q.colour == p.colour
-                            select q;
+                          where Math.Abs(p.square.indexX - q.square.indexX) < 4
+                          && Math.Abs(p.square.indexY - q.square.indexY) < 4
+                          && q.colour == p.colour
+                          select q;
                 if (far.Count() == 1) { p.addedValue -= 4000 * colour; }
                 if (far.Count() == 2) { p.addedValue -= 100 * colour; }
 
-                switch (p.type) {
-                    case PieceType.PAWN: {
-                        var query = from q in pieces
-                                    where q.square.indexY == p.square.indexY + colour
-                                    && Math.Abs(q.square.indexX - p.square.indexX) == 1
-                                    select q;
-                        foreach (Piece t in query)
-                            t.addedValue += 200 * (t.colour == PieceColour.WHITE ? 1 : -1);
-                        if (colour == 1) {
-                            if (p.square.indexY == 7) p.addedValue += 400;
-                            if (p.square.indexY == 8) p.addedValue += 1000;
-                            if (p.square.indexY == 9) p.addedValue += 1500;
-                            if (p.square.indexY == 10) p.addedValue += 2500;
+                switch (p.type)
+                {
+                    case PieceType.PAWN:
+                        {
+                            var query = from q in pieces
+                                        where q.square.indexY == p.square.indexY + colour
+                                        && Math.Abs(q.square.indexX - p.square.indexX) == 1
+                                        select q;
+                            foreach (Piece t in query)
+                                t.addedValue += 200 * (t.colour == PieceColour.WHITE ? 1 : -1);
+                            if (colour == 1)
+                            {
+                                if (p.square.indexY == 7) p.addedValue += 400;
+                                if (p.square.indexY == 8) p.addedValue += 1000;
+                                if (p.square.indexY == 9) p.addedValue += 1500;
+                                if (p.square.indexY == 10) p.addedValue += 2500;
+                            }
+                            else
+                            {
+                                if (p.square.indexY == 8) p.addedValue -= 400;
+                                if (p.square.indexY == 7) p.addedValue -= 1000;
+                                if (p.square.indexY == 6) p.addedValue -= 1500;
+                                if (p.square.indexY == 5) p.addedValue -= 2500;
+                            }
+                            break;
                         }
-                        else {
-                            if (p.square.indexY == 8) p.addedValue -= 400;
-                            if (p.square.indexY == 7) p.addedValue -= 1000;
-                            if (p.square.indexY == 6) p.addedValue -= 1500;
-                            if (p.square.indexY == 5) p.addedValue -= 2500;
+                    case PieceType.MANN:
+                        {
+                            var query = from q in pieces
+                                        where Math.Abs(q.square.indexY - p.square.indexY) < 2
+                                        && Math.Abs(q.square.indexX - p.square.indexX) < 2
+                                        && q.colour == p.colour
+                                        select q;
+                            if (query.Count() > 0) p.addedValue += 1000 * colour;
+                            break;
                         }
-                        break;
-                    }
-                    case PieceType.MANN: {
-                        var query = from q in pieces
-                                    where Math.Abs(q.square.indexY - p.square.indexY) < 2
-                                    && Math.Abs(q.square.indexX - p.square.indexX) < 2
-                                    && q.colour == p.colour
-                                    select q;
-                        if (query.Count() > 0) p.addedValue += 1000 * colour;
-                        break;
-                    }
-                    case PieceType.ROOK: {
-                        var query = from q in pieces
-                                    where (p.square.indexX == q.square.indexX
-                                    || p.square.indexY == q.square.indexY)
-                                    && q.colour != p.colour
-                                    select q;
-                        var king = from t in query
-                                   where t.type == PieceType.KING
-                                   select t;
-                        if (query.Count() > 0) p.addedValue += 2000 * colour;
-                        if (king.Count() > 0) p.addedValue += 2000 * colour;
-                        break;
-                    }
+                    case PieceType.ROOK:
+                        {
+                            var query = from q in pieces
+                                        where (p.square.indexX == q.square.indexX
+                                        || p.square.indexY == q.square.indexY)
+                                        && q.colour != p.colour
+                                        select q;
+                            var king = from t in query
+                                       where t.type == PieceType.KING
+                                       select t;
+                            if (query.Count() > 0) p.addedValue += 2000 * colour;
+                            if (king.Count() > 0) p.addedValue += 2000 * colour;
+                            break;
+                        }
                     case PieceType.CHANCELLOR: { goto case PieceType.ROOK; }
-                    case PieceType.BISHOP: {
-                        var query = from q in pieces
-                                    where (p.square.indexX - q.square.indexX 
-                                    == p.square.indexY - q.square.indexY)
-                                    && q.colour != p.colour
-                                    select q;
-                        var king = from t in query
-                                    where t.type == PieceType.KING
-                                    select t;
-                        if (query.Count() > 0) p.addedValue += 1500 * colour;
-                        if (king.Count() > 0) p.addedValue += 1500 * colour;
-                        break;
-                    }
-                    case PieceType.QUEEN: {
-                        var query = from q in pieces
-                                    where (p.square.indexX - q.square.indexX
-                                    == p.square.indexY - q.square.indexY)
-                                    || (p.square.indexX == q.square.indexX
-                                    || p.square.indexY == q.square.indexY)
-                                    && q.colour != p.colour
-                                    select q;
-                        var king = from t in query
-                                    where t.type == PieceType.KING
-                                    select t;
-                        if (query.Count() > 0) p.addedValue += 2500 * colour;
-                        if (king.Count() > 0) p.addedValue += 2500 * colour;
-                        break;
-                    }
+                    case PieceType.BISHOP:
+                        {
+                            var query = from q in pieces
+                                        where (p.square.indexX - q.square.indexX
+                                        == p.square.indexY - q.square.indexY)
+                                        && q.colour != p.colour
+                                        select q;
+                            var king = from t in query
+                                       where t.type == PieceType.KING
+                                       select t;
+                            if (query.Count() > 0) p.addedValue += 1500 * colour;
+                            if (king.Count() > 0) p.addedValue += 1500 * colour;
+                            break;
+                        }
+                    case PieceType.QUEEN:
+                        {
+                            var query = from q in pieces
+                                        where (p.square.indexX - q.square.indexX
+                                        == p.square.indexY - q.square.indexY)
+                                        || (p.square.indexX == q.square.indexX
+                                        || p.square.indexY == q.square.indexY)
+                                        && q.colour != p.colour
+                                        select q;
+                            var king = from t in query
+                                       where t.type == PieceType.KING
+                                       select t;
+                            if (query.Count() > 0) p.addedValue += 2500 * colour;
+                            if (king.Count() > 0) p.addedValue += 2500 * colour;
+                            break;
+                        }
                 }
                 if (colour == 1) p.addedValue = Math.Max(p.addedValue - (1000 - 10 * AIDIfficulty), 0);
                 else p.addedValue = Math.Min(p.addedValue + (1000 - 10 * AIDIfficulty), 0);
@@ -230,20 +276,22 @@ namespace InfiniteChess
         }
         #endregion
         #region util
-        public void drawBoard() {
+        public void drawBoard()
+        {
             Graphics g = boardPanel.CreateGraphics();
-            g.Clear(Color.FromArgb(200,200,200));
+            g.Clear(Color.FromArgb(200, 200, 200));
             //for (int i = bounds[0]; i < bounds[1]+1; i++) { //columns 
             //    for (int j = bounds[2]; j < bounds[3]+1; j++) { //rows
             //        g.DrawRectangle(new Pen(Color.Green), origin[0] + sf * i, origin[1] - sf * j, sf, sf); } }
             int boardPolarity = (origin[0] / sf + origin[1] / sf) % 2;
             g.DrawImage(
                 new Bitmap(
-                    new Bitmap($"res/image/board/{boardPolarity.ToString()}board{size[0].ToString()}.png"), 
+                    new Bitmap($"res/image/board/{boardPolarity.ToString()}board{size[0].ToString()}.png"),
                     new Size(sf * size[0], sf * size[1])), 0, 0
                 );
-            foreach (Piece p in pieces) {
-                g.DrawImage(new Bitmap(p.icon, new Size(sf - 6, sf - 6)), p.square.X+3, p.square.Y+3);
+            foreach (Piece p in pieces)
+            {
+                g.DrawImage(new Bitmap(p.icon, new Size(sf - 6, sf - 6)), p.square.X + 3, p.square.Y + 3);
             }
             g.Dispose();
             if (state.HasFlag(GameState.MOVE)) { boardPanel.drawMoves(pieceMoving); }
@@ -256,17 +304,21 @@ namespace InfiniteChess
             else { board.ForEach(s => s.Y += sf * amount); }
         }
 
-        public static int findLargest(int[] i) {
+        public static int findLargest(int[] i)
+        {
             int j = int.MinValue;
             foreach (int k in i) { if (k > j) j = k; }
             return j;
         }
-        public static int checkSquareForPiece(Square s, bool includeKings, PieceColour c) {
+        public static int checkSquareForPiece(Square s, bool includeKings, PieceColour c)
+        {
             //foreach (Piece p in pieces) {
             Piece p;
-            for (int i = 0; i < pieces.Count; i++) {
+            for (int i = 0; i < pieces.Count; i++)
+            {
                 p = pieces[i];
-                if (p.square == s) {
+                if (p.square == s)
+                {
                     if (p.type == PieceType.KING && !includeKings) return 2;
                     if (c != p.colour)
                         return 1;
@@ -284,18 +336,29 @@ namespace InfiniteChess
         {
 
         }
-
+        private void mouseMove(object sender, MouseEventArgs e)
+        {
+            Point loc = e.Location;
+            Point boardCorner = boardPanel.Location;
+            Point oppositeCorner = new Point(
+                boardPanel.Location.X + boardPanel.Size.Width,
+                boardPanel.Location.Y + boardPanel.Size.Height
+                );
+                cursorLabel.Text = "";
+        }
         private void undo_Click(object sender, EventArgs e) => undo(1);
         private void undo2_Click(object sender, EventArgs e) => undo(2);
         private void undo(int i)
         {
             history.undoMove(i);
             drawBoard();
-            if (opponentAI && state.HasFlag((GameState)1)) 
+            if (opponentAI && state.HasFlag((GameState)1))
                 AIThread.RunWorkerAsync();
         }
-        public static string prefixFromType(PieceType t) {
-            switch (t) {
+        public static string prefixFromType(PieceType t)
+        {
+            switch (t)
+            {
                 case PieceType.BISHOP: return "B";
                 case PieceType.CHANCELLOR: return "C";
                 case PieceType.HAWK: return "H";
@@ -309,8 +372,10 @@ namespace InfiniteChess
             }
             return "#";
         }
-        public static PieceType typeFromPrefix(string c) {
-            switch (c) {
+        public static PieceType typeFromPrefix(string c)
+        {
+            switch (c)
+            {
                 case "B": return PieceType.BISHOP;
                 case "C": return PieceType.CHANCELLOR;
                 case "H": return PieceType.HAWK;
@@ -324,11 +389,13 @@ namespace InfiniteChess
             }
             return PieceType.NONE;
         }
-        public static string parseState(GameState g) {
+        public static string parseState(GameState g)
+        {
             string colour = g.HasFlag((GameState)1) ? "Black" : "White";
             string final = $"{colour}'s turn.";
             if (g.HasFlag((GameState)4)) { final = $"{colour} in check!"; }
-            if (g.HasFlag((GameState)2)) {
+            if (g.HasFlag((GameState)2))
+            {
                 if (pieceMovingMoves.Count == 0)
                     final = $"That piece cannot move!";
                 else
@@ -336,7 +403,7 @@ namespace InfiniteChess
                 if (g.HasFlag((GameState)1) && opponentAI) { final = "AI Moving..."; }
             }
             if (g.HasFlag((GameState)8)) { final = $"{colour} has won!"; }
-            if (g.HasFlag((GameState)16)) { final= "Stalemate"; }
+            if (g.HasFlag((GameState)16)) { final = "Stalemate"; }
             return final;
         }
         private void AIThread_DoWork(object sender, DoWorkEventArgs e)
@@ -352,16 +419,22 @@ namespace InfiniteChess
         #region scrolling
         private void sUp_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < scrollMultiplier; i++) { 
+            for (int i = 0; i < scrollMultiplier; i++)
+            {
                 Square edge = GameContainer.findSquareByCoords(0, 0);
                 updateSquares(1, false, sender);
-                if (edge.indexY == bounds[3]) {
+                if (edge.indexY == bounds[3])
+                {
                     bounds[3]++;
-                    for (int j = bounds[0]; j <= bounds[1]; j++) {
-                        board.Add(new Square { X = origin[0] + sf * j,
-                                               Y = origin[1] - bounds[3] * sf,
-                                               indexX = (short)j,
-                                               indexY = (short)bounds[3] });
+                    for (int j = bounds[0]; j <= bounds[1]; j++)
+                    {
+                        board.Add(new Square
+                        {
+                            X = origin[0] + sf * j,
+                            Y = origin[1] - bounds[3] * sf,
+                            indexX = (short)j,
+                            indexY = (short)bounds[3]
+                        });
                     }
                 }
             }
@@ -374,13 +447,18 @@ namespace InfiniteChess
             {
                 Square edge = GameContainer.findSquareByCoords((size[0] - 1) * sf + 1, (size[1] - 1) * sf + 1);
                 updateSquares(-1, false, sender);
-                if (edge.indexY == bounds[2]) {
+                if (edge.indexY == bounds[2])
+                {
                     bounds[2]--;
-                    for (int j = bounds[0]; j <= bounds[1]; j++) {
-                        board.Add(new Square { X = origin[0] + sf * j,
-                                               Y = origin[1] - bounds[2] * sf,
-                                               indexX = (short)j,
-                                               indexY = (short)bounds[2] });
+                    for (int j = bounds[0]; j <= bounds[1]; j++)
+                    {
+                        board.Add(new Square
+                        {
+                            X = origin[0] + sf * j,
+                            Y = origin[1] - bounds[2] * sf,
+                            indexX = (short)j,
+                            indexY = (short)bounds[2]
+                        });
                     }
                 }
             }
@@ -393,13 +471,18 @@ namespace InfiniteChess
             {
                 Square edge = GameContainer.findSquareByCoords((size[0] - 1) * sf + 1, (size[1] - 1) * sf + 1);
                 updateSquares(-1, true, sender);
-                if (edge.indexX == bounds[1]) {
+                if (edge.indexX == bounds[1])
+                {
                     bounds[1]++;
-                    for (int j = bounds[2]; j <= bounds[3]; j++) {
-                        board.Add(new Square { X = origin[0] + bounds[1] * sf,
-                                               Y = origin[1] - sf * j,
-                                               indexX = (short)bounds[1],
-                                               indexY = (short)j });
+                    for (int j = bounds[2]; j <= bounds[3]; j++)
+                    {
+                        board.Add(new Square
+                        {
+                            X = origin[0] + bounds[1] * sf,
+                            Y = origin[1] - sf * j,
+                            indexX = (short)bounds[1],
+                            indexY = (short)j
+                        });
                     }
                 }
             }
@@ -412,13 +495,18 @@ namespace InfiniteChess
             {
                 Square edge = GameContainer.findSquareByCoords(0, 0);
                 updateSquares(1, true, sender);
-                if (edge.indexX == bounds[0]) {
+                if (edge.indexX == bounds[0])
+                {
                     bounds[0]--;
-                    for (int j = bounds[2]; j <= bounds[3]; j++) {
-                        board.Add(new Square { X = origin[0] + bounds[0] * sf,
-                                               Y = origin[1] - sf * j,
-                                               indexX = (short)bounds[0],
-                                               indexY = (short)j });
+                    for (int j = bounds[2]; j <= bounds[3]; j++)
+                    {
+                        board.Add(new Square
+                        {
+                            X = origin[0] + bounds[0] * sf,
+                            Y = origin[1] - sf * j,
+                            indexX = (short)bounds[0],
+                            indexY = (short)j
+                        });
                     }
                 }
             }

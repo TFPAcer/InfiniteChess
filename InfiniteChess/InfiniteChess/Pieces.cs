@@ -78,7 +78,7 @@ namespace InfiniteChess
                             Square attempt = Chess.GameContainer.findSquareByIndex(square.indexX + i, direction);
                             if (Chess.checkSquareForPiece(attempt, includeKings, colour) == Math.Abs(i)) moves.Add(attempt);
                         }
-                        if (PawnData) {
+                        if (PawnData && moves.Count != 0) {
                             int direction2 = colour == PieceColour.WHITE ? square.indexY + 2 : square.indexY - 2;
                             Square attempt = Chess.GameContainer.findSquareByIndex(square.indexX, direction2);
                             if (Chess.checkSquareForPiece(attempt, includeKings, colour) == 0)

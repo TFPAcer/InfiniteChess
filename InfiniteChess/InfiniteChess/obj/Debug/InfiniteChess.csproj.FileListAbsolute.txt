@@ -29,3 +29,5 @@ A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\In
 A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.Promote.resources
 C:\Users\Acer\Documents\Github\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.Promote.resources
 A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.AIDiff.resources
+C:\Users\Acer\Documents\Github\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.AIDiff.resources
+C:\Users\Acer\Documents\Github\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.About.resources

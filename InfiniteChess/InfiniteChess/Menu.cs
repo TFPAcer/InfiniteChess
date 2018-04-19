@@ -56,6 +56,7 @@ namespace InfiniteChess
                     sr.Close();
                 }
             }
+            if (data == "") return;
             string[] data_pieces = data.Split('|')[0].Split(';');
             string[] data_history = data.Split('|')[1].Split(';');
             string[] data_state = data.Split('|')[2].Split(';');
@@ -208,6 +209,13 @@ namespace InfiniteChess
             menu_game_undo.Enabled = enabled;
             menu_game_undo2.Enabled = enabled;
             menu_setting_undo.Checked = !enabled;
+        }
+        #endregion
+        #region about
+        private void menu_about_about_Click(object sender, EventArgs e)
+        {
+            About a = new About();
+            a.ShowDialog();
         }
         #endregion
     }

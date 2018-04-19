@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Chess));
             this.begin = new System.Windows.Forms.Button();
-            this.debug2 = new System.Windows.Forms.Label();
+            this.cursorLabel = new System.Windows.Forms.Label();
             this.sUp = new System.Windows.Forms.Button();
             this.sDown = new System.Windows.Forms.Button();
             this.sLeft = new System.Windows.Forms.Button();
@@ -83,30 +83,35 @@
             this.menu_about_about = new System.Windows.Forms.ToolStripMenuItem();
             this.AIThread = new System.ComponentModel.BackgroundWorker();
             this.undo2 = new System.Windows.Forms.Button();
+            this.labelBack = new System.Windows.Forms.PictureBox();
             this.menu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.labelBack)).BeginInit();
             this.SuspendLayout();
             // 
             // begin
             // 
             this.begin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.begin.Location = new System.Drawing.Point(941, 648);
+            this.begin.BackColor = System.Drawing.Color.Transparent;
+            this.begin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.begin.Location = new System.Drawing.Point(1018, 671);
             this.begin.Name = "begin";
-            this.begin.Size = new System.Drawing.Size(75, 23);
+            this.begin.Size = new System.Drawing.Size(10, 10);
             this.begin.TabIndex = 1;
             this.begin.Text = "debug1";
-            this.begin.UseVisualStyleBackColor = true;
+            this.begin.UseVisualStyleBackColor = false;
             this.begin.Click += new System.EventHandler(this.begin_Click);
             // 
-            // debug2
+            // cursorLabel
             // 
-            this.debug2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.debug2.AutoSize = true;
-            this.debug2.ForeColor = System.Drawing.Color.Black;
-            this.debug2.Location = new System.Drawing.Point(684, 67);
-            this.debug2.Name = "debug2";
-            this.debug2.Size = new System.Drawing.Size(37, 13);
-            this.debug2.TabIndex = 2;
-            this.debug2.Text = "debug";
+            this.cursorLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cursorLabel.AutoSize = true;
+            this.cursorLabel.BackColor = System.Drawing.SystemColors.Control;
+            this.cursorLabel.ForeColor = System.Drawing.Color.Black;
+            this.cursorLabel.Location = new System.Drawing.Point(683, 110);
+            this.cursorLabel.Name = "cursorLabel";
+            this.cursorLabel.Size = new System.Drawing.Size(39, 13);
+            this.cursorLabel.TabIndex = 2;
+            this.cursorLabel.Text = "square";
             // 
             // sUp
             // 
@@ -183,10 +188,11 @@
             this.stateLabel.BackColor = System.Drawing.SystemColors.Control;
             this.stateLabel.Font = new System.Drawing.Font("Perpetua", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.stateLabel.ForeColor = System.Drawing.Color.Black;
-            this.stateLabel.Location = new System.Drawing.Point(806, 2);
+            this.stateLabel.Location = new System.Drawing.Point(682, 78);
             this.stateLabel.Name = "stateLabel";
-            this.stateLabel.Size = new System.Drawing.Size(0, 20);
+            this.stateLabel.Size = new System.Drawing.Size(43, 20);
             this.stateLabel.TabIndex = 7;
+            this.stateLabel.Text = "state";
             this.stateLabel.Click += new System.EventHandler(this.debug3_Click);
             // 
             // boardPanel
@@ -620,12 +626,12 @@
             // 
             // menu_about_about
             // 
-            this.menu_about_about.Enabled = false;
             this.menu_about_about.Image = ((System.Drawing.Image)(resources.GetObject("menu_about_about.Image")));
             this.menu_about_about.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.menu_about_about.Name = "menu_about_about";
             this.menu_about_about.Size = new System.Drawing.Size(184, 22);
             this.menu_about_about.Text = "About InfinteChess...";
+            this.menu_about_about.Click += new System.EventHandler(this.menu_about_about_Click);
             // 
             // AIThread
             // 
@@ -645,6 +651,15 @@
             this.undo2.UseVisualStyleBackColor = false;
             this.undo2.Click += new System.EventHandler(this.undo2_Click);
             // 
+            // labelBack
+            // 
+            this.labelBack.BackColor = System.Drawing.SystemColors.Control;
+            this.labelBack.Location = new System.Drawing.Point(668, 66);
+            this.labelBack.Name = "labelBack";
+            this.labelBack.Size = new System.Drawing.Size(348, 122);
+            this.labelBack.TabIndex = 13;
+            this.labelBack.TabStop = false;
+            // 
             // Chess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -660,15 +675,20 @@
             this.Controls.Add(this.sLeft);
             this.Controls.Add(this.sDown);
             this.Controls.Add(this.sUp);
-            this.Controls.Add(this.debug2);
+            this.Controls.Add(this.cursorLabel);
             this.Controls.Add(this.begin);
             this.Controls.Add(this.boardPanel);
+            this.Controls.Add(this.labelBack);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menu;
+            this.MaximizeBox = false;
             this.Name = "Chess";
             this.Text = "InfiniteChess";
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mouseMove);
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.labelBack)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -678,7 +698,7 @@
 
         public GameContainer boardPanel;
         private System.Windows.Forms.Button begin;
-        private System.Windows.Forms.Label debug2;
+        private System.Windows.Forms.Label cursorLabel;
         private System.Windows.Forms.Button sUp;
         private System.Windows.Forms.Button sDown;
         private System.Windows.Forms.Button sLeft;
@@ -730,6 +750,7 @@
         private System.Windows.Forms.ToolStripMenuItem menu_game_undo2;
         private System.Windows.Forms.ToolStripMenuItem menu_game_save;
         private System.Windows.Forms.ToolStripMenuItem menu_game_load;
+        private System.Windows.Forms.PictureBox labelBack;
     }
 }
 

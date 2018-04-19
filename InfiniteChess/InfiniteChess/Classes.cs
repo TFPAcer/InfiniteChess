@@ -210,8 +210,16 @@ namespace InfiniteChess
             {
                 c = getForm<Chess>();
                 Square cursorSquare = findSquareByCoords(e.X, e.Y);
-                c.debug2.Text = cursorSquare?.ToString() ?? "null";
+                if (cursorSquare == null) return;
+                string s =
+                    $"Cursor is over ({cursorSquare?.indexX.ToString()}, {cursorSquare?.indexY.ToString()})";
                 Piece p = pieces.Find(q => q.square == cursorSquare) ?? null;
+                if (p != null) {
+                    s += 
+                        $"\ncontaining {p.colour.ToString().ToLower()} {p.type.ToString().ToLower()}";
+                }
+                c.cursorLabel.Text = s;
+                
                 //c.debug2.Text = bounds[]
             }
             #endregion
