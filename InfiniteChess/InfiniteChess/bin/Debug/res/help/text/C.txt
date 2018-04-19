@@ -1,0 +1,3 @@
+The chancellor moves as a rook and a knight combined.
+It can only jump over other pieces when it is moving as a knight.
+It can capture any piece that is in these lines of movement.

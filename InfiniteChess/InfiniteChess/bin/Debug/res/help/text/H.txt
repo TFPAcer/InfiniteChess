@@ -1,0 +1,3 @@
+The hawk can move two or three squares in any orthogonal or diagonal direction.
+It cannot move one square.
+It can jump over pieces while it is moving.

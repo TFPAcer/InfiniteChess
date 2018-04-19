@@ -1,0 +1,4 @@
+The pawn can move one square in the direction of the enemy pieces each turn.
+It cannot capture forward, it instead captures diagonally forward and to the left or right.
+A pawn may move two squares instead of one on its first turn only.
+It can also promote to any of the other pieces if it reaches the back line of the enemy pieces.

@@ -197,12 +197,17 @@ namespace InfiniteChess
             #region mouse stuff
             protected override void OnMouseClick(MouseEventArgs e)
             {
+                Square cursorSquare = findSquareByCoords(e.X, e.Y);
+                Piece found = pieces.Find(p => p.square == cursorSquare);
                 Focus();
                 if (e.Button == MouseButtons.Left) {
                     if (opponentAI & state.HasFlag((GameState)3)) return;
-                    Square cursorSquare = findSquareByCoords(e.X, e.Y);
-                    Piece found = pieces.Find(p => p.square == cursorSquare);
                     handleTurn(found, cursorSquare);
+                }
+                if (e.Button == MouseButtons.Right) {
+                    if (found == null) return;
+                    c.pieceContextMenu.Show(Cursor.Position);
+                    c.pieceContextMenu.Text = prefixFromType(found.type);
                 }
             }
 
@@ -328,7 +333,7 @@ namespace InfiniteChess
             }
             #endregion
         }
-         #region history
+        #region history
         public class MoveHistory : TextBox
         {
             public List<string> moves { get; private set; } = new List<string>();
@@ -375,7 +380,7 @@ namespace InfiniteChess
                     MatchCollection matchSquares = Regex.Matches(lastMove, "-?\\d+,-?\\d+");
                     MatchCollection matchPieces = Regex.Matches(lastMove, "[A-Z]");
                     Square to = GameContainer.findSquareByIndex(
-                        int.Parse(matchSquares[1].Value.Split(',')[0]), 
+                        int.Parse(matchSquares[1].Value.Split(',')[0]),
                         int.Parse(matchSquares[1].Value.Split(',')[1])
                         );
                     Square from = GameContainer.findSquareByIndex(
@@ -414,8 +419,8 @@ namespace InfiniteChess
                 List<string> result = new List<string>();
                 for (int i = 0; i < moves.Count(); i += 2) {
                     int lineNo = (i + 1) / 2;
-                    string line = $"{lineNo+1}. {moves[i]}".PadRight(36);
-                    if (moves.Count() != i+1) line += $"{moves[i+1]}";
+                    string line = $"{lineNo + 1}. {moves[i]}".PadRight(36);
+                    if (moves.Count() != i + 1) line += $"{moves[i + 1]}";
                     result.Add(line);
                 }
                 Lines = result.ToArray();
@@ -425,14 +430,28 @@ namespace InfiniteChess
 
             public void addCheck(int state) {
                 if (state < 0 || state > 2) return;
-                string[] symbols = { "+", "#", "~"};
-                moves[moves.Count()-1] += symbols[state];
+                string[] symbols = { "+", "#", "~" };
+                moves[moves.Count() - 1] += symbols[state];
                 updateMoves();
             }
 
             public void setMoves(List<string> m) {
                 moves = m;
                 updateMoves();
+            }
+
+            public List<Square> getLastMoveSquares() {
+                if (moves.Count == 0) return Square.emptyList();
+                MatchCollection matchSquares = Regex.Matches(moves.Last(), "-?\\d+,-?\\d+");
+                Square to = GameContainer.findSquareByIndex(
+                    int.Parse(matchSquares[1].Value.Split(',')[0]),
+                    int.Parse(matchSquares[1].Value.Split(',')[1])
+                    );
+                Square from = GameContainer.findSquareByIndex(
+                    int.Parse(matchSquares[0].Value.Split(',')[0]),
+                    int.Parse(matchSquares[0].Value.Split(',')[1])
+                    );
+                return to + from;
             }
         }
     }

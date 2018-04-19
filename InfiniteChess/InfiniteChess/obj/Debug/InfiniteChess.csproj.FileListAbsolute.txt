@@ -31,3 +31,5 @@ C:\Users\Acer\Documents\Github\InfiniteChess\InfiniteChess\InfiniteChess\obj\Deb
 A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.AIDiff.resources
 C:\Users\Acer\Documents\Github\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.AIDiff.resources
 C:\Users\Acer\Documents\Github\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.About.resources
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.About.resources
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Debug\InfiniteChess.PieceInfo.resources

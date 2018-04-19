@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Chess));
-            this.begin = new System.Windows.Forms.Button();
             this.cursorLabel = new System.Windows.Forms.Label();
             this.sUp = new System.Windows.Forms.Button();
             this.sDown = new System.Windows.Forms.Button();
@@ -77,29 +77,17 @@
             this.menu_setting_scroll_mult_4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menu_setting_undo = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_help = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_help_app = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_about = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_about_about = new System.Windows.Forms.ToolStripMenuItem();
             this.AIThread = new System.ComponentModel.BackgroundWorker();
             this.undo2 = new System.Windows.Forms.Button();
             this.labelBack = new System.Windows.Forms.PictureBox();
+            this.pieceContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.pieceInfoContextItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.labelBack)).BeginInit();
+            this.pieceContextMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // begin
-            // 
-            this.begin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.begin.BackColor = System.Drawing.Color.Transparent;
-            this.begin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.begin.Location = new System.Drawing.Point(1018, 671);
-            this.begin.Name = "begin";
-            this.begin.Size = new System.Drawing.Size(10, 10);
-            this.begin.TabIndex = 1;
-            this.begin.Text = "debug1";
-            this.begin.UseVisualStyleBackColor = false;
-            this.begin.Click += new System.EventHandler(this.begin_Click);
             // 
             // cursorLabel
             // 
@@ -239,7 +227,6 @@
             this.menu_game,
             this.menu_window,
             this.menu_settings,
-            this.menu_help,
             this.menu_about});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
@@ -595,26 +582,6 @@
             this.menu_setting_undo.Text = "Disable Undo Button";
             this.menu_setting_undo.Click += new System.EventHandler(this.menu_setting_undo_Click);
             // 
-            // menu_help
-            // 
-            this.menu_help.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_help_app});
-            this.menu_help.Image = ((System.Drawing.Image)(resources.GetObject("menu_help.Image")));
-            this.menu_help.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.menu_help.Name = "menu_help";
-            this.menu_help.Size = new System.Drawing.Size(60, 20);
-            this.menu_help.Text = "Help";
-            // 
-            // menu_help_app
-            // 
-            this.menu_help_app.Enabled = false;
-            this.menu_help_app.Image = ((System.Drawing.Image)(resources.GetObject("menu_help_app.Image")));
-            this.menu_help_app.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.menu_help_app.Name = "menu_help_app";
-            this.menu_help_app.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
-            this.menu_help_app.Size = new System.Drawing.Size(211, 22);
-            this.menu_help_app.Text = "Application Help...";
-            // 
             // menu_about
             // 
             this.menu_about.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -653,18 +620,39 @@
             // 
             // labelBack
             // 
+            this.labelBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelBack.BackColor = System.Drawing.SystemColors.Control;
+            this.labelBack.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.labelBack.Location = new System.Drawing.Point(668, 66);
             this.labelBack.Name = "labelBack";
             this.labelBack.Size = new System.Drawing.Size(348, 122);
             this.labelBack.TabIndex = 13;
             this.labelBack.TabStop = false;
             // 
+            // pieceContextMenu
+            // 
+            this.pieceContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pieceInfoContextItem});
+            this.pieceContextMenu.Name = "pieceContextMenu";
+            this.pieceContextMenu.Size = new System.Drawing.Size(172, 26);
+            this.pieceContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.pieceContextMenu_Opening);
+            // 
+            // pieceInfoContextItem
+            // 
+            this.pieceInfoContextItem.Image = ((System.Drawing.Image)(resources.GetObject("pieceInfoContextItem.Image")));
+            this.pieceInfoContextItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.pieceInfoContextItem.Name = "pieceInfoContextItem";
+            this.pieceInfoContextItem.Size = new System.Drawing.Size(171, 22);
+            this.pieceInfoContextItem.Text = "What is this piece?";
+            this.pieceInfoContextItem.Click += new System.EventHandler(this.pieceInfoContextItem_Click);
+            // 
             // Chess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1028, 681);
             this.Controls.Add(this.undo2);
             this.Controls.Add(this.stateLabel);
@@ -676,19 +664,20 @@
             this.Controls.Add(this.sDown);
             this.Controls.Add(this.sUp);
             this.Controls.Add(this.cursorLabel);
-            this.Controls.Add(this.begin);
             this.Controls.Add(this.boardPanel);
             this.Controls.Add(this.labelBack);
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menu;
             this.MaximizeBox = false;
             this.Name = "Chess";
-            this.Text = "InfiniteChess";
+            this.Text = "Infinite Chess";
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mouseMove);
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.labelBack)).EndInit();
+            this.pieceContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -697,7 +686,6 @@
         #endregion
 
         public GameContainer boardPanel;
-        private System.Windows.Forms.Button begin;
         private System.Windows.Forms.Label cursorLabel;
         private System.Windows.Forms.Button sUp;
         private System.Windows.Forms.Button sDown;
@@ -710,7 +698,6 @@
         private System.Windows.Forms.ToolStripMenuItem menu_game;
         private System.Windows.Forms.ToolStripMenuItem menu_window;
         private System.Windows.Forms.ToolStripMenuItem menu_settings;
-        private System.Windows.Forms.ToolStripMenuItem menu_help;
         private System.Windows.Forms.ToolStripMenuItem menu_about;
         private System.Windows.Forms.ToolStripSeparator menu_game_sep1;
         private System.Windows.Forms.ToolStripMenuItem menu_game_new;
@@ -723,7 +710,6 @@
         private System.Windows.Forms.ToolStripMenuItem menu_setting_ai;
         private System.Windows.Forms.ToolStripMenuItem menu_setting_opp;
         private System.Windows.Forms.ToolStripMenuItem menu_setting_scroll;
-        private System.Windows.Forms.ToolStripMenuItem menu_help_app;
         private System.Windows.Forms.ToolStripMenuItem menu_window_res_1080;
         private System.Windows.Forms.ToolStripMenuItem menu_window_ui;
         private System.Windows.Forms.ToolStripMenuItem menu_window_ui_hist;
@@ -751,6 +737,8 @@
         private System.Windows.Forms.ToolStripMenuItem menu_game_save;
         private System.Windows.Forms.ToolStripMenuItem menu_game_load;
         private System.Windows.Forms.PictureBox labelBack;
+        private System.Windows.Forms.ContextMenuStrip pieceContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem pieceInfoContextItem;
     }
 }
 

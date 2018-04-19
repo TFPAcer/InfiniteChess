@@ -24,7 +24,7 @@ namespace InfiniteChess
 
         public Piece(PieceType t, Square s, PieceColour c) {
             type = t; colour = c; square = s;
-            icon = new Bitmap($"res/image/pieces/letter/{c.ToString()}/{t.ToString()}.png");
+            icon = new Bitmap($"res/image/pieces/icon/{c.ToString()}/{t.ToString()}.png");
             if (t == PieceType.PAWN) { PawnData = true; }
             int sign = colour == PieceColour.WHITE ? 1 : -1;
             switch (type) {
@@ -42,7 +42,7 @@ namespace InfiniteChess
         }
         public Piece(PieceType t, Square s, PieceColour c, bool pd, int av) {
             type = t; colour = c; square = s; PawnData = pd; addedValue = av;
-            icon = new Bitmap($"res/image/{c.ToString()}/{t.ToString()}.png");
+            icon = new Bitmap($"res/image/pieces/icon/{c.ToString()}/{t.ToString()}.png");
             int sign = colour == PieceColour.WHITE ? 1 : -1;
             switch (type) {
                 case PieceType.PAWN: { baseValue = 1000 * sign; break; }
@@ -165,11 +165,11 @@ namespace InfiniteChess
         #region util
         public void altColour() {
             colour = colour == PieceColour.WHITE ? PieceColour.BLACK : PieceColour.WHITE;
-            icon = new Bitmap($"res/image/{colour.ToString()}/{type.ToString()}.png");
+            icon = new Bitmap($"res/image/pieces/icon/{colour.ToString()}/{type.ToString()}.png");
         }
         public void changeType(PieceType t) {
             type = t;
-            icon = new Bitmap($"res/image/{colour.ToString()}/{type.ToString()}.png");
+            icon = new Bitmap($"res/image/pieces/icon/{colour.ToString()}/{type.ToString()}.png");
             PawnData = true;
         }
         public override string ToString() => $"{type},{colour},{square.ToString()}";

@@ -112,6 +112,9 @@ namespace InfiniteChess
             menu.BackColor = highlight;
             history.BackColor = highlight;
             history.ForeColor = Color.Black;
+            labelBack.BackColor = highlight;
+            stateLabel.BackColor = highlight;
+            cursorLabel.BackColor = highlight;
 
             int s = scrollMultiplier;
             Size = is1080 ? new Size(1520, 960) : new Size(1040, 720);
@@ -278,17 +281,23 @@ namespace InfiniteChess
         #region util
         public void drawBoard()
         {
+            if (!history.Enabled) { return; }
             Graphics g = boardPanel.CreateGraphics();
             g.Clear(Color.FromArgb(200, 200, 200));
             //for (int i = bounds[0]; i < bounds[1]+1; i++) { //columns 
             //    for (int j = bounds[2]; j < bounds[3]+1; j++) { //rows
             //        g.DrawRectangle(new Pen(Color.Green), origin[0] + sf * i, origin[1] - sf * j, sf, sf); } }
             int boardPolarity = (origin[0] / sf + origin[1] / sf) % 2;
-            g.DrawImage(
-                new Bitmap(
+            g.DrawImage( new Bitmap(
                     new Bitmap($"res/image/board/{boardPolarity.ToString()}board{size[0].ToString()}.png"),
                     new Size(sf * size[0], sf * size[1])), 0, 0
                 );
+           foreach (Square s in history.getLastMoveSquares()) {
+                Color c = Color.FromKnownColor(KnownColor.CornflowerBlue);
+                for (int j = 1; j < 18; j++) {
+                    g.DrawRectangle(new Pen(Color.FromArgb(160, c)), s.X + j + 1, s.Y + j + 1, sf - (2*j) - 3, sf - (2*j) - 3);
+                }
+            }
             foreach (Piece p in pieces)
             {
                 g.DrawImage(new Bitmap(p.icon, new Size(sf - 6, sf - 6)), p.square.X + 3, p.square.Y + 3);

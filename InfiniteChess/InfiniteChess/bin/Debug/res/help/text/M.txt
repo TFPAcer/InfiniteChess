@@ -1,0 +1,2 @@
+The mann can move one square in any direction.
+It can capture any piece that is in these squares of movement.

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.ComponentModel;
+using System.Drawing;
 
 namespace InfiniteChess
 {
@@ -218,5 +220,16 @@ namespace InfiniteChess
             a.ShowDialog();
         }
         #endregion
+        private void pieceContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+        }
+        private void pieceInfoContextItem_Click(object sender, EventArgs e)
+        {
+            string type = pieceContextMenu.Text;
+            string text = File.ReadAllText($"res/help/text/{pieceContextMenu.Text}.txt");
+            Bitmap image = new Bitmap($"res/help/image/{pieceContextMenu.Text}.png");
+            PieceInfo p = new PieceInfo(typeFromPrefix(type).ToString(), text, image);
+            p.ShowDialog();
+        }
     }
 }

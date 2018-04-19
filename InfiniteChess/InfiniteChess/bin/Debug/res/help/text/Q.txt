@@ -1,0 +1,2 @@
+The queen can move any number of squares in any orthogonal or diagonal direction each turn.
+It can capture any piece that is in these lines of movement.
