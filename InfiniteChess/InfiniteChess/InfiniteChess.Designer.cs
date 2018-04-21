@@ -36,7 +36,6 @@
             this.sLeft = new System.Windows.Forms.Button();
             this.sRight = new System.Windows.Forms.Button();
             this.stateLabel = new System.Windows.Forms.Label();
-            this.boardPanel = new InfiniteChess.Chess.GameContainer();
             this.history = new InfiniteChess.Chess.MoveHistory();
             this.undo1 = new System.Windows.Forms.Button();
             this.menu = new System.Windows.Forms.MenuStrip();
@@ -84,6 +83,7 @@
             this.labelBack = new System.Windows.Forms.PictureBox();
             this.pieceContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.pieceInfoContextItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.boardPanel = new InfiniteChess.Chess.GameContainer();
             this.menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.labelBack)).BeginInit();
             this.pieceContextMenu.SuspendLayout();
@@ -182,14 +182,6 @@
             this.stateLabel.TabIndex = 7;
             this.stateLabel.Text = "state";
             this.stateLabel.Click += new System.EventHandler(this.debug3_Click);
-            // 
-            // boardPanel
-            // 
-            this.boardPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.boardPanel.Location = new System.Drawing.Point(12, 33);
-            this.boardPanel.Name = "boardPanel";
-            this.boardPanel.Size = new System.Drawing.Size(608, 608);
-            this.boardPanel.TabIndex = 0;
             // 
             // history
             // 
@@ -646,6 +638,14 @@
             this.pieceInfoContextItem.Text = "What is this piece?";
             this.pieceInfoContextItem.Click += new System.EventHandler(this.pieceInfoContextItem_Click);
             // 
+            // boardPanel
+            // 
+            this.boardPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.boardPanel.Location = new System.Drawing.Point(12, 33);
+            this.boardPanel.Name = "boardPanel";
+            this.boardPanel.Size = new System.Drawing.Size(608, 608);
+            this.boardPanel.TabIndex = 0;
+            // 
             // Chess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -684,8 +684,6 @@
         }
 
         #endregion
-
-        public GameContainer boardPanel;
         private System.Windows.Forms.Label cursorLabel;
         private System.Windows.Forms.Button sUp;
         private System.Windows.Forms.Button sDown;
@@ -739,6 +737,7 @@
         private System.Windows.Forms.PictureBox labelBack;
         private System.Windows.Forms.ContextMenuStrip pieceContextMenu;
         private System.Windows.Forms.ToolStripMenuItem pieceInfoContextItem;
+        public GameContainer boardPanel;
     }
 }
 

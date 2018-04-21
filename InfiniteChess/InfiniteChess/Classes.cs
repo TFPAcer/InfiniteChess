@@ -246,9 +246,12 @@ namespace InfiniteChess
                     int param = s.indexX + s.indexY;
                     //Color c = param % 2 == 0 ? Color.FromArgb(206,17,22) : Color.FromArgb(255,34,44);
                     Color c = Color.FromArgb(206, 17, 22);
-                    g.DrawRectangle(new Pen(Color.FromArgb(255, c)), s.X + 1, s.Y + 1, sf - 3, sf - 3);
-                    g.DrawRectangle(new Pen(Color.FromArgb(195, c)), s.X + 2, s.Y + 2, sf - 5, sf - 5);
-                    g.DrawRectangle(new Pen(Color.FromArgb(145, c)), s.X + 3, s.Y + 3, sf - 7, sf - 7);
+                    for (int j = 1; j < 18; j++) {
+                        g.DrawRectangle(new Pen(Color.FromArgb(180 - (4*j), c)), s.X + j + 1, s.Y + j + 1, sf - 3 - (2*j), sf - 3 - (2*j));
+                    }
+                    //g.DrawRectangle(new Pen(Color.FromArgb(255, c)), s.X + 1, s.Y + 1, sf - 3, sf - 3);
+                    //g.DrawRectangle(new Pen(Color.FromArgb(195, c)), s.X + 2, s.Y + 2, sf - 5, sf - 5);
+                    //g.DrawRectangle(new Pen(Color.FromArgb(145, c)), s.X + 3, s.Y + 3, sf - 7, sf - 7);
 
                 }
                 g.Dispose();

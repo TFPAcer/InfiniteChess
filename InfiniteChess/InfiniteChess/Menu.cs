@@ -72,6 +72,7 @@ namespace InfiniteChess
                 bounds[i] = int.Parse(data_state[i]);
             }
             InitialiseBoard();
+            InitialiseButtons(true);
             foreach (string s in data_pieces) {
                 if (s == "") continue;
                 string[] p = s.Split(',');
@@ -220,6 +221,7 @@ namespace InfiniteChess
             a.ShowDialog();
         }
         #endregion
+        #region context
         private void pieceContextMenu_Opening(object sender, CancelEventArgs e)
         {
         }
@@ -231,5 +233,6 @@ namespace InfiniteChess
             PieceInfo p = new PieceInfo(typeFromPrefix(type).ToString(), text, image);
             p.ShowDialog();
         }
+        #endregion
     }
 }

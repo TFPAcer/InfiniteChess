@@ -295,7 +295,7 @@ namespace InfiniteChess
            foreach (Square s in history.getLastMoveSquares()) {
                 Color c = Color.FromKnownColor(KnownColor.CornflowerBlue);
                 for (int j = 1; j < 18; j++) {
-                    g.DrawRectangle(new Pen(Color.FromArgb(160, c)), s.X + j + 1, s.Y + j + 1, sf - (2*j) - 3, sf - (2*j) - 3);
+                    g.DrawRectangle(new Pen(Color.FromArgb(160 - (2*j), c)), s.X + j + 1, s.Y + j + 1, sf - (2*j) - 3, sf - (2*j) - 3);
                 }
             }
             foreach (Piece p in pieces)
