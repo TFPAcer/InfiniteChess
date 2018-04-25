@@ -287,7 +287,7 @@ namespace InfiniteChess
             //for (int i = bounds[0]; i < bounds[1]+1; i++) { //columns 
             //    for (int j = bounds[2]; j < bounds[3]+1; j++) { //rows
             //        g.DrawRectangle(new Pen(Color.Green), origin[0] + sf * i, origin[1] - sf * j, sf, sf); } }
-            int boardPolarity = (origin[0] / sf + origin[1] / sf) % 2;
+            int boardPolarity = Math.Abs((origin[0] / sf + origin[1] / sf) % 2);
             g.DrawImage( new Bitmap(
                     new Bitmap($"res/image/board/{boardPolarity.ToString()}board{size[0].ToString()}.png"),
                     new Size(sf * size[0], sf * size[1])), 0, 0
