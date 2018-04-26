@@ -1,0 +1,14 @@
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\bin\Release\InfiniteChess.exe.config
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\bin\Release\InfiniteChess.exe
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\bin\Release\InfiniteChess.pdb
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Release\InfiniteChess.csprojResolveAssemblyReference.cache
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Release\InfiniteChess.About.resources
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Release\InfiniteChess.AIDiff.resources
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Release\InfiniteChess.Chess.resources
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Release\InfiniteChess.PieceInfo.resources
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Release\InfiniteChess.Promote.resources
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Release\InfiniteChess.Properties.Resources.resources
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Release\InfiniteChess.csproj.GenerateResource.cache
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Release\InfiniteChess.csproj.CoreCompileInputs.cache
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Release\InfiniteChess.exe
+A:\Files\Documents\GitHub\InfiniteChess\InfiniteChess\InfiniteChess\obj\Release\InfiniteChess.pdb

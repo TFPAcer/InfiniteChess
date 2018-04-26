@@ -1,0 +1,5 @@
+The king can move one square in any direction.
+If an enemy piece's movement contains the king, it is in check.
+If a player's king is in check, the only valid moves are those which take the king out of check.
+If no such moves exist, the player is in checkmate and has lost.
+It can capture any piece that is in its movement, unless capturing a piece would put it into check.

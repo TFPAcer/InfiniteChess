@@ -1,0 +1,3 @@
+The knight moves two squares in an orthogonal direction, followed by one square in a direction ninety degrees from the first move.
+It can jump over pieces while it is moving.
+It can capture any piece that is in these squares of movement.

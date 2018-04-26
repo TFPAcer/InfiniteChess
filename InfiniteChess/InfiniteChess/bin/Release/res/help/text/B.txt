@@ -1,0 +1,2 @@
+The bishop can move any number of squares in any diagonal direction.
+It can capture any piece that is in these lines of movement.
